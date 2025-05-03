@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 namespace Shoghlana.Core.Models;
 public class FreelancerSkills
 {
-    [Key]
-    public int Id { get; set; }
+    //  public int Id { get; set; }
+
+    //----------------------------
 
     [ForeignKey("Freelancer")]
     public int? FreelancerId { get; set; }

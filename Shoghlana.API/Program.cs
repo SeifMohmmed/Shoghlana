@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.EF;
+using Shoghlana.EF.Repositories;
 
 namespace Shoghlana.API
 {
@@ -24,7 +25,7 @@ namespace Shoghlana.API
             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
 
-            builder.Services.AddScoped<IUnitOfWork,IUnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
             var app = builder.Build();
 

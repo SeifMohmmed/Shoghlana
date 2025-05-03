@@ -8,19 +8,28 @@ namespace Shoghlana.Core.Interfaces;
 public interface IUnitOfWork
 {
     ICategoryRepository category { get; }
-    IFreelancerRepository freelancer { get; }
+
     IClientRepository client { get; }
+
+    IFreelancerRepository freelancer { get; }
+
     IJobRepository job { get; }
+
     IJobSkillsRepository jobSkills { get; }
-    IRateRepository rate { get; }
-    IProposalRepository proposal { get; }
-    ISkillRepository skill { get; }
-    IFreelancerSkillsRepository freelancerSkills { get; }
+
+    IProjectImagesRepository projectImages { get; }
+
     IProjectRepository project { get; }
-    IProjectImagesRepository projectImages{ get; }
+
     IProjectSkillsRepository projectSkills { get; }
 
-    public int save();
-    public void Dispose();
+    IProposalRepository proposal { get; }
 
+    IRateRepository rate { get; }
+
+    ISkillRepository skill { get; }
+
+    public int save();
+
+   // public void Dispose();
 }

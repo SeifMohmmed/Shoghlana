@@ -82,28 +82,39 @@ public class Repository<T> : IRepository<T> where T : class
         IQueryable<T> query = _context.Set<T>();
 
         if (includes != null)
+        {
             foreach (var incluse in includes)
+            {
                 query = query.Include(incluse);
-
-        return query.SingleOrDefault(criteria);
+            }
+        }
+        return query.FirstOrDefault(criteria);
     }
     public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
     {
         IQueryable<T> query = _context.Set<T>();
 
         if (includes != null)
+        {
             foreach (var incluse in includes)
+            {
                 query = query.Include(incluse);
+            }
+        }
 
-        return await query.SingleOrDefaultAsync(criteria);
+        return await query.FirstOrDefaultAsync(criteria);
     }
     public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null)
     {
         IQueryable<T> query = _context.Set<T>();
 
         if (includes != null)
+        {
             foreach (var incluse in includes)
+            {
                 query = query.Include(incluse);
+            }
+        }
 
         return query.Where(criteria).ToList();
     }
@@ -143,8 +154,12 @@ public class Repository<T> : IRepository<T> where T : class
         IQueryable<T> query = _context.Set<T>();
 
         if (includes != null)
+        {
             foreach (var incluse in includes)
+            {
                 query = query.Include(incluse);
+            }
+        }
 
         return await query.Where(criteria).ToListAsync();
     }
@@ -159,12 +174,6 @@ public class Repository<T> : IRepository<T> where T : class
     {
         IQueryable<T> query = _context.Set<T>().Where(criteria);
 
-        if (skip.HasValue)
-            query = query.Skip(skip.Value);
-
-        if (take.HasValue)
-            query = query.Take(take.Value);
-
         if (orderBy != null)
         {
             if (orderByDirection == OrderWay.Ascending)
@@ -176,6 +185,17 @@ public class Repository<T> : IRepository<T> where T : class
                 query = query.OrderByDescending(orderBy);
             }
         }
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+
+        if (take.HasValue)
+        {
+            query = query.Take(take.Value);
+        }
+
         return await query.ToListAsync();
     }
 
