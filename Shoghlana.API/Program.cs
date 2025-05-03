@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Shoghlana.Core.Interfaces;
 using Shoghlana.EF;
 
 namespace Shoghlana.API
@@ -21,6 +22,9 @@ namespace Shoghlana.API
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+
+            builder.Services.AddScoped<IUnitOfWork,IUnitOfWork>();
 
             var app = builder.Build();
 
