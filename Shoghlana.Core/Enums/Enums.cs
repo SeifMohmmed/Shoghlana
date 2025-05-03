@@ -26,3 +26,8 @@ public enum ProposalStatus
 
     Rejected = 2,
 }
+public enum OrderWay
+{
+    Ascending = 1,
+    Descending = 2,
+}
