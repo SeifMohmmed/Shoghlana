@@ -59,6 +59,8 @@ public class ApplicationDbContext : DbContext
         {
             entity.HasKey(f => f.Id);
 
+            entity.Property(f => f.Name).HasMaxLength(50);
+
             // map relation with skills >> M:M
             entity.HasMany(f => f.skills)
                   .WithMany(s => s.freelancers)
@@ -188,6 +190,16 @@ public class ApplicationDbContext : DbContext
 
         //modelBuilder.Entity<ProjectSkills>()
         //   .HasKey(pS => new { pS.ProjectId, pS.SkillId });
+
+        #region Initial Data
+
+        modelBuilder.Entity<Freelancer>().HasData
+        (
+            new Freelancer() { Id = 1, Name = "Ahmed Mohammed", Title = "Back-End Developer" },
+            new Freelancer() { Id = 2, Name = "Ali Suleiman", Title = "Front-End Developer" },
+            new Freelancer() { Id = 3, Name = "Wael Abdul Rahim", Title = "Back-End Developer" }
+        ); 
+        #endregion
 
 
         base.OnModelCreating(modelBuilder);
