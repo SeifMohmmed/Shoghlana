@@ -29,7 +29,7 @@ public interface IUnitOfWork
 
     ISkillRepository skill { get; }
 
-    public int save();
+    public int Save();
 
    // public void Dispose();
 }

@@ -39,7 +39,7 @@ public class UnitOfWork : IUnitOfWork , IDisposable
         proposal = new ProposalRepository(context);
         jobSkills = new JobSkillsRepository(context);
     }
-    public int save()
+    public int Save()
     {
         return _context.SaveChanges(); // num of affected entities in db
     }
