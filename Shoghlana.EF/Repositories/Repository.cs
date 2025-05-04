@@ -24,7 +24,7 @@ public class Repository<T> : IRepository<T> where T : class
         return entity;
     }
 
-    public async Task<T> AddASync(T entity)
+    public async Task<T> AddAsync(T entity)
     {
         await _context.Set<T>().AddAsync(entity);
         return entity;

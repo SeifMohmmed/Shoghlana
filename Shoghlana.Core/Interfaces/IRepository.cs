@@ -32,7 +32,7 @@ public interface IRepository<T> where T : class
     Expression<Func<T, object>> orderBy = null, OrderWay orderByDirection = OrderWay.Ascending);
 
     public T Add(T entity);
-    public Task<T> AddASync(T entity);
+    public Task<T> AddAsync(T entity);
 
     public IEnumerable<T> AddRange(IEnumerable<T> entities);
     public Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
