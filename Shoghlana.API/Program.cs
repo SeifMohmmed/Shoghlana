@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Shoghlana.API.Helpers;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.EF;
 using Shoghlana.EF.Repositories;
@@ -27,6 +28,10 @@ namespace Shoghlana.API
 
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            builder.Services.AddCors();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -37,6 +42,8 @@ namespace Shoghlana.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseAuthorization();
 
