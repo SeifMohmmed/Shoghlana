@@ -27,6 +27,10 @@ namespace Shoghlana.API
 
 
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddScoped<IClientRepository,ClientRepository>();
+            builder.Services.AddScoped<IJobRepository,JobRepository>();
+
+
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
