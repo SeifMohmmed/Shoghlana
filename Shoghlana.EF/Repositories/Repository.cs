@@ -77,7 +77,7 @@ public class Repository<T> : IRepository<T> where T : class
 
 
 
-    public T Find(Func<T, bool> criteria, string[] includes = null)
+    public T Find(string[] includes = null, Expression<Func<T, bool>> criteria = null)
     {
         IQueryable<T> query = _context.Set<T>();
 
@@ -88,7 +88,12 @@ public class Repository<T> : IRepository<T> where T : class
                 query = query.Include(incluse);
             }
         }
-        return query.FirstOrDefault(criteria);
+        if (criteria is not null)
+        {
+            query = query.Where(criteria);
+        }
+
+        return query.FirstOrDefault();
     }
     public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
     {
@@ -104,7 +109,7 @@ public class Repository<T> : IRepository<T> where T : class
 
         return await query.FirstOrDefaultAsync(criteria);
     }
-    public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null)
+    public IEnumerable<T> FindAll(string[] includes = null, Expression<Func<T, bool>> criteria = null)
     {
         IQueryable<T> query = _context.Set<T>();
 
@@ -115,8 +120,12 @@ public class Repository<T> : IRepository<T> where T : class
                 query = query.Include(incluse);
             }
         }
+        if (criteria is not null)
+        {
+            query = query.Where(criteria);
+        }
 
-        return query.Where(criteria).ToList();
+        return query.ToList();
     }
 
     public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int skip, int take)

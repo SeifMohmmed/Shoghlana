@@ -19,7 +19,7 @@ public class FreelancerDTO
 
     //public List<Proposal>? Proposals { get; set; }
 
-    //public List<Skill>? skills { get; set; }
+    public List<SkillsDTO>? skills { get; set; }
 
     //public List<Notification>? notifications { get; set; }
 }

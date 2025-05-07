@@ -26,8 +26,8 @@ public class Freelancer
 
     public List<Proposal>? Proposals { get; set; }
 
-    public List<Skill>? skills { get; set; }
-    public List<Notification>? notifications { get; set; }
+    public List<Skill>? Skills { get; set; }
+    public List<Notification>? Notifications { get; set; }
 
     // list<Notification> notifications {get; set;}  >> time , desc "url" navigate to dif pages
     // ai guide client how write requirements , recommend freelancers  

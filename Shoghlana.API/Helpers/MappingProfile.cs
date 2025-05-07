@@ -9,5 +9,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Freelancer,FreelancerDTO>().ReverseMap();
+
+        CreateMap<Proposal, ProposalDTO>().ReverseMap();
+
+        CreateMap<SkillsDTO,Skill>().ReverseMap();
     }
 }

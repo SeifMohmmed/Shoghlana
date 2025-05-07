@@ -16,10 +16,10 @@ public interface IRepository<T> where T : class
     public Task<T> GetByIdAsync(int id);
 
 
-    public T Find(Func<T, bool> criteria, string[] includes = null);
+    public T Find(string[] includes = null, Expression<Func<T, bool>> criteria = null);
     public Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null);
 
-    public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null);
+    public IEnumerable<T> FindAll(string[] includes = null, Expression<Func<T, bool>> criteria = null);
     public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int skip, int take);
 
     public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int? skip, int? take,

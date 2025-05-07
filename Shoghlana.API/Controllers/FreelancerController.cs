@@ -26,8 +26,9 @@ public class FreelancerController : ControllerBase
     [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
-        var freelancers = _unitOfWork.freelancer.GetAll().ToList();
-        var freelancerDTOs = new List<FreelancerDTO>(freelancers.Count);
+        var freelancers = _unitOfWork.freelancer.FindAll(includes: new[] { "Skills" }).ToList();
+
+        var freelancerDTOs = new List<FreelancerDTO>(freelancers.Count());
 
         foreach (var freelancer in freelancers)
         {
@@ -57,14 +58,14 @@ public class FreelancerController : ControllerBase
     [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
-        var freelancer = _unitOfWork.freelancer.GetById(id);
+        var freelancer = _unitOfWork.freelancer.Find(includes: new[] {"Skills"});
 
         if (freelancer is null)
         {
             return new GeneralResponse()
             {
                 IsSuccess = false,
-                Status = 400,
+                Status = 404,
                 Message = "There is no Freelancer found with this ID !"
 
             };
@@ -196,6 +197,13 @@ public class FreelancerController : ControllerBase
             await addFreelancerDTO.PersonalImageBytes.CopyToAsync(dataStream);
             freelancer.PersonalImageBytes = dataStream.ToArray();
         }
+        #region Don't use Automapper here
+        // can't use update here because the same instance is already tracked when I got him by Id
+        // so I just map with my self and save changes => also cant use automapper because it creates
+        // a new instance and doesn't modify the existed one 
+        // so SaveChanges won't take effect unless I Mapped manually 
+        #endregion
+
         freelancer.Name = addFreelancerDTO.Name;
         freelancer.Title = addFreelancerDTO.Title;
         freelancer.Overview = addFreelancerDTO.Overview;
