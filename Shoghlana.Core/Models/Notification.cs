@@ -10,4 +10,9 @@ public class Notification
     public int Id { get; set; }
     public DateTime sentTime { get; set; }
     public string description { get; set; }
+
+    //--------------------------------------------
+    public List<FreelancerNotification>? FreelancerNotifications { get; set; }
+
+    public List<ClientNotification>? ClientNotifications { get; set; }
 }

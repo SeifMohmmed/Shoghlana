@@ -14,18 +14,20 @@ public class Proposal
 
     //public string Title { get; set; }
 
-    //TODO duration / deadline 
+    public DateTime ApprovedTime { get; set; } // known when the client approves
+
+    public double Deadline { get; set; } // given from the freelancer
 
     public string? Description { get; set; }
 
     public decimal Price { get; set; }
 
-    // public ProposalStatus Status { get; set; } = ProposalStatus.Waiting;
     public ProposalStatus Status { get; set; } // not in the DTO
 
-    //TODO list of linke of the repo + list of images
+    public List<string>? ReposLinks { get; set; }
 
     //---------------------------------
+    public List<ProposalImages>? Image { get; set; }
 
     public int? FreelancerId { get; set; }
 

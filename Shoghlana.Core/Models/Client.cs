@@ -22,6 +22,7 @@ public class Client
     public byte[]? Image { get; set; }
 
     public List<Job>? Jobs { get; set; }
-    public List<Notification>? notifications { get; set; }
+
+    public List<ClientNotification>? Notifications { get; set; }
 
 }
