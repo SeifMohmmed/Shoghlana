@@ -45,13 +45,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.HasKey(c => c.Id);
         });
 
-        //modelBuilder.Entity<Client>(entity =>
-        //{
-        //    entity.HasKey(c => c.Id);
-        //});
+        modelBuilder.Entity<Client>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+        });
 
-                    // Freelancer-Notification relationship
-            modelBuilder.Entity<FreelancerNotification>()
+        // Freelancer-Notification relationship
+        modelBuilder.Entity<FreelancerNotification>()
                 .HasKey(fn => new { fn.FreelancerId, fn.NotificationId });
 
             modelBuilder.Entity<FreelancerNotification>()
@@ -77,6 +77,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .HasOne(cn => cn.Notification)
                 .WithMany(n => n.ClientNotifications)
                 .HasForeignKey(cn => cn.NotificationId);
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(n => n.Id);
+        });
 
         modelBuilder.Entity<Job>(entity =>
         {
@@ -105,7 +110,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
 
             // Map relation with skills (M:M)
-            entity.HasMany(j => j.skills)
+            entity.HasMany(j => j.Skills)
                   .WithMany(s => s.jobs)
                   .UsingEntity<Dictionary<string, object>>("jobSkills",
 
@@ -182,6 +187,57 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         });
 
         #region Initial Data
+
+        modelBuilder.Entity<Job>().HasData(
+            new Job
+            {
+                Id = 1,
+                Title = "Job1",
+                PostTime = new DateTime(2025, 5, 10, 16, 22, 37, 705),
+                Description = "Description for Job1",
+                MinBudget = 100,
+                MaxBudget = 500,
+                ExperienceLevel = ExperienceLevel.Beginner,
+                Status = JobStatus.Active,
+                ClientId = 1,
+                FreelancerId = 1,
+                CategoryId = 1
+            },
+            new Job
+            {
+                Id = 2,
+                Title = "Job2",
+                PostTime = new DateTime(2025, 5, 10, 16, 22, 37, 705),
+                Description = "Description for Job2",
+                MinBudget = 200,
+                MaxBudget = 700,
+                ExperienceLevel = ExperienceLevel.Intermediate,
+                Status = JobStatus.Active,
+                ClientId = 2,
+                FreelancerId = 2,
+                CategoryId = 2
+            }
+        );
+
+        modelBuilder.Entity<Project>().HasData(
+            new Project { Id = 1, Title = "Project1", Description = "Description for Project1", FreelancerId = 1 },
+            new Project { Id = 2, Title = "Project2", Description = "Description for Project2", FreelancerId = 2 }
+        );
+
+        modelBuilder.Entity<Category>().HasData(
+            new Category { Id = 1, Title = "Category1" },
+            new Category { Id = 2, Title = "Category2" }
+        );
+
+        modelBuilder.Entity<Proposal>().HasData(
+            new Proposal { Id = 1, Price = 300, Status = ProposalStatus.Waiting, FreelancerId = 1, JobId = 1 },
+            new Proposal { Id = 2, Price = 400, Status = ProposalStatus.Waiting, FreelancerId = 2, JobId = 2 }
+        );
+
+        modelBuilder.Entity<Rate>().HasData(
+            new Rate { Id = 1, Value = 4, JobId = 1 },
+            new Rate { Id = 2, Value = 5, JobId = 2 }
+        );
 
         modelBuilder.Entity<Freelancer>().HasData
         (

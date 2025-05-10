@@ -95,9 +95,22 @@ public class Repository<T> : IRepository<T> where T : class
 
         return query.FirstOrDefault();
     }
-    public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
+    public T Find(string[] includes = null)
     {
         IQueryable<T> query = _context.Set<T>();
+        if (includes != null)
+        {
+            foreach (var incluse in includes)
+            {
+                query = query.Include(incluse);
+            }
+        }
+
+        return query.FirstOrDefault();
+    }
+    public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
+    {
+        IQueryable<T> query = _context.Set<T>().Where(criteria);
 
         if (includes != null)
         {
@@ -158,6 +171,20 @@ public class Repository<T> : IRepository<T> where T : class
         return query.ToList();
     }
 
+    public IEnumerable<T> FindAll(string[] includes = null)
+    {
+        IQueryable<T> query = _context.Set<T>();
+
+        if (includes != null)
+        {
+            foreach (var incluse in includes)
+            {
+                query = query.Include(incluse);
+            }
+        }
+        return query.ToList();
+    }
+
     public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
     {
         IQueryable<T> query = _context.Set<T>();
@@ -177,7 +204,6 @@ public class Repository<T> : IRepository<T> where T : class
     {
         return await _context.Set<T>().Where(criteria).Skip(skip).Take(take).ToListAsync();
     }
-
     public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int? skip, int? take,
         Expression<Func<T, object>> orderBy = null, OrderWay orderByDirection = OrderWay.Ascending)
     {

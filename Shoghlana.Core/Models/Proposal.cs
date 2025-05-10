@@ -12,7 +12,7 @@ public class Proposal
     //  [Key]
     public int Id { get; set; }
 
-    //public string Title { get; set; }
+    public string? Title { get; set; }
 
     public DateTime ApprovedTime { get; set; } // known when the client approves
 
@@ -29,7 +29,7 @@ public class Proposal
     //---------------------------------
     public List<ProposalImages>? Image { get; set; }
 
-    public int? FreelancerId { get; set; }
+    public int FreelancerId { get; set; }
 
     public Freelancer Freelancer { get; set; }
 
