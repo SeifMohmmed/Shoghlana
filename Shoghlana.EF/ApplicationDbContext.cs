@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Shoghlana.Core.Enums;
 using Shoghlana.Core.Models;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF;
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Freelancer> Freelancers { get; set; }
 
@@ -44,10 +45,10 @@ public class ApplicationDbContext : DbContext
             entity.HasKey(c => c.Id);
         });
 
-        modelBuilder.Entity<Client>(entity =>
-        {
-            entity.HasKey(c => c.Id);
-        });
+        //modelBuilder.Entity<Client>(entity =>
+        //{
+        //    entity.HasKey(c => c.Id);
+        //});
 
                     // Freelancer-Notification relationship
             modelBuilder.Entity<FreelancerNotification>()

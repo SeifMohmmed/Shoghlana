@@ -30,6 +30,8 @@ public class Freelancer
 
     public List<FreelancerNotification>? Notifications { get; set; }
 
+    public ApplicationUser? User { get; set; }
+
     #region TODO
     //TODO : add service from freelancer
     // list<Notification> notifications {get; set;}  >> time , desc "url" navigate to dif pages
