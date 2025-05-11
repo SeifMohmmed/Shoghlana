@@ -15,7 +15,7 @@ public class ProjectImages
     [ForeignKey("Project")]
     public int? ProjectId { get; set; }
 
-    public Project Project { get; set; }
+    public Project? Project { get; set; }
 
     public byte[] Image { get; set; }
 }

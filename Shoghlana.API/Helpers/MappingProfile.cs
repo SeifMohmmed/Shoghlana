@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Shoghlana.API.DTOs;
+using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Models;
 
 namespace Shoghlana.API.Helpers;
@@ -12,7 +12,7 @@ public class MappingProfile : Profile
 
         CreateMap<Proposal, ProposalDTO>().ReverseMap();
 
-        CreateMap<SkillsDTO,Skill>().ReverseMap();
+        CreateMap<SkillDTO,Skill>().ReverseMap();
 
         CreateMap<Job, JobDTO>().ReverseMap();
     }

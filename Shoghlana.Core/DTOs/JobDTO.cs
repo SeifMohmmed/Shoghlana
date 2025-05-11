@@ -1,7 +1,7 @@
 ﻿using Shoghlana.Core.Enums;
 using Shoghlana.Core.Models;
 
-namespace Shoghlana.API.DTOs;
+namespace Shoghlana.Core.DTOs;
 
 public class JobDTO
 {

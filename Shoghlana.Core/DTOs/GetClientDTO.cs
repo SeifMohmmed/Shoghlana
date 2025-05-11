@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Shoghlana.API.DTOs;
+namespace Shoghlana.Core.DTOs;
 
 public class GetClientDTO
 {

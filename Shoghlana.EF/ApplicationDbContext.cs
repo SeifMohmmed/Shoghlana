@@ -130,7 +130,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                  .HasForeignKey(p => p.FreelancerId);
 
             // map relation with skills >> M:M
-            entity.HasMany(p => p.skills)
+            entity.HasMany(p => p.Skills)
                   .WithMany(s => s.projects)
                   .UsingEntity<Dictionary<string, object>>("projectSkills",
                 j => j.HasOne<Skill>()
@@ -217,11 +217,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 FreelancerId = 2,
                 CategoryId = 2
             }
-        );
-
-        modelBuilder.Entity<Project>().HasData(
-            new Project { Id = 1, Title = "Project1", Description = "Description for Project1", FreelancerId = 1 },
-            new Project { Id = 2, Title = "Project2", Description = "Description for Project2", FreelancerId = 2 }
         );
 
         modelBuilder.Entity<Category>().HasData(

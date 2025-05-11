@@ -1,4 +1,4 @@
-﻿namespace Shoghlana.API.DTOs;
+﻿namespace Shoghlana.Core.DTOs;
 
 public class FreelancerDTO
 {
@@ -19,7 +19,7 @@ public class FreelancerDTO
 
     //public List<Proposal>? Proposals { get; set; }
 
-    public List<SkillsDTO>? skills { get; set; }
+    public List<SkillDTO>? skills { get; set; }
 
     //public List<Notification>? notifications { get; set; }
 }

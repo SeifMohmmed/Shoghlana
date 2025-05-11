@@ -2,7 +2,7 @@
 using Shoghlana.Core.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shoghlana.API.DTOs;
+namespace Shoghlana.Core.DTOs;
 
 public class ProposalDTO
 {
