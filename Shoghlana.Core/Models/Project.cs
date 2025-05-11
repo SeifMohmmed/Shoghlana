@@ -17,7 +17,7 @@ public class Project
 
     public string? Link { get; set; }
 
-    public byte[] Poster { get; set; }
+    public byte[]? Poster { get; set; }
 
     public List<ProjectImages>? Images { get; set; }
 

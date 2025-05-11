@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Client> Clients { get; set; }
 
+    public DbSet<Admin> Admins { get; set; }
+
     public DbSet<Project> Projects { get; set; }
 
     public DbSet<Job> Jobs { get; set; }

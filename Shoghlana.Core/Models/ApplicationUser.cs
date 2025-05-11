@@ -20,4 +20,8 @@ public class ApplicationUser : IdentityUser
 
     public Freelancer? Freelancer { get; set; }
 
+    [ForeignKey("Admin")]
+    public int? AdminId { get; set; }
+
+    public Admin? Admin { get; set; }
 }
