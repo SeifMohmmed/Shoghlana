@@ -23,9 +23,9 @@ public class JobController : ControllerBase
     [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
-        var jobs = _unitOfWork.job.FindAll(new string[] { "Category", "Client","Skills" }).ToList();
+        var jobs = _unitOfWork.job.FindAll(new string[] { "Category", "Client", "Skills" }).ToList();
 
-        var jobDTOs = _mapper.Map<List<Job>,List<JobDTO>>(jobs);
+        var jobDTOs = _mapper.Map<List<Job>, List<JobDTO>>(jobs);
 
         for (int i = 0; i < jobs.Count; i++)
         {
@@ -55,7 +55,7 @@ public class JobController : ControllerBase
 
         try
         {
-            job = _unitOfWork.job.Find(new string[] { "Skills", "Category", "Proposals", "Client" });
+            job = _unitOfWork.job.Find(new string[] { "Skills", "Category", "Proposals", "Client" },j=>j.Id==id);
 
             jobDTOs = _mapper.Map<Job, JobDTO>(job);
             jobDTOs.ClientName = job.Client.Name;

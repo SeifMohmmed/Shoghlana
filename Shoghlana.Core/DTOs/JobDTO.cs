@@ -11,7 +11,7 @@ public class JobDTO
 
     public string Description { get; set; }
 
-    public DateTime PostTime { get; set; }= DateTime.Now;
+    public DateTime PostTime { get; set; } = DateTime.Now;
 
     public decimal MaxBudget { get; set; }
 
@@ -29,7 +29,7 @@ public class JobDTO
     public Dictionary<int, string> FreelancerDic { get; set; } = new Dictionary<int, string>();
     public Dictionary<int, string> ProposalDic { get; set; } = new Dictionary<int, string>();
 
-    public JobStatus JobStatus { get; set; }=JobStatus.Active;
+    public JobStatus JobStatus { get; set; } = JobStatus.Active;
 
 
     public int ClientId { get; set; }

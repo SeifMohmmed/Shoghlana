@@ -81,16 +81,17 @@ public class Repository<T> : IRepository<T> where T : class
     {
         IQueryable<T> query = _context.Set<T>();
 
+        if (criteria is not null)
+        {
+            query = query.Where(criteria);
+        }
+
         if (includes != null)
         {
             foreach (var incluse in includes)
             {
                 query = query.Include(incluse);
             }
-        }
-        if (criteria is not null)
-        {
-            query = query.Where(criteria);
         }
 
         return query.FirstOrDefault();
@@ -110,7 +111,7 @@ public class Repository<T> : IRepository<T> where T : class
     }
     public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
     {
-        IQueryable<T> query = _context.Set<T>().Where(criteria);
+        IQueryable<T> query = _context.Set<T>();
 
         if (includes != null)
         {
@@ -126,16 +127,17 @@ public class Repository<T> : IRepository<T> where T : class
     {
         IQueryable<T> query = _context.Set<T>();
 
+        if (criteria is not null)
+        {
+            query = query.Where(criteria);
+        }
+
         if (includes != null)
         {
             foreach (var incluse in includes)
             {
                 query = query.Include(incluse);
             }
-        }
-        if (criteria is not null)
-        {
-            query = query.Where(criteria);
         }
 
         return query.ToList();
@@ -248,8 +250,17 @@ public class Repository<T> : IRepository<T> where T : class
 
 
 
-    public T GetById(int id)
+    public T GetById(int id, string[] includes = null)
     {
+        if (includes != null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            foreach (string include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault();
+        }
         return _context.Set<T>().Find(id);
     }
 
