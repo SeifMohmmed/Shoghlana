@@ -23,11 +23,11 @@ public class ProposalController : ControllerBase
     [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
-        List<Freelancer> freelancers = _unitOfWork.freelancer.GetAll().ToList();
+        List<Proposal> proposals = _unitOfWork.proposal.GetAll().ToList();
 
-        List<FreelancerDTO> freelancerDTOs = new List<FreelancerDTO>(freelancers.Count);
+        List<GetProposalDTO> getProposalsDTOs = new List<GetProposalDTO>(proposals.Count);
 
-        foreach (var freelancer in freelancers)
+        foreach (var proposal in proposals)
         {
             #region Manual Mapping
             //FreelancerDTO freelancerDTO = new FreelancerDTO()
@@ -40,41 +40,71 @@ public class ProposalController : ControllerBase
             //};
             #endregion
 
-            FreelancerDTO freelancerDTO = _mapper.Map<Freelancer, FreelancerDTO>(freelancer);
+            GetProposalDTO getProposalsDTO = _mapper.Map<Proposal, GetProposalDTO>(proposal);
 
-            freelancerDTOs.Add(freelancerDTO);
+            getProposalsDTOs.Add(getProposalsDTO);
         }
         return new GeneralResponse()
         {
             IsSuccess = true,
             Status = 200,
-            Data = freelancerDTOs,
+            Data = getProposalsDTOs,
+        };
+    }
+    [HttpGet("{id:int}")]
+    public ActionResult<GeneralResponse> GetById(int id)
+    {
+        var proposal = _unitOfWork.proposal.GetById(id);
+        if (proposal == null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = "There is no Proposal found with this ID !"
+            };
+        }
+        var proposalDTO = _mapper.Map<Proposal, GetProposalDTO>(proposal);
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Status = 200,
+            Data = proposalDTO,
+        };
+    }
+    [HttpGet("JobId/{id:int}")]
+    public ActionResult<GeneralResponse> GetByJobId(int id)
+    {
+        var proposals = _unitOfWork.proposal.GetAll().ToList();
+
+        var getProposalDTOs = new List<GetProposalDTO>(proposals.Count);
+
+        if (proposals == null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = "There is no Proposal found with this ID !"
+            };
+        }
+        foreach (var proposal in proposals)
+        {
+            GetProposalDTO getProposalDTO = _mapper.Map<Proposal, GetProposalDTO>(proposal);
+
+            getProposalDTOs.Add(getProposalDTO);
+
+        }
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Status = 200,
+            Data = getProposalDTOs,
         };
     }
 
-
     #region To Be Added
-    //[HttpGet("{id:int}")]
-    //public ActionResult<GeneralResponse> GetById(int id)
-    //{
-    //    var freelancer = _unitOfWork.freelancer.GetById(id);
-    //    if (freelancer == null)
-    //    {
-    //        return new GeneralResponse()
-    //        {
-    //            IsSuccess = false,
-    //            Status = 400,
-    //            Message = "There is no Freelancer found with this ID !"
-    //        };
-    //    }
-    //    var freelancerDTO = _mapper.Map<Freelancer, FreelancerDTO>(freelancer);
-    //    return new GeneralResponse()
-    //    {
-    //        IsSuccess = true,
-    //        Status = 200,
-    //        Data = freelancerDTO,
-    //    };
-    //}
+
     //[HttpPost]
     //public async Task<ActionResult<GeneralResponse>> AddFreelancer([FromForm] AddFreelancerDTO addFreelancerDTO)
     //{
