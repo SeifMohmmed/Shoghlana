@@ -13,7 +13,7 @@ public class ProposalImages
     [ForeignKey("Proposal")]
     public int ProposalId { get; set; }
 
-    public Proposal Proposal { get; set; }
+    public Proposal? Proposal { get; set; }
 
     public byte[] Image { get; set; }
 }

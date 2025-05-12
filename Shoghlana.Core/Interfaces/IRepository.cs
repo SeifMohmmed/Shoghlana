@@ -52,4 +52,7 @@ public interface IRepository<T> where T : class
     public Task<int> CountAsync();
     public Task<int> CountAsync(Expression<Func<T, bool>> criteria);
 
+    public bool IsValid(int id);
+    public Task<bool> IsValidAsync(int id);
+
 }

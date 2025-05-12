@@ -288,5 +288,13 @@ public class Repository<T> : IRepository<T> where T : class
         _context.Set<T>().RemoveRange(entites);
     }
 
+    public bool IsValid(int id)
+    {
+        return _context.Set<T>().Find(id) != null;
+    }
 
+    public async Task<bool> IsValidAsync(int id)
+    {
+        return await _context.Set<T>().FindAsync(id) != null;
+    }
 }

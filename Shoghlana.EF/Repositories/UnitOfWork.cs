@@ -12,16 +12,29 @@ public class UnitOfWork : IUnitOfWork , IDisposable
     private readonly ApplicationDbContext _context;
 
     public ICategoryRepository category { get; private set; }
+
     public IFreelancerRepository freelancer { get; private set; }
+
     public IClientRepository client { get; private set; }
+
     public IJobRepository job { get; }
+
     public IJobSkillsRepository jobSkills { get; private set; }
+
     public IRateRepository rate { get; private set; }
+
     public IProposalRepository proposal { get; private set; }
+
+    public IPropsalImageRepository ProposalImages { get; private set; }
+
     public ISkillRepository skill { get; }
+
     public IFreelancerSkillsRepository freelancerSkills { get; private set; }
+
     public IProjectRepository project { get; private set; }
+
     public IProjectImagesRepository projectImages { get; private set; }
+
     public IProjectSkillsRepository projectSkills { get; private set; }
 
     public UnitOfWork(ApplicationDbContext context)
@@ -38,6 +51,7 @@ public class UnitOfWork : IUnitOfWork , IDisposable
         skill = new SkillRepository(context);
         proposal = new ProposalRepository(context);
         jobSkills = new JobSkillsRepository(context);
+        ProposalImages = new PropsalImageRepository(context);
     }
     public int Save()
     {

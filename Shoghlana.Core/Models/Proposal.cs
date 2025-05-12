@@ -12,11 +12,11 @@ public class Proposal
     //  [Key]
     public int Id { get; set; }
 
-    public string? Title { get; set; }
+    public DateTime Deadline { get; set; }
 
     public DateTime ApprovedTime { get; set; } // known when the client approves
 
-    public double Deadline { get; set; } // given from the freelancer
+    public double Duration { get; set; } // given from the freelancer
 
     public string? Description { get; set; }
 
@@ -29,7 +29,7 @@ public class Proposal
     public List<string>? ReposLinks { get; set; }
 
     //---------------------------------
-    public List<ProposalImages>? Image { get; set; }
+    public List<ProposalImages>? Images { get; set; }
 
     public int FreelancerId { get; set; }
 

@@ -27,6 +27,8 @@ public class GetProposalDTO
     //---------------------------------
     //public List<ProposalImages>? Image { get; set; }
 
+    public List<GetPropsalImageDTO>? Images { get; set; }
+
     public int FreelancerId { get; set; }
 
     // public Freelancer Freelancer { get; set; }

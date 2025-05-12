@@ -25,6 +25,8 @@ public interface IUnitOfWork
 
     IProposalRepository proposal { get; }
 
+    IPropsalImageRepository ProposalImages { get; }
+
     IRateRepository rate { get; }
 
     ISkillRepository skill { get; }
