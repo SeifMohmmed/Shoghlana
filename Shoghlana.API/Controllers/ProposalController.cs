@@ -52,6 +52,7 @@ public class ProposalController : ControllerBase
             Data = getProposalsDTOs,
         };
     }
+   
     [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
@@ -73,6 +74,7 @@ public class ProposalController : ControllerBase
             Data = getProposalDTO,
         };
     }
+    
     [HttpGet("JobId/{id:int}")]
     public ActionResult<GeneralResponse> GetByJobId(int id)
     {
@@ -115,6 +117,46 @@ public class ProposalController : ControllerBase
             Data = getProposalDTOs,
         };
     }
+    
+    [HttpGet("freelancerId/{id:int}")]
+    public ActionResult<GeneralResponse> GetByFreelancerId(int id)
+    {
+        var freelancer = _unitOfWork.freelancer.GetById(id);
+
+        if (freelancer is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 404,
+                Message = $"There are no freelancer found with this ID {id} ."
+            };
+        }
+        var proposals = _unitOfWork.proposal.FindAll(null, p => p.FreelancerId == id).ToList();
+        if (proposals.Count == 0)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 404,
+                Message = "There are no proposals yet to this freelancer ."
+            };
+        }
+        var getProposalDTOs = new List<GetProposalDTO>();
+        foreach (var proposal in proposals)
+        {
+            var getProposalDTO = _mapper.Map<Proposal, GetProposalDTO>(proposal);
+
+            getProposalDTOs.Add(getProposalDTO);
+        }
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Status = 200,
+            Data = getProposalDTOs,
+        };
+    }
+    
     [HttpPost]
     public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddProposalDTO addProposalDTO)
     {
@@ -399,10 +441,11 @@ public class ProposalController : ControllerBase
             };
         }
     }
+    
     [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> Delete(int id)
     {
-        var proposal = _unitOfWork.proposal.Find(includes:new string[] {"Images"} ,p=>p.Id==id);
+        var proposal = _unitOfWork.proposal.Find(includes: new string[] { "Images" }, p => p.Id == id);
 
         if (proposal is null)
         {
