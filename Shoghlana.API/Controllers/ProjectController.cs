@@ -169,11 +169,6 @@ public class ProjectController : ControllerBase
             Poster = posterDataStream.ToArray(),
             TimePublished = projectDTO.TimePublished,
             FreelancerId = projectDTO.FreelancerId,
-            Skills = projectDTO.Skills?.Select(skill => new Skill()
-            {
-                Title = skill.Title,
-                Description = skill.Description,
-            }).ToList(),
             Images = projectImages
         };
 
@@ -274,17 +269,17 @@ public class ProjectController : ControllerBase
         project.Link = updatedProjectDTO.Link;
         project.FreelancerId = updatedProjectDTO.FreelancerId;
 
-        project.Skills ??= new List<Skill>();
+        project.Skills ??= new List<ProjectSkills>();
+
         project.Skills.Clear();
 
         if (updatedProjectDTO.Skills != null)
         {
-            project.Skills.AddRange(updatedProjectDTO.Skills.Select(skill => new Skill
+            project.Skills.AddRange(updatedProjectDTO.Skills.Select(skillDto => new ProjectSkills
             {
-                Title = skill.Title,
-                Description = skill.Description,
+                SkillId = skillDto.Id, // Assuming the Skill already exists in DB
+                ProjectId = project.Id // optional, EF can populate this
             }));
-
         }
         _unitOfWork.Save();
 

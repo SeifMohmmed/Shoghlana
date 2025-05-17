@@ -13,12 +13,16 @@ public class ProjectSkills
     //----------------------------
 
     [ForeignKey("Project")]
-    public int? ProjectId { get; set; }
+    public int ProjectId { get; set; }
 
     public Project Project { get; set; }
 
     [ForeignKey("Skill")]
-    public int? SkillId { get; set; }
+    public int SkillId { get; set; }
 
     public Skill Skill { get; set; }
+
+    public string Description { get; set; }
+
+    public string Title { get; set; }
 }

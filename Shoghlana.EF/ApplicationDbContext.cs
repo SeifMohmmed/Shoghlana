@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Shoghlana.Core.Enums;
 using Shoghlana.Core.Models;
@@ -47,42 +48,72 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.HasKey(c => c.Id);
         });
 
-        modelBuilder.Entity<Client>(entity =>
-        {
-            entity.HasKey(c => c.Id);
-        });
+        //modelBuilder.Entity<Client>(entity =>
+        //{
+        //    entity.HasKey(c => c.Id);
+        //});
 
         // Freelancer-Notification relationship
         modelBuilder.Entity<FreelancerNotification>()
                 .HasKey(fn => new { fn.FreelancerId, fn.NotificationId });
 
-            modelBuilder.Entity<FreelancerNotification>()
-                .HasOne(fn => fn.Freelancer)
-                .WithMany(f => f.Notifications)
-                .HasForeignKey(fn => fn.FreelancerId);
+        modelBuilder.Entity<FreelancerNotification>()
+            .HasOne(fn => fn.Freelancer)
+            .WithMany(f => f.Notifications)
+            .HasForeignKey(fn => fn.FreelancerId);
 
-            modelBuilder.Entity<FreelancerNotification>()
-                .HasOne(fn => fn.Notification)
-                .WithMany(n => n.FreelancerNotifications)
-                .HasForeignKey(fn => fn.NotificationId);
+        modelBuilder.Entity<FreelancerNotification>()
+            .HasOne(fn => fn.Notification)
+            .WithMany(n => n.FreelancerNotifications)
+            .HasForeignKey(fn => fn.NotificationId);
 
-            // Client-Notification relationship
-            modelBuilder.Entity<ClientNotification>()
-                .HasKey(cn => new { cn.ClientId, cn.NotificationId });
+        // Client-Notification relationship
+        modelBuilder.Entity<ClientNotification>()
+            .HasKey(cn => new { cn.ClientId, cn.NotificationId });
 
-            modelBuilder.Entity<ClientNotification>()
-                .HasOne(cn => cn.Client)
-                .WithMany(c => c.Notifications)
-                .HasForeignKey(cn => cn.ClientId);
+        modelBuilder.Entity<ClientNotification>()
+            .HasOne(cn => cn.Client)
+            .WithMany(c => c.Notifications)
+            .HasForeignKey(cn => cn.ClientId);
 
-            modelBuilder.Entity<ClientNotification>()
-                .HasOne(cn => cn.Notification)
-                .WithMany(n => n.ClientNotifications)
-                .HasForeignKey(cn => cn.NotificationId);
+        modelBuilder.Entity<ClientNotification>()
+            .HasOne(cn => cn.Notification)
+            .WithMany(n => n.ClientNotifications)
+            .HasForeignKey(cn => cn.NotificationId);
 
         modelBuilder.Entity<Notification>(entity =>
         {
             entity.HasKey(n => n.Id);
+        });
+
+        modelBuilder.Entity<Freelancer>(entity =>
+        {
+            //entity.HasKey(f => f.Id);
+
+            entity.Property(f => f.Name).HasMaxLength(50);
+
+            // map relation with skills >> M:M
+            //entity.HasMany(f => f.Skills)
+            //      .WithMany(s => s.freelancers)
+            //      .UsingEntity<Dictionary<string, object>>("freelancerSkills",  // j 
+            //    j => j.HasOne<Skill>()
+            //          .WithMany()
+            //          .HasForeignKey("SkillId"),
+            //    j => j.HasOne<Freelancer>()
+            //          .WithMany()
+            //          .HasForeignKey("FreelancerId"));
+        });
+        modelBuilder.Entity<FreelancerSkills>(entity =>
+        {
+            entity.HasKey(fs => new { fs.SkillId, fs.FreelancerId });
+
+            entity.HasOne(fs => fs.Freelancer)
+                  .WithMany(f => f.Skills)
+                  .HasForeignKey(fs => fs.FreelancerId);
+
+            entity.HasOne(fs => fs.Skill)
+                   .WithMany(s => s.Freelancers)
+                   .HasForeignKey(fs => fs.SkillId);
         });
 
         modelBuilder.Entity<Job>(entity =>
@@ -112,16 +143,29 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
 
             // Map relation with skills (M:M)
-            entity.HasMany(j => j.Skills)
-                  .WithMany(s => s.jobs)
-                  .UsingEntity<Dictionary<string, object>>("jobSkills",
+            //entity.HasMany(j => j.Skills)
+            //      .WithMany(s => s.jobs)
+            //      .UsingEntity<Dictionary<string, object>>("jobSkills",
 
-                     j => j.HasOne<Skill>()
-                           .WithMany()
-                           .HasForeignKey("SkillId"),
-                     j => j.HasOne<Job>()
-                           .WithMany()
-                           .HasForeignKey("JobId"));
+            //         j => j.HasOne<Skill>()
+            //               .WithMany()
+            //               .HasForeignKey("SkillId"),
+            //         j => j.HasOne<Job>()
+            //               .WithMany()
+            //               .HasForeignKey("JobId"));
+        });
+
+        modelBuilder.Entity<JobSkills>(entity =>
+        {
+            entity.HasKey(e => new { e.SkillId, e.JobId });
+
+            entity.HasOne(js => js.Job)
+                  .WithMany(j => j.Skills)
+                  .HasForeignKey(js => js.JobId);
+
+            entity.HasOne(js => js.Skill)
+                   .WithMany(s => s.Jobs)
+                   .HasForeignKey(js => js.SkillId);
         });
         modelBuilder.Entity<Project>(entity =>
         {
@@ -132,15 +176,28 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                  .HasForeignKey(p => p.FreelancerId);
 
             // map relation with skills >> M:M
-            entity.HasMany(p => p.Skills)
-                  .WithMany(s => s.projects)
-                  .UsingEntity<Dictionary<string, object>>("projectSkills",
-                j => j.HasOne<Skill>()
-                      .WithMany()
-                      .HasForeignKey("SkillId"),
-                j => j.HasOne<Project>()
-                      .WithMany()
-                      .HasForeignKey("ProjectId"));
+            //entity.HasMany(p => p.Skills)
+            //      .WithMany(s => s.projects)
+            //      .UsingEntity<Dictionary<string, object>>("projectSkills",
+            //    j => j.HasOne<Skill>()
+            //          .WithMany()
+            //          .HasForeignKey("SkillId"),
+            //    j => j.HasOne<Project>()
+            //          .WithMany()
+            //          .HasForeignKey("ProjectId"));
+        });
+
+        modelBuilder.Entity<ProjectSkills>(entity =>
+        {
+            entity.HasKey(e => new { e.SkillId, e.ProjectId });
+
+            entity.HasOne(ps => ps.Project)
+                  .WithMany(p => p.Skills)
+                  .HasForeignKey(ps => ps.ProjectId);
+
+            entity.HasOne(ps => ps.Skill)
+                   .WithMany(s => s.Projects)
+                   .HasForeignKey(ps => ps.SkillId);
         });
 
         modelBuilder.Entity<ProjectImages>(entity =>
@@ -170,7 +227,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                   .WithMany(j => j.Proposals)
                   .HasForeignKey(p => p.JobId);
         });
-
 
         modelBuilder.Entity<Rate>(entity =>
         {
@@ -255,6 +311,30 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
               new Skill() { Id = 6, Title = "Blazor" },
           }
         );
+
+        modelBuilder.Entity<IdentityRole>().HasData(
+            new IdentityRole()
+            {
+                Id = "43e0e661-bc87-41cb-8865-d2942590f0bd",
+                Name = "Admin",
+                NormalizedName = "Admin".ToUpper(),
+                ConcurrencyStamp = "f37db9e5-310f-43c7-911a-13175601cfbf"
+            },
+               new IdentityRole()
+               {
+                   Id = "d14bce5b-fb04-43e2-9f93-bdfbb430e78e",
+                   Name = "Client",
+                   NormalizedName = "Client".ToUpper(),
+                   ConcurrencyStamp = "5b5fb572-a893-4e1d-860b-165dc0e5d5c8"
+               },
+                 new IdentityRole()
+                 {
+                     Id = "d5ed44ff-f5b6-4b70-b837-3c9a6a49bc91",
+                     Name = "Freelancer",
+                     NormalizedName = "Freelancer".ToUpper(),
+                     ConcurrencyStamp = "175d71bb-bc5d-428f-ab98-9076b535c5f5"
+                 }
+            );
         #endregion
 
 

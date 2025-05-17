@@ -27,9 +27,9 @@ public class Job
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
-    public List<Skill> Skills { get; set; }
+    public List<JobSkills> Skills { get; set; } = new List<JobSkills>();
 
-    public List<Proposal>? Proposals { get; set; }
+    public List<Proposal>? Proposals { get; set; } = new List<Proposal>();
 
     public Rate? Rate { get; set; }
 

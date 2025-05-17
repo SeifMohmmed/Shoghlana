@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace Shoghlana.Core.DTOs;
 public class SkillDTO
 {
+    public int Id { get; set; }
+
     [Required(ErrorMessage = "Title is required")]
     [MinLength(3, ErrorMessage = "Title must be at least 3 characters long")]
     [MaxLength(50, ErrorMessage = "Title cannot exceed 50 characters")]

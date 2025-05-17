@@ -25,9 +25,11 @@ public class JobDTO
 
     //public Rate? Rate { get; set; }
 
-    public Dictionary<int, string> SkillsDic { get; set; } = new Dictionary<int, string>();
-    public Dictionary<int, string> FreelancerDic { get; set; } = new Dictionary<int, string>();
-    public Dictionary<int, string> ProposalDic { get; set; } = new Dictionary<int, string>();
+    public List<SkillDTO> skillsDTO { get; set; } = new List<SkillDTO>();
+
+    public List<FreelancerDTO> freelancersDTO { get; set; } = new List<FreelancerDTO>();
+
+    public List<GetProposalDTO> proposalsDTO { get; set; } = new List<GetProposalDTO>();
 
     public JobStatus JobStatus { get; set; } = JobStatus.Active;
 
@@ -35,6 +37,10 @@ public class JobDTO
     public int ClientId { get; set; }
 
     public string? ClientName { get; set; }
+
+    public int AcceptedFreelancerId { get; set; }
+
+    public string? AcceptedFreelancerName { get; set; }
 
     public int CategoryId { get; set; }
 

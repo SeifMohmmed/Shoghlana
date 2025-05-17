@@ -18,11 +18,13 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JWT _jwt;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager)
+    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager,IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _unitOfWork = unitOfWork;
         _jwt = jwt.Value;
     }
     public async Task<AuthModel> RegisterAsync(RegisterModel model)
@@ -39,7 +41,8 @@ public class AuthService : IAuthService
         var freelancer = new ApplicationUser
         {
             UserName = model.Username,
-            Email = model.Email
+            Email = model.Email,
+            PhoneNumber = model.PhoneNumber,
         };
 
         var result =
@@ -55,6 +58,17 @@ public class AuthService : IAuthService
         }
 
         var jwtSecurityToken = await CreateJwtToken(freelancer);
+
+        Freelancer userToAddToDb = new Freelancer
+        {
+            Name = model.Username,
+            User = freelancer,
+            Title = ""
+
+        };
+        _unitOfWork.freelancer.Add(userToAddToDb);
+        _unitOfWork.Save();
+        freelancer.FreelancerId = userToAddToDb.Id;
 
         return new AuthModel
         {

@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 namespace Shoghlana.Core.Models;
 public class Freelancer
 {
+    [Key]
     public int Id { get; set; }
 
     public byte[]? PersonalImageBytes { get; set; }
 
     public string Name { get; set; }
 
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     public string? Address { get; set; }
 
@@ -26,7 +27,7 @@ public class Freelancer
 
     public List<Proposal>? Proposals { get; set; }
 
-    public List<Skill>? Skills { get; set; }
+    public List<FreelancerSkills>? Skills { get; set; }
 
     public List<FreelancerNotification>? Notifications { get; set; }
 

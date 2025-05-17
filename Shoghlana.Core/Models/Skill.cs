@@ -15,7 +15,10 @@ public class Skill
 
     public string? Description { get; set; }
 
-    public List<Freelancer>? freelancers { get; set; }
-    public List<Job>? jobs { get; set; }
-    public List<Project>? projects { get; set; }
+    public List<FreelancerSkills>? Freelancers { get; set; }
+
+    public List<JobSkills>? Jobs { get; set; }
+
+    public List<ProjectSkills>? Projects { get; set; }
+
 }
