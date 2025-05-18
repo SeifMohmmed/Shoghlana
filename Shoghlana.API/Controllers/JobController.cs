@@ -61,7 +61,7 @@ public class JobController : ControllerBase
 
         try
         {
-            job = _unitOfWork.job.Find(new string[] { "Skills", "Category", "Proposals", "Client" }, j => j.Id == id);
+            job = _unitOfWork.job.Find(includes: new string[] { "Skills", "Category", "Proposals", "Client" }, criteria: j => j.Id == id);
 
             jobDTOs = _mapper.Map<Job, JobDTO>(job);
             jobDTOs.ClientName = job.Client.Name;
@@ -76,7 +76,7 @@ public class JobController : ControllerBase
                     Id = freelancer.Id
                 });
 
-                jobDTOs.proposalsDTO.Add(new GetProposalDTO
+                jobDTOs.proposalsDTO.Add(new ProposalDTO
                 {
                     Description = proposal.Description,
                     Id = proposal.Id

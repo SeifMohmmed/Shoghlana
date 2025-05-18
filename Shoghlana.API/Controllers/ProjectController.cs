@@ -35,8 +35,8 @@ public class ProjectController : ControllerBase
             }).ToList(),
             Skills = project.Skills?.Select(skill => new SkillDTO
             {
-                Title = skill.Title,
-                Description = skill.Description,
+                Title = _unitOfWork.skill.GetById(skill.SkillId).Title,
+                Description = _unitOfWork.skill.GetById(skill.SkillId).Description,
             }).ToList(),
             TimePublished = project.TimePublished,
             FreelancerId = project.FreelancerId,
@@ -70,8 +70,8 @@ public class ProjectController : ControllerBase
             Link = project.Link,
             Skills = project.Skills?.Select(skill => new SkillDTO
             {
-                Title = skill.Title,
-                Description = skill.Description,
+                Title = _unitOfWork.skill.GetById(skill.SkillId).Title,
+                Description = _unitOfWork.skill.GetById(skill.SkillId).Description,
             }).ToList(),
             Images = project.Images?.Select(image => new GetImageDTO
             {
@@ -172,7 +172,13 @@ public class ProjectController : ControllerBase
             Images = projectImages
         };
 
-        await _unitOfWork.project.AddAsync(project);
+        project.Skills = projectDTO.Skills?.Select(skillDTO => new ProjectSkills   // skills are added after project id is generated
+        {
+            SkillId = skillDTO.Id,
+            ProjectId = project.Id
+        }).ToList();
+
+        _unitOfWork.project.Update(project);
         _unitOfWork.Save();
 
         return new GeneralResponse()
@@ -192,6 +198,7 @@ public class ProjectController : ControllerBase
             {
                 Status = 400,
                 IsSuccess = false,
+                Data = ModelState,
                 Message = "Model State is Invaild!"
             };
         }
@@ -293,8 +300,8 @@ public class ProjectController : ControllerBase
 
             Skills = updatedProjectDTO.Skills?.Select(skill => new SkillDTO()
             {
-                Title = skill.Title,
-                Description = skill.Description,
+                Title = _unitOfWork.skill.GetById(skill.Id).Title,
+                Description = _unitOfWork.skill.GetById(skill.Id).Description,
             }).ToList(),
 
             Images = project.Images?.Select(image => new ImageDTO

@@ -29,7 +29,7 @@ public class JobDTO
 
     public List<FreelancerDTO> freelancersDTO { get; set; } = new List<FreelancerDTO>();
 
-    public List<GetProposalDTO> proposalsDTO { get; set; } = new List<GetProposalDTO>();
+    public List<ProposalDTO> proposalsDTO { get; set; } = new List<ProposalDTO>();
 
     public JobStatus JobStatus { get; set; } = JobStatus.Active;
 

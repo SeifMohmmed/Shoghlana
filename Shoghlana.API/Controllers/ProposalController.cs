@@ -52,7 +52,7 @@ public class ProposalController : ControllerBase
             Data = getProposalsDTOs,
         };
     }
-   
+
     [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
@@ -74,7 +74,7 @@ public class ProposalController : ControllerBase
             Data = getProposalDTO,
         };
     }
-    
+
     [HttpGet("JobId/{id:int}")]
     public ActionResult<GeneralResponse> GetByJobId(int id)
     {
@@ -117,7 +117,7 @@ public class ProposalController : ControllerBase
             Data = getProposalDTOs,
         };
     }
-    
+
     [HttpGet("freelancerId/{id:int}")]
     public ActionResult<GeneralResponse> GetByFreelancerId(int id)
     {
@@ -156,7 +156,7 @@ public class ProposalController : ControllerBase
             Data = getProposalDTOs,
         };
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddProposalDTO addProposalDTO)
     {
@@ -441,11 +441,11 @@ public class ProposalController : ControllerBase
             };
         }
     }
-    
+
     [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> Delete(int id)
     {
-        var proposal = _unitOfWork.proposal.Find(includes: new string[] { "Images" }, p => p.Id == id);
+        var proposal = _unitOfWork.proposal.Find(includes: new string[] { "Images" }, criteria: p => p.Id == id);
 
         if (proposal is null)
         {
