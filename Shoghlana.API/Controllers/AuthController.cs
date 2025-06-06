@@ -15,6 +15,7 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+
     [HttpPost("Register")]
     public async Task<GeneralResponse> RegisterAsync([FromBody] RegisterModel registerModel)
     {
@@ -23,6 +24,8 @@ public class AuthController : ControllerBase
             var result = await _authService.RegisterAsync(registerModel);
             if (result.IsAuthenticated)
             {
+                SetRefreshTokenInCookie(result.RefreshToken,result.RefreshTokenExpiration);
+
                 return new GeneralResponse
                 {
                     Data = result,
@@ -62,6 +65,10 @@ public class AuthController : ControllerBase
             var result = await _authService.GetTokenAsync(registerModel);
             if (result.IsAuthenticated)
             {
+                if (!string.IsNullOrEmpty(result.RefreshToken))
+                {
+                    SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+                }
                 return new GeneralResponse
                 {
                     Data = result,
@@ -130,5 +137,53 @@ public class AuthController : ControllerBase
             };
         }
 
+    }
+
+
+    [HttpGet("refreshToken")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+
+        var result = await _authService.RefreshTokenAsync(refreshToken);
+
+        if (!result.IsAuthenticated)
+            return BadRequest(result);
+
+        SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+
+        return Ok(result);
+
+    }
+
+
+    [HttpPost("revokeToken")]
+    public async Task<IActionResult> RevokeToken([FromBody] RevokeToken model)
+    {
+        var token = model.Token ?? Request.Cookies["refreshToken"];
+
+        if (string.IsNullOrEmpty(token))
+            return BadRequest("Token is required!");
+
+        var result = await _authService.RevokeTokenAsync(token);
+
+        if (!result)
+            return BadRequest("Token is invalid!");
+
+        return Ok();
+    }
+
+
+    private void SetRefreshTokenInCookie(string refreshToken,DateTime expires)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = expires.ToLocalTime(),
+            Secure = true,
+            IsEssential = true,
+            SameSite = SameSiteMode.None,
+        };
+        Response.Cookies.Append("refreshtoken",refreshToken,cookieOptions);
     }
 }
