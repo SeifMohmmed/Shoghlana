@@ -11,7 +11,12 @@ public class ClientNotification
 
     public Client Client { get; set; }
 
-    public int NotificationId { get; set; }
+    public int Id { get;set; }
 
-    public Notification Notification { get; set; } 
+    public string Title { get; set; }
+
+    public DateTime SentTime { get; set; }
+
+    public string Description { get; set; }
+
 }

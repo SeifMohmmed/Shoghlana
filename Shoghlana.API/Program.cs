@@ -8,6 +8,7 @@ using Shoghlana.Core.Helpers;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF;
+using Shoghlana.EF.Hubs;
 using Shoghlana.EF.Repositories;
 using System.Text;
 
@@ -22,6 +23,7 @@ namespace Shoghlana.API
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddSignalR();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -60,7 +62,7 @@ namespace Shoghlana.API
                       ValidIssuer = builder.Configuration["JWT:Issuer"],
                       ValidateLifetime=true,
                       IssuerSigningKey = 
-                      new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
+                      new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
                       
                   };
               });
@@ -81,6 +83,9 @@ namespace Shoghlana.API
             app.UseHttpsRedirection();
 
             app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+            app.MapHub<NotificationHub>("/notificationHub");
+
 
             app.UseAuthentication();
 

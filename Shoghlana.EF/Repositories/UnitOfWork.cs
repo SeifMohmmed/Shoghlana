@@ -7,35 +7,37 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class UnitOfWork : IUnitOfWork , IDisposable
+public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ApplicationDbContext _context;
 
     public ICategoryRepository category { get; private set; }
 
-    public IFreelancerRepository freelancer { get; private set; }
-
     public IClientRepository client { get; private set; }
+
+    public IFreelancerRepository freelancer { get; private set; }
 
     public IJobRepository job { get; }
 
     public IJobSkillsRepository jobSkills { get; private set; }
 
-    public IRateRepository rate { get; private set; }
+    public IProjectImagesRepository projectImages { get; private set; }
+
+    public IProjectRepository project { get; private set; }
+
+    public IProjectSkillsRepository projectSkills { get; private set; }
 
     public IProposalRepository proposal { get; private set; }
 
     public IPropsalImageRepository ProposalImages { get; private set; }
 
+    public IRateRepository rate { get; private set; }
+
     public ISkillRepository skill { get; }
 
-    public IFreelancerSkillsRepository freelancerSkills { get; private set; }
+    public IClientNotificationRepository clientNotification { get; private set; }
 
-    public IProjectRepository project { get; private set; }
-
-    public IProjectImagesRepository projectImages { get; private set; }
-
-    public IProjectSkillsRepository projectSkills { get; private set; }
+    public IFreelancerNotificationRepository freelancerNotification { get; private set; }
 
     public UnitOfWork(ApplicationDbContext context)
     {
@@ -51,7 +53,11 @@ public class UnitOfWork : IUnitOfWork , IDisposable
         skill = new SkillRepository(context);
         proposal = new ProposalRepository(context);
         jobSkills = new JobSkillsRepository(context);
+        clientNotification = new ClientNotificationRepository(context);
+        freelancerNotification = new FreelancerNotificationRepository(context);
         ProposalImages = new PropsalImageRepository(context);
+
+
     }
     public int Save()
     {
@@ -62,6 +68,6 @@ public class UnitOfWork : IUnitOfWork , IDisposable
     //release unmanaged resources like connection with db "like garbage collector but for unmanaged resources"
     public void Dispose()
     {
-        _context.Dispose(); 
+        _context.Dispose();
     }
 }

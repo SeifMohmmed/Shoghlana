@@ -5,6 +5,9 @@ using Shoghlana.API.Response;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF.Repositories;
+using Microsoft.AspNetCore.SignalR;
+using Shoghlana.EF.Hubs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
@@ -12,11 +15,13 @@ namespace Shoghlana.API.Controllers;
 public class ClientController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IHubContext<NotificationHub> _hubContext;
     private List<string> allowedExtensions = new List<string>() { ".jpg", ".png" };
     private long maxAllowedPersonalImageSize = 1_048_576;  // 1 MB = 1024 * 1024 bytes
-    public ClientController(IUnitOfWork unitOfWork)
+    public ClientController(IUnitOfWork unitOfWork, IHubContext<NotificationHub> hubContext)
     {
         _unitOfWork = unitOfWork;
+        _hubContext = hubContext;
     }
     [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
@@ -37,6 +42,17 @@ public class ClientController : ControllerBase
                 clientDTO.Country = client.Country;
 
                 clientsDTO.Add(clientDTO);
+
+                var notificationDto = new NotificationDTO
+                {
+                    Title = "New Client Registered",
+                    Description = $"{client.Name} has registered.",
+                    SentTime = DateTime.Now,
+                    SenderName = client.Name,
+                    SenderImage = client.Image
+                };
+                _hubContext.Clients.All.SendAsync("ReceiveNotification", notificationDto);
+
             }
             return new GeneralResponse()
             {
@@ -154,7 +170,8 @@ public class ClientController : ControllerBase
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "The allowed Personal Image Extensions => {jpg , png}",
+                Message = "Only JPG and PNG image formats are allowed!"
+
             };
         }
 
@@ -164,21 +181,36 @@ public class ClientController : ControllerBase
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "The max Allowed Personal Image Size => 1 MB ",
+                Message = "Image size exceeds the maximum allowed size (1 MB)!"
             };
         }
         using var dataStream = new MemoryStream();
 
         await clientDTO.Image.CopyToAsync(dataStream);
 
-        Client client = new Client();
-        client.Name = clientDTO.Name;
-        client.Image = dataStream.ToArray();
-        client.Description = clientDTO.Description;
-        client.Country = clientDTO.Country;
-        client.Phone = clientDTO.Phone;
+        Client client = new Client()
+        {
+            Name = clientDTO.Name,
+            Image = dataStream.ToArray(),
+            Description = clientDTO.Description,
+            Country = clientDTO.Country,
+            Phone = clientDTO.Phone
+        };
+
         _unitOfWork.client.Add(client);
         _unitOfWork.Save();
+
+        // Send notificationAdd commentMore actions
+        var notificationDto = new NotificationDTO
+        {
+            Title = "New Client Registered",
+            Description = $"{client.Name} has registered.",
+            SentTime = DateTime.Now,
+            SenderName = client.Name,
+            SenderImage = client.Image
+        };
+
+        await _hubContext.Clients.All.SendAsync("ReceiveNotification", notificationDto);
 
         return new GeneralResponse()
         {

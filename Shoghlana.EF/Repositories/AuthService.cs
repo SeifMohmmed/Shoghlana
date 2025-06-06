@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.SignalR;
+using Shoghlana.EF.Hubs;
+using Shoghlana.Core.DTOs;
 
 namespace Shoghlana.EF.Repositories;
 public class AuthService : IAuthService
@@ -18,76 +21,84 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JWT _jwt;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork)
+    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager
+        , IUnitOfWork unitOfWork, IHubContext<NotificationHub> hubContext)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _unitOfWork = unitOfWork;
+        _hubContext = hubContext;
         _jwt = jwt.Value;
     }
     public async Task<AuthModel> RegisterAsync(RegisterModel model)
     {
-        if (await _userManager.FindByEmailAsync(model.Email) is null)
+        if (await _userManager.FindByEmailAsync(model.Email) is not null)
         {
             return new AuthModel { Message = "Email is already registered!" };
         }
-        if (await _userManager.FindByNameAsync(model.Username) is null)
+        if (await _userManager.FindByNameAsync(model.Username) is not null)
         {
             return new AuthModel { Message = "Username is already registered!" };
         }
 
-        var freelancer = new ApplicationUser
+        var user = new ApplicationUser
         {
             UserName = model.Username,
             Email = model.Email,
-            PhoneNumber = model.PhoneNumber,
         };
 
         var result =
-            await _userManager.CreateAsync(freelancer, model.Password);
+            await _userManager.CreateAsync(user, model.Password);
 
         if (!result.Succeeded)
         {
-            var errors = string.Empty;
-            foreach (var error in result.Errors)
-                errors += $"{error.Description}";
-
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
             return new AuthModel { Message = errors };
         }
 
-        var jwtSecurityToken = await CreateJwtToken(freelancer);
+        // Send a welcome notification to the user
+        await SendWelcomeNotificationAsync(user);
 
-        Freelancer userToAddToDb = new Freelancer
-        {
-            Name = model.Username,
-            User = freelancer,
-            Title = ""
+        var jwtSecurityToken = await CreateJwtToken(user);
 
-        };
-        _unitOfWork.freelancer.Add(userToAddToDb);
-        _unitOfWork.Save();
-        freelancer.FreelancerId = userToAddToDb.Id;
+        // Determine the user's roles
+        var roles = await _userManager.GetRolesAsync(user);
 
         return new AuthModel
         {
-            Email = freelancer.Email,
+            Email = user.Email,
             ExpiresOn = jwtSecurityToken.ValidTo,
             IsAuthenticated = true,
-            Roles = new List<string> { "Freelancer" },
+            Roles = roles.ToList(),
             Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-            Username = freelancer.UserName,
+            Username = user.UserName,
         };
+    }
+
+    private async Task SendWelcomeNotificationAsync(ApplicationUser user)
+    {
+        var notification = new NotificationDTO
+        {
+            Title = "Welcome to Shoglana!",
+            Description = $"Welcome, {user.UserName}! Thank you for joining us.",
+            SentTime = DateTime.Now,
+            // You can include the user's image in the notification if available
+
+        };
+
+        await _hubContext.Clients.User(user.Id).SendAsync("ReceiveNotification", notification);
     }
 
     public async Task<string> AddRoleAsync(AddRoleModel model)
     {
         var user = await _userManager.FindByIdAsync(model.UserId);
+
         if (user is null || await _roleManager.RoleExistsAsync(model.Role))
         {
             return "Invalid User ID or Role";
         }
+
         if (await _userManager.IsInRoleAsync(user, model.Role))
         {
             return "User Already Assigned To This Role";
@@ -134,6 +145,7 @@ public class AuthService : IAuthService
         var userClaims = await _userManager.GetClaimsAsync(user);
         var roles = await _userManager.GetRolesAsync(user);
         var rolesClaims = new List<Claim>();
+
         foreach (var role in roles)
             rolesClaims.Add(new Claim("roles", role));
 
@@ -152,6 +164,7 @@ public class AuthService : IAuthService
 
         var signingCredentials = new
             SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: _jwt.Issuer,
             audience: _jwt.Audience,

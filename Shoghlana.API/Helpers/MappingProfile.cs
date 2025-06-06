@@ -20,5 +20,6 @@ public class MappingProfile : Profile
 
         CreateMap<Proposal,GetPropsalImageDTO>().ReverseMap();
 
+        CreateMap<Rate,RateDTO>().ReverseMap();
     }
 }
