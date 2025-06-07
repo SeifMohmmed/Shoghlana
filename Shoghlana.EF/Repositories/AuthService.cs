@@ -48,6 +48,14 @@ public class AuthService : IAuthService
         {
             UserName = model.Username,
             Email = model.Email,
+
+            //PhoneNumber = model.PhoneNumber,
+
+            //NormalizedEmail = model.Email ,
+
+            //PasswordHash = model.Password,
+
+            // TODO the mail and password ? 
         };
 
         var result =

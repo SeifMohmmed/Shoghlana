@@ -88,12 +88,12 @@ public class RateController : ControllerBase
 
             if (existingJob == null)
             {
-                return NotFound(new GeneralResponse()
+                return new GeneralResponse()
                 {
                     IsSuccess = false,
                     Status = 404,
                     Message = "Job Not Found",
-                });
+                };
             }
 
             var rate = _mapper.Map<Rate>(rateDTO);
@@ -117,13 +117,13 @@ public class RateController : ControllerBase
                     await NotifyFreelancer(existingJob.FreelancerId.Value, notificationDto);
                 }
             }
-            return Ok(new GeneralResponse()
+            return new GeneralResponse()
             {
                 IsSuccess = true,
                 Status = 200,
                 Data = rateDTO,
                 Message = "Rate Created Successfully !"
-            });
+            };
         }
 
         return BadRequest(new GeneralResponse()

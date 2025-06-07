@@ -40,7 +40,9 @@ public class AuthController : ControllerBase
                 {
                     Data = registerModel,
                     IsSuccess = false,
-                    Message = result.Message
+                    Message = result.Message,
+                    Status=400,
+                    
                 };
             }
         }

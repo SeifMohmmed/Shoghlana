@@ -64,16 +64,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                   .HasForeignKey(n => n.ClientId);
         });
 
-        modelBuilder.Entity<Freelancer>(entity =>
-        {
-            entity.HasKey(f => f.Id);
+        //modelBuilder.Entity<Freelancer>(entity =>
+        //{
+        //    entity.HasKey(f => f.Id);
 
-            entity.Property(f => f.Name).HasMaxLength(50);
+        //    entity.Property(f => f.Name).HasMaxLength(50);
 
 
-            entity.HasMany(f => f.Notifications)
-                  .WithOne(n => n.Freelancer)
-                  .HasForeignKey(n => n.FreelancerId);
+        //    entity.HasMany(f => f.Notifications)
+        //          .WithOne(n => n.Freelancer)
+        //          .HasForeignKey(n => n.FreelancerId);
 
             //entity.HasMany(f => f.Skills)
             //      .WithMany(s => s.)
