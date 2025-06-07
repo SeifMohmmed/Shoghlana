@@ -95,7 +95,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             //    j => j.HasOne<Freelancer>()
             //          .WithMany()
             //          .HasForeignKey("FreelancerId"));
-        });
+        //});
 
         modelBuilder.Entity<FreelancerSkills>(entity =>
         {

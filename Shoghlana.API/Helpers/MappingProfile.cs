@@ -21,5 +21,9 @@ public class MappingProfile : Profile
         CreateMap<Proposal,GetPropsalImageDTO>().ReverseMap();
 
         CreateMap<Rate,RateDTO>().ReverseMap();
+
+        CreateMap<Category,CategoryDTO>().ReverseMap();
+
+        CreateMap<Category, GetTitleOfCategoryDTO>().ReverseMap();
     }
 }

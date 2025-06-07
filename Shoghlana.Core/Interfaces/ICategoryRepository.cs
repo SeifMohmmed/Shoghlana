@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 namespace Shoghlana.Core.Interfaces;
 public interface ICategoryRepository : IRepository<Category>
 {
-
+    Category? GetCategoryWithJobs(int id);
 }
