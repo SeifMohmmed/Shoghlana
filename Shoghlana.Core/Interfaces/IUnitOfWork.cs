@@ -31,7 +31,17 @@ public interface IUnitOfWork
 
     ISkillRepository skill { get; }
 
+    IClientNotificationRepository clientNotification { get; }
+
+    IFreelancerNotificationRepository freelancerNotification { get; }
+
+    IFreelancerSkillsRepository freelancerSkills { get; }
+
     public int Save();
 
-   // public void Dispose();
+    void BeginTransaction();
+
+    void Commit();
+
+    void Rollback();
 }

@@ -1,4 +1,6 @@
-﻿using Shoghlana.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
+using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,8 @@ namespace Shoghlana.EF.Repositories;
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ApplicationDbContext _context;
+
+    private IDbContextTransaction _transaction;
 
     public ICategoryRepository category { get; private set; }
 
@@ -39,25 +43,39 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public IFreelancerNotificationRepository freelancerNotification { get; private set; }
 
-    public UnitOfWork(ApplicationDbContext context)
+    public IFreelancerSkillsRepository freelancerSkills { get; private set; }
+    public UnitOfWork(ApplicationDbContext context, ICategoryRepository categoryRepository, IClientRepository clientRepository,
+               IFreelancerRepository freelancerRepository, IJobRepository jobRepository, IProjectImagesRepository projectImagesRepository,
+               IProjectRepository projectRepository, IProjectSkillsRepository projectSkillsRepository, IRateRepository rateRepository,
+               ISkillRepository skillRepository, IProposalRepository proposalRepository, IJobSkillsRepository jobSkillsRepository,
+               IClientNotificationRepository clientNotificationRepository, IFreelancerNotificationRepository freelancerNotificationRepository
+               , IPropsalImageRepository proposalImageRepository, IFreelancerSkillsRepository freelancerSkillsRepository)
     {
         _context = context;
-        category = new CategoryRepository(context);
-        client = new ClientRepository(context);
-        freelancer = new FreelancerRepository(context);
-        job = new JobRepository(context);
-        projectImages = new ProjectImagesRepository(context);
-        project = new ProjectRepository(context);
-        projectSkills = new ProjectSkillsRepository(context);
-        rate = new RateRepository(context);
-        skill = new SkillRepository(context);
-        proposal = new ProposalRepository(context);
-        jobSkills = new JobSkillsRepository(context);
-        clientNotification = new ClientNotificationRepository(context);
-        freelancerNotification = new FreelancerNotificationRepository(context);
-        ProposalImages = new PropsalImageRepository(context);
+
+        category = categoryRepository;
+        client = clientRepository;
+        freelancer = freelancerRepository;
+
+        job = jobRepository;
+        jobSkills = jobSkillsRepository;
+
+        project = projectRepository;
+        projectImages = projectImagesRepository;
+        projectSkills = projectSkillsRepository;
+
+        proposal = proposalRepository;
+        ProposalImages = proposalImageRepository;
 
 
+        rate = rateRepository;
+
+        skill = skillRepository;
+
+        freelancerSkills = freelancerSkillsRepository;
+
+        clientNotification = clientNotificationRepository;
+        freelancerNotification = freelancerNotificationRepository;
     }
     public int Save()
     {
@@ -69,5 +87,33 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public void Dispose()
     {
         _context.Dispose();
+    }
+
+    public void BeginTransaction()
+    {
+        if (_transaction == null)
+        {
+            _transaction = _context.Database.BeginTransaction();
+        }
+    }
+
+    public void Commit()
+    {
+        try
+        {
+            _context.SaveChanges();
+            _transaction?.Commit();
+        }
+        catch
+        {
+            Rollback();
+            throw; // Re-throw exception to propagate
+        }
+    }
+
+    public void Rollback()
+    {
+        _transaction?.Rollback();
+        _transaction = null;
     }
 }
