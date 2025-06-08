@@ -12,8 +12,4 @@ public class ProposalImageService : GenericService<ProposalImages> , IProposalIm
 
         }
 
-    //**************************************
-
-
-
 }
