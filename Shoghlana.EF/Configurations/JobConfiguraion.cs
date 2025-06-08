@@ -43,7 +43,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
             {
                 Id = 1,
                 Title = "Job1",
-                PostTime = DateTime.Now,
+                PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                 Description = "Description for Job1",
                 MinBudget = 100,
                 MaxBudget = 500,
@@ -57,7 +57,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
             {
                 Id = 2,
                 Title = "Job2",
-                PostTime = DateTime.Now,
+                PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(625),
                 Description = "Description for Job2",
                 MinBudget = 200,
                 MaxBudget = 700,

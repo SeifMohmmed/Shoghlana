@@ -13,11 +13,11 @@ internal class FreelancerConfiguration : IEntityTypeConfiguration<Freelancer>
     public void Configure(EntityTypeBuilder<Freelancer> builder)
     {
         builder.HasData
-                 (
-                     new Freelancer() { Id = 1, Name = "أحمد محمد", Title = "مطور الواجهة الخلفية" },
-                     new Freelancer() { Id = 2, Name = "علي سليمان", Title = "مطور الواجهة الأمامية" },
-                     new Freelancer() { Id = 3, Name = "وائل عبد الرحيم", Title = "مطور الواجهة الخلفية" }
-                 );
+        (
+            new Freelancer() { Id = 1, Name = "Ahmed Mohammed", Title = "Backend Developer" },
+            new Freelancer() { Id = 2, Name = "Ali Suleiman", Title = "Frontend Developer" },
+            new Freelancer() { Id = 3, Name = "Wael Abdul Rahim", Title = "Backend Developer" }
+        );
 
         #region Old Config
         //modelBuilder.Entity<Freelancer>(entity =>Add commentMore actions
