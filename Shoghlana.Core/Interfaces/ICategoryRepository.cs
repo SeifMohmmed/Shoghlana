@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.Core.Interfaces;
-public interface ICategoryRepository : IRepository<Category>
+public interface ICategoryRepository : IGenericRepository<Category>
 {
     Category? GetCategoryWithJobs(int id);
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.Core.Interfaces;
-public interface IFreelancerNotificationRepository : IRepository<FreelancerNotification>
+public interface IFreelancerNotificationRepository : IGenericRepository<FreelancerNotification>
 {
 
 }

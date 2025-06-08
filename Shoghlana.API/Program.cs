@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Shoghlana.API.Helpers;
+using Shoghlana.API.Services.Implementations;
+using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.Helpers;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
@@ -72,9 +74,47 @@ namespace Shoghlana.API
                   };
               });
 
+            // Registering the Unit of work inside the application container.
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
+            builder.Services.AddScoped<IClientNotificationRepository, ClientNotificationRepository>();
+
+            builder.Services.AddScoped<IJobRepository, JobRepository>();
+            builder.Services.AddScoped<IJobSkillsRepository, JobSkillsRepository>();
+
+            builder.Services.AddScoped<IFreelancerRepository, FreelancerRepository>();
+            builder.Services.AddScoped<IFreelancerSkillsRepository, FreelancerSkillsRepository>();
+            builder.Services.AddScoped<IFreelancerNotificationRepository, FreelancerNotificationRepository>();
+
+            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            builder.Services.AddScoped<IProjectImagesRepository, ProjectImagesRepository>();
+            builder.Services.AddScoped<IProjectSkillsRepository, ProjectSkillsRepository>();
+
+            builder.Services.AddScoped<IProposalRepository, ProposalRepository>();
+            builder.Services.AddScoped<IProposalImagesRepository, PropsalImageRepository>();
+
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+            builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+
+            builder.Services.AddScoped<IRateRepository, RateRepository>();
+
+            // Registering the Generic Repository inside the application container.
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            // Registering the Generic Service inside the application container.
+            builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+
+            // Registering the Proposal Service inside the application container.
+            builder.Services.AddScoped<IProposalService, ProposalService>();
+            builder.Services.AddScoped<IProposalImageService, ProposalImageService>();
+
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddCors();
+
+            //************************************************************************
 
             var app = builder.Build();
 

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class PropsalImageRepository : Repository<ProposalImages>, IPropsalImageRepository
+public class PropsalImageRepository : GenericRepository<ProposalImages>, IProposalImagesRepository
 {
     public PropsalImageRepository(ApplicationDbContext context) : base(context)
     { }

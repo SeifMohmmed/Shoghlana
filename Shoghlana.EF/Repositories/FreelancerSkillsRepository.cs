@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class FreelancerSkillsRepository : Repository<FreelancerSkills>
+public class FreelancerSkillsRepository : GenericRepository<FreelancerSkills> , IFreelancerSkillsRepository
 {
     public FreelancerSkillsRepository(ApplicationDbContext context) : base(context)
     { }

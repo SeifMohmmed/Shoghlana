@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class ClientRepository : Repository<Client>, IClientRepository
+public class ClientRepository : GenericRepository<Client>, IClientRepository
 {
     private readonly ApplicationDbContext _context;
     public ClientRepository(ApplicationDbContext context) : base(context)

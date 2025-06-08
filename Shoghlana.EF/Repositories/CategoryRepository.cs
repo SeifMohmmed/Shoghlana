@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class CategoryRepository : Repository<Category>, ICategoryRepository
+public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -19,7 +19,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
 
     public Category? GetCategoryWithJobs(int id)
     {
-        return _context.Category
+        return _context.Categories
             .Include(c => c.Jobs)
             .FirstOrDefault(x=>x.Id==id);
     }

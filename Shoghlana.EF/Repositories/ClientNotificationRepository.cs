@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class ClientNotificationRepository : Repository<ClientNotification>, IClientNotificationRepository
+public class ClientNotificationRepository : GenericRepository<ClientNotification>, IClientNotificationRepository
 {
     public ClientNotificationRepository(ApplicationDbContext context) : base(context)
     { }

@@ -13,73 +13,63 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ApplicationDbContext _context;
 
-    private IDbContextTransaction _transaction;
+    public IFreelancerRepository freelancerRepository { get; private set; }
+    public IFreelancerNotificationRepository freelancerNotificationRepository { get; private set; }
+    public IFreelancerSkillsRepository freelancerSkillsRepository { get; private set; }
 
-    public ICategoryRepository category { get; private set; }
+    public ICategoryRepository categoryRepository { get; private set; }
+    public IClientRepository clientRepository { get; private set; }
+    public IClientNotificationRepository clientNotificationRepository { get; private set; }
 
-    public IClientRepository client { get; private set; }
+    public IProjectImagesRepository projectImagesRepository { get; private set; }
+    public IProjectRepository projectRepository { get; private set; }
+    public IProjectSkillsRepository projectSkillsRepository { get; private set; }
+   
+    public IProposalRepository proposalRepository { get; private set; }
+    public IProposalImagesRepository proposalImageRepository { get; private set; }
 
-    public IFreelancerRepository freelancer { get; private set; }
+    public ISkillRepository skillRepository { get; }
+    public IRateRepository rateRepository { get; private set; }
 
-    public IJobRepository job { get; }
+    public IJobRepository jobRepository { get; }
+    public IJobSkillsRepository jobSkillsRepository { get; private set; }
 
-    public IJobSkillsRepository jobSkills { get; private set; }
+    public IDbContextTransaction _transaction { get; private set; }
 
-    public IProjectImagesRepository projectImages { get; private set; }
 
-    public IProjectRepository project { get; private set; }
-
-    public IProjectSkillsRepository projectSkills { get; private set; }
-
-    public IProposalRepository proposal { get; private set; }
-
-    public IPropsalImageRepository ProposalImages { get; private set; }
-
-    public IRateRepository rate { get; private set; }
-
-    public ISkillRepository skill { get; }
-
-    public IClientNotificationRepository clientNotification { get; private set; }
-
-    public IFreelancerNotificationRepository freelancerNotification { get; private set; }
-
-    public IFreelancerSkillsRepository freelancerSkills { get; private set; }
-    public UnitOfWork(ApplicationDbContext context, ICategoryRepository categoryRepository, IClientRepository clientRepository,
-               IFreelancerRepository freelancerRepository, IJobRepository jobRepository, IProjectImagesRepository projectImagesRepository,
-               IProjectRepository projectRepository, IProjectSkillsRepository projectSkillsRepository, IRateRepository rateRepository,
-               ISkillRepository skillRepository, IProposalRepository proposalRepository, IJobSkillsRepository jobSkillsRepository,
-               IClientNotificationRepository clientNotificationRepository, IFreelancerNotificationRepository freelancerNotificationRepository
-               , IPropsalImageRepository proposalImageRepository, IFreelancerSkillsRepository freelancerSkillsRepository)
+    public UnitOfWork
+        (ApplicationDbContext context, IFreelancerRepository freelancerRepository,
+        IFreelancerSkillsRepository freelancerSkillsRepository, IFreelancerNotificationRepository freelancerNotificationRepository,
+        IClientRepository clientRepository, IClientNotificationRepository clientNotificationRepository, ICategoryRepository categoryRepository,
+        IProjectRepository projectRepository, IProjectImagesRepository projectImagesRepository, IJobRepository jobRepository,
+        IProjectSkillsRepository projectSkillsRepository, IProposalRepository proposalRepository, IJobSkillsRepository jobSkillsRepository,
+        IProposalImagesRepository proposalImageRepository, ISkillRepository skillRepository, IRateRepository rateRepository)
     {
         _context = context;
-
-        category = categoryRepository;
-        client = clientRepository;
-        freelancer = freelancerRepository;
-
-        job = jobRepository;
-        jobSkills = jobSkillsRepository;
-
-        project = projectRepository;
-        projectImages = projectImagesRepository;
-        projectSkills = projectSkillsRepository;
-
-        proposal = proposalRepository;
-        ProposalImages = proposalImageRepository;
-
-
-        rate = rateRepository;
-
-        skill = skillRepository;
-
-        freelancerSkills = freelancerSkillsRepository;
-
-        clientNotification = clientNotificationRepository;
-        freelancerNotification = freelancerNotificationRepository;
+        this.freelancerRepository = freelancerRepository;
+        this.freelancerSkillsRepository = freelancerSkillsRepository;
+        this.freelancerNotificationRepository = freelancerNotificationRepository;
+        this.clientRepository = clientRepository;
+        this.clientNotificationRepository = clientNotificationRepository;
+        this.categoryRepository = categoryRepository;
+        this.projectRepository = projectRepository;
+        this.projectImagesRepository = projectImagesRepository;
+        this.jobRepository = jobRepository;
+        this.projectSkillsRepository = projectSkillsRepository;
+        this.proposalRepository = proposalRepository;
+        this.jobSkillsRepository = jobSkillsRepository;
+        this.proposalImageRepository = proposalImageRepository;
+        this.skillRepository = skillRepository;
+        this.rateRepository = rateRepository;
     }
     public int Save()
     {
         return _context.SaveChanges(); // num of affected entities in db
+    }
+
+    public async Task<int> SaveAsync()
+    {
+        return await _context.SaveChangesAsync();
     }
 
     // as destructor >> called automatic when this request connection ends "if registered using addscoped" >>
@@ -116,4 +106,5 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         _transaction?.Rollback();
         _transaction = null;
     }
+
 }

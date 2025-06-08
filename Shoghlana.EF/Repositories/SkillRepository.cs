@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
-public class SkillRepository : Repository<Skill>, ISkillRepository
+public class SkillRepository : GenericRepository<Skill>, ISkillRepository
 {
     public SkillRepository(ApplicationDbContext context) : base(context)
     { }
