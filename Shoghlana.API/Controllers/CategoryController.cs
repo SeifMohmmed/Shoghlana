@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
+using Shoghlana.API.Services.Implementations;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Interfaces;
@@ -14,69 +15,24 @@ namespace Shoghlana.API.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _categoryService;
-    private readonly IMapper _mapper;
 
-    public CategoryController(ICategoryService categoryService, IMapper mapper)
+    public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
-        _mapper = mapper;
     }
+
 
     [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
-        var categories = _categoryService.FindAll();
-
-        if (categories != null)
-        {
-            var categoryDTOs = new List<GetTitleOfCategoryDTO>();
-
-            foreach (var category in categories)
-            {
-                var categoryDTO = _mapper.Map<GetTitleOfCategoryDTO>(category);
-
-                categoryDTOs.Add(categoryDTO);
-            }
-
-            return new GeneralResponse()
-            {
-                IsSuccess = true,
-                Status = 200,
-                Data = categoryDTOs
-            };
-        }
-
-        return new GeneralResponse()
-        {
-            IsSuccess = false,
-            Status = 400,
-            Message = "There is no categories"
-        };
+        return _categoryService.GetAll();
     }
 
 
     [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
-        var category = _categoryService.GetById(id);
-
-        if (category != null)
-        {
-            var categoryDTO = _mapper.Map<CategoryDTO>(category);
-
-            return new GeneralResponse()
-            {
-                IsSuccess = true,
-                Status = 200,
-                Data = categoryDTO
-            };
-        }
-        return new GeneralResponse()
-        {
-            IsSuccess = false,
-            Status = 400,
-            Message = "Category Not Found !"
-        };
+        return _categoryService.GetById(id);
     }
 
 
@@ -89,24 +45,11 @@ public class CategoryController : ControllerBase
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "Invalid Data !"
+                Message = "Invalid data!"
             };
         }
 
-        var category = _mapper.Map<Category>(dto);
-
-        _categoryService.Add(category);
-        _categoryService.Save();
-
-        var categoryDTO = _mapper.Map<CategoryDTO>(category);
-
-        return new GeneralResponse()
-        {
-            IsSuccess = true,
-            Status = 201,
-            Data = categoryDTO,
-            Message = "Category Created Successfully"
-        };
+        return _categoryService.CreateCategory(dto);
     }
 
 
@@ -119,59 +62,17 @@ public class CategoryController : ControllerBase
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "Invalid Data !"
+                Message = "Invalid data!"
             };
         }
 
-        var category = _categoryService.GetById(id);
-
-        if (category != null)
-        {
-            _mapper.Map(dto, category);
-            _categoryService.Update(category);
-            _categoryService.Save();
-
-            return new GeneralResponse()
-            {
-                IsSuccess = true,
-                Status = 200,
-                Message = "Category Updated Successfully !"
-            };
-        }
-
-        return new GeneralResponse()
-        {
-            IsSuccess = false,
-            Status = 404,
-            Message = "Category Not Found !"
-        };
-
+        return _categoryService.UpdateCategory(id, dto);
     }
 
 
     [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> DeleteCategory(int id)
     {
-
-        var category = _categoryService.GetById(id);
-
-        if (category != null)
-        {
-            _categoryService.Delete(category);
-            _categoryService.Save();
-
-            return new GeneralResponse()
-            {
-                IsSuccess = true,
-                Status = 200,
-                Message = "Category Deleted Successfully !"
-            };
-        }
-        return new GeneralResponse()
-        {
-            IsSuccess = false,
-            Status = 404,
-            Message = "Category Not Found !"
-        };
+        return _categoryService.DeleteCategory(id);
     }
 }
