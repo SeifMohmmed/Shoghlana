@@ -15,7 +15,7 @@ public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
 
-    public JobController(IJobService jobService, IMapper mapper)
+    public JobController(IJobService jobService)
     {
        _jobService = jobService;
     }
