@@ -46,31 +46,31 @@ namespace Shoghlana.API
             builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-            builder.Services.AddScoped<IClientRepository,ClientRepository>();
-            builder.Services.AddScoped<IJobRepository,JobRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
+            builder.Services.AddScoped<IJobRepository, JobRepository>();
 
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme=JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-              .AddJwtBearer(op => 
+              .AddJwtBearer(op =>
               {
                   op.SaveToken = false;
                   op.RequireHttpsMetadata = false;
 
                   op.TokenValidationParameters = new TokenValidationParameters()
                   {
-                      ValidateIssuerSigningKey= true,
+                      ValidateIssuerSigningKey = true,
                       ValidateAudience = true,
                       ValidAudience = builder.Configuration["JWT:Audience"],
-                      ValidateIssuer=true,
+                      ValidateIssuer = true,
                       ValidIssuer = builder.Configuration["JWT:Issuer"],
-                      ValidateLifetime=true,
-                      IssuerSigningKey = 
+                      ValidateLifetime = true,
+                      IssuerSigningKey =
                       new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
-                      
+
                   };
               });
 
@@ -112,6 +112,8 @@ namespace Shoghlana.API
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IFreelancerService, FreelancerService>();
             builder.Services.AddScoped<IJobService, JobService>();
+            builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<IRateService, RateService>();
             builder.Services.AddScoped<IClientService, ClientService>();
 
             builder.Services.AddAutoMapper(typeof(Program));
