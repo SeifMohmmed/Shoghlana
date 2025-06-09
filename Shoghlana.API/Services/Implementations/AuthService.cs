@@ -16,8 +16,9 @@ using Shoghlana.EF.Hubs;
 using Shoghlana.Core.DTOs;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Shoghlana.API.Services.Interfaces;
 
-namespace Shoghlana.EF.Repositories;
+namespace Shoghlana.API.Services.Implementations;
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;

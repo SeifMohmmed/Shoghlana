@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shoghlana.Core.Interfaces;
+namespace Shoghlana.API.Services.Interfaces;
 public interface IAuthService
 {
     Task<AuthModel> RegisterAsync(RegisterModel model);
