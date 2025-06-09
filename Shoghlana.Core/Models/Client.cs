@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ public class Client
 
     public string Name { get; set; }
 
+    public DateTime RegisterationTime { get; set; }
+
     public string? Description { get; set; }
 
     public string? Phone { get; set; }
@@ -21,7 +24,13 @@ public class Client
 
     public byte[]? Image { get; set; }
 
-    public List<Job>? Jobs { get; set; }
+    public List<Job>? Jobs { get; set; } = new List<Job>();
+
+    [NotMapped]
+    public int JobsCount => Jobs.Count;
+
+    [NotMapped]
+    public int CompletedJobsCount => Jobs.Where(j => j.Status == Enums.JobStatus.Completed).Count();
 
     public List<ClientNotification>? Notifications { get; set; }
 

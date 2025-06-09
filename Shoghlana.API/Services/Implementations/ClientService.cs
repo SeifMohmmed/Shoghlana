@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
@@ -12,16 +13,18 @@ namespace Shoghlana.API.Services.Implementations;
 public class ClientService : GenericService<Client>, IClientService
 {
     private readonly IHubContext<NotificationHub> _hubContext;
-
+    private readonly IMapper _mapper;
     private List<string> allowedExtensions = new List<string>() { ".jpg", ".png" };
     private long maxAllowedImageSize = 1_048_576;
 
-    public ClientService(IUnitOfWork unitOfWork, IGenericRepository<Client> repository,IHubContext<NotificationHub> hubContext)
-        : base(unitOfWork, repository)
+    public ClientService(IUnitOfWork unitOfWork, IGenericRepository<Client> repository, IHubContext<NotificationHub> hubContext
+        , IMapper mapper) : base(unitOfWork, repository)
     {
         _hubContext = hubContext;
+        _mapper = mapper;
     }
 
+    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var clients = _unitOfWork.clientRepository.FindAll();
@@ -70,25 +73,43 @@ public class ClientService : GenericService<Client>, IClientService
         }
     }
 
+
+    [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
-        var client = _unitOfWork.clientRepository.GetById(id);
+        //var client = _unitOfWork.clientRepository.GetById(id);
+
+        Client? client = _unitOfWork.clientRepository.Find(c => c.Id == id, new string[] { "Jobs" });
 
         if (client != null)
         {
-            var clientDTO = new GetClientDTO();
+            var clientsDTO = new GetClientDTO();
 
-            clientDTO.Name = client.Name;
-            clientDTO.Phone = client.Phone;
-            clientDTO.Description = client.Description;
-            clientDTO.Image = client.Image;
-            clientDTO.Country = client.Country;
+            clientsDTO.Name = client.Name;
+            clientsDTO.Phone = client.Phone;
+            clientsDTO.Description = client.Description;
+            clientsDTO.Image = client.Image;
+            clientsDTO.Country = client.Country;
+            clientsDTO.JobsCount = client.JobsCount;
+            clientsDTO.CompletedJobsCount = client.CompletedJobsCount;
+            clientsDTO.Id = client.Id;
+            clientsDTO.RegisterationTime = client.RegisterationTime;
+
+            if (client?.Jobs?.Count > 0)
+            {
+                foreach (Job job in client.Jobs)
+                {
+                    JobDTO jobDTO = new JobDTO();
+                    jobDTO = _mapper.Map<Job, JobDTO>(job);
+                    clientsDTO.Jobs.Add(jobDTO);
+                }
+            }
 
             return new GeneralResponse()
             {
                 IsSuccess = true,
                 Status = 200,
-                Data = clientDTO
+                Data = clientsDTO
             };
         }
         else
@@ -103,6 +124,8 @@ public class ClientService : GenericService<Client>, IClientService
         }
     }
 
+
+    [HttpGet("jobs/{id:int}")]
     public ActionResult<GeneralResponse> GetJobsByClientId(int id)
     {
         var client = _unitOfWork.clientRepository.Find(criteria: c => c.Id == id, includes: new string[] { "Jobs" });
@@ -140,6 +163,8 @@ public class ClientService : GenericService<Client>, IClientService
         }
     }
 
+
+    [HttpPost]
     public async Task<ActionResult<GeneralResponse>> CreateClient([FromForm] ClientDTO clientDTO)
     {
 
@@ -213,31 +238,8 @@ public class ClientService : GenericService<Client>, IClientService
         };
     }
 
-    public ActionResult<GeneralResponse> DeleteClient(int id)
-    {
-        var client = _unitOfWork.clientRepository.GetById(id);
 
-        if (client == null)
-        {
-            return new GeneralResponse
-            {
-                IsSuccess = false,
-                Status = 400,
-                Message = "Client Not Found !"
-            };
-        }
-
-        _unitOfWork.clientRepository.Delete(client);
-        _unitOfWork.clientRepository.Save();
-
-        return new GeneralResponse
-        {
-            IsSuccess = true,
-            Status = 200,
-            Message = "Client Deleted Successfully !"
-        };
-    }
-
+    [HttpPut("{id:int}")]
     public async Task<ActionResult<GeneralResponse>> UpdateClient(int id, [FromForm] ClientDTO clientDTO)
     {
         if (clientDTO.Image is null)
@@ -300,6 +302,33 @@ public class ClientService : GenericService<Client>, IClientService
             Status = 200,
             Message = "Client Updated Successfully !",
             Data = clientDTO
+        };
+    }
+
+
+    [HttpDelete("{id:int}")]
+    public ActionResult<GeneralResponse> DeleteClient(int id)
+    {
+        var client = _unitOfWork.clientRepository.GetById(id);
+
+        if (client == null)
+        {
+            return new GeneralResponse
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = "Client Not Found !"
+            };
+        }
+
+        _unitOfWork.clientRepository.Delete(client);
+        _unitOfWork.clientRepository.Save();
+
+        return new GeneralResponse
+        {
+            IsSuccess = true,
+            Status = 200,
+            Message = "Client Deleted Successfully !"
         };
     }
 
