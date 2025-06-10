@@ -30,6 +30,9 @@ public interface IUnitOfWork
 
     ISkillRepository skillRepository { get; }
 
+    public IApplicationUserRepository ApplicationUserRepository { get; }
+
+
     //------------------------------------------------------
 
     public int Save();

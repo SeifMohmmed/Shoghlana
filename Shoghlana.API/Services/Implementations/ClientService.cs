@@ -37,6 +37,7 @@ public class ClientService : GenericService<Client>, IClientService
             {
                 var clientDTO = new GetClientDTO();
 
+                clientDTO.Id = client.Id;
                 clientDTO.Name = client.Name;
                 clientDTO.Phone = client.Phone;
                 clientDTO.Description = client.Description;
@@ -53,7 +54,7 @@ public class ClientService : GenericService<Client>, IClientService
                     SenderName = client.Name,
                     SenderImage = client.Image
                 };
-                _hubContext.Clients.All.SendAsync("ReceiveNotification", notificationDto);
+                _hubContext.Clients.All.SendAsync("ReceiveNotification", notificationDto);  // todo why send notifi.. for all clients , for this client instead ??? 
 
             }
             return new GeneralResponse()

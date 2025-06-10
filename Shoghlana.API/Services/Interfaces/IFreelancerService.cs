@@ -12,7 +12,7 @@ public interface IFreelancerService : IGenericService<Freelancer>
 
     public ActionResult<GeneralResponse> GetById(int id);
 
-    public Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddFreelancerDTO addFreelancerDTO);
+    public Task<ActionResult<GeneralResponse>> AddAsync(AddFreelancerDTO addFreelancerDTO);
 
     public Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] AddFreelancerDTO addFreelancerDTO);
 

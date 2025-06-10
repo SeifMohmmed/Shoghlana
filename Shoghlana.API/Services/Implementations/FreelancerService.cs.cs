@@ -70,16 +70,16 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
 
 
     [HttpPost]
-    public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddFreelancerDTO addFreelancerDTO)
+    public async Task<ActionResult<GeneralResponse>> AddAsync(AddFreelancerDTO addFreelancerDTO)
     {
-        if (addFreelancerDTO.PersonalImageBytes is null)
+        if (addFreelancerDTO.PersonalImageBytes is not null)
         {
-            return new GeneralResponse()
-            {
-                IsSuccess = false,
-                Status = 400,
-                Message = "Personal Image is required!"
-            };
+            //return new GeneralResponse()
+            //{
+            //    IsSuccess = false,
+            //    Status = 400,
+            //    Message = "Personal Image is required!"
+            //};
         }
 
         if (!allowedExtensions.Contains(Path.GetExtension(addFreelancerDTO.PersonalImageBytes.FileName).ToLower()))
@@ -128,9 +128,10 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
             Data = freelancerDTO,
             Message = "Added Successfully"
         };
+
     }
 
-    
+
     [HttpPut("{id:int}")]
     public async Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] AddFreelancerDTO addFreelancerDTO)
     {

@@ -17,6 +17,9 @@ using Shoghlana.Core.DTOs;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Shoghlana.API.Services.Interfaces;
+using Shoghlana.API.Response;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
+using Google.Apis.Auth;
 
 namespace Shoghlana.API.Services.Implementations;
 public class AuthService : IAuthService
@@ -24,16 +27,23 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JWT _jwt;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IFreelancerService _freelancerService;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager
-        , IUnitOfWork unitOfWork, IHubContext<NotificationHub> hubContext)
+    public AuthService
+        (UserManager<ApplicationUser> userManager, IOptions<JWT> jwt,
+        RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork,IHubContext<NotificationHub> hubContext,
+        IFreelancerService freelancerService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _unitOfWork = unitOfWork;
         _hubContext = hubContext;
+        _freelancerService = freelancerService;
         _jwt = jwt.Value;
     }
+
     public async Task<AuthModel> RegisterAsync(RegisterModel model)
     {
         if (await _userManager.FindByEmailAsync(model.Email) is not null)
@@ -87,8 +97,8 @@ public class AuthService : IAuthService
             Roles = roles.ToList(),
             Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
             Username = user.UserName,
-            RefreshToken=refreshToken.Token,
-            RefreshTokenExpiration=refreshToken.ExpiresOn,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiration = refreshToken.ExpiresOn,
         };
     }
 
@@ -150,19 +160,19 @@ public class AuthService : IAuthService
         authModel.ExpiresOn = jwtSecurityToken.ValidTo;
         authModel.Roles = roleList.ToList();
 
-        if(user.RefreshTokens.Any(t=>t.IsActive))
+        if (user.RefreshTokens.Any(t => t.IsActive))
         {
-            var activeRefreshToken=user.RefreshTokens.FirstOrDefault(t=>t.IsActive);
-           
+            var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
+
             authModel.RefreshToken = activeRefreshToken.Token;
-            authModel.RefreshTokenExpiration=activeRefreshToken.ExpiresOn;
+            authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
 
         }
         else
         {
             var refreshToken = GenerateRefreshToken();
 
-            authModel.RefreshToken=refreshToken.Token;
+            authModel.RefreshToken = refreshToken.Token;
             authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
 
             user.RefreshTokens.Add(refreshToken);
@@ -175,7 +185,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthModel> RefreshTokenAsync(string token)
     {
-        var authModel=new AuthModel();
+        var authModel = new AuthModel();
 
         var user = await _userManager
                .Users
@@ -187,7 +197,7 @@ public class AuthService : IAuthService
             return authModel;
         }
 
-        var refreshToken = user.RefreshTokens.Single(t=>t.Token == token);
+        var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
 
         if (!refreshToken.IsActive)
         {
@@ -200,10 +210,10 @@ public class AuthService : IAuthService
         user.RefreshTokens.Add(newRefreshToken);
         await _userManager.UpdateAsync(user);
 
-        var jwtToken= await CreateJwtToken(user);
+        var jwtToken = await CreateJwtToken(user);
 
-        authModel.IsAuthenticated=true;
-        authModel.Token=new JwtSecurityTokenHandler().WriteToken(jwtToken);
+        authModel.IsAuthenticated = true;
+        authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
         authModel.Email = user.Email;
         authModel.Username = user.UserName;
 
@@ -285,4 +295,164 @@ public class AuthService : IAuthService
             CreatedOn = DateTime.UtcNow,
         };
     }
+
+    //Google Authentication
+    public async Task<ApplicationUser> GetByIdAsync(string id)
+    {
+        return await _unitOfWork.ApplicationUserRepository.GetByIdAsync(id);
+    }
+
+    public async Task<ApplicationUser> GetByEmailAsync(string email)
+    {
+        return await _unitOfWork.ApplicationUserRepository.GetByEmailAsync(email);
+    }
+
+    public async Task<GeneralResponse> RegisterAsync(GoogleSignupDTO googleSignupDto)
+    {
+        ApplicationUser? user = await _unitOfWork.ApplicationUserRepository.GetByEmailAsync(googleSignupDto.Email);
+
+        if (user == null)
+        {
+            //// apply login logic here
+            //return await Task.FromResult(new GeneralResponse()
+            //{
+            //    IsSuccess = false,
+            //    Data = null,
+            //    Message = "This email has already been registered before"
+            //});
+
+            var freelancer = new Freelancer() // consider it is a freelancer for testing
+            {
+                Name = googleSignupDto.FirstName,
+
+                // convert img from string to bytes and save it in freelancer
+            };
+            try
+            {
+                _freelancerService.Add(freelancer); // add + save inside the same method
+
+            }
+
+            catch (Exception ex)
+            {
+                return new GeneralResponse()
+                {
+                    IsSuccess = false,
+                    Data = null,
+                    Message = ex.Message
+                };
+
+            }
+
+            user = new ApplicationUser()
+            {
+                UserName = googleSignupDto.FirstName, // should add guid as suffix as gmail allow username duplication but identity user doesnot
+                Email = googleSignupDto.Email,
+                FreelancerId = freelancer.Id,
+                EmailConfirmed = true, // as he registered using gmail
+            };
+
+            try
+            {
+                await _unitOfWork.ApplicationUserRepository.InsertAsync(user);
+
+            }
+
+            catch (Exception ex)
+            {
+                return await Task.FromResult(new GeneralResponse()
+                {
+                    IsSuccess = false,
+                    Data = ex.Message,
+                    Message = "Error on account creation"
+                });
+            }
+
+            try
+            {
+                await SendWelcomeNotificationAsync(user);
+            }
+
+            catch (Exception ex)
+            {
+                return new GeneralResponse()
+                {
+                    IsSuccess = false,
+                    Data = ex.Message,
+                    Message = "Error on sending welcome notification"
+                };
+            }
+
+        }
+
+        //Logic for Login
+        AuthModel authModel = new AuthModel();
+
+        var jwtSecurityToken = await CreateJwtToken(user);
+        var roleList = await _userManager.GetRolesAsync(user);
+
+        authModel.IsAuthenticated = true;
+        authModel.Token =
+            new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        authModel.Email = user.Email;
+        authModel.Username = user.UserName;
+        authModel.ExpiresOn = jwtSecurityToken.ValidTo;
+        authModel.Roles = roleList.ToList();
+
+        // Refresh Token
+        //if (user.RefreshTokens.Any(t => t.IsActive))
+        //{
+        //    var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
+
+        //    authModel.RefreshToken = activeRefreshToken.Token;
+        //    authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+
+        //}
+        //else
+        //{
+        //    var refreshToken = GenerateRefreshToken();
+
+        //    authModel.RefreshToken = refreshToken.Token;
+        //    authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
+
+        //    user.RefreshTokens.Add(refreshToken);
+
+        //    await _userManager.UpdateAsync(user);
+        //}
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Data = authModel,
+            Message = "Login successful"
+        };
+    }
+
+
+    public async Task<GeneralResponse> IsGmailTokenValid(string GmailToken)
+    {
+        ValidationSettings settings = new GoogleJsonWebSignature.ValidationSettings
+        {
+            //Audience = new string[] { _googleAuthConfig.ClientId }
+        };
+
+        Payload payload = await GoogleJsonWebSignature.ValidateAsync(GmailToken, settings); // validate that aud of token matches clienId of my project on google cloud api
+        if (payload == null)
+        {
+            return new GeneralResponse
+            {
+                IsSuccess = false,
+                Data = null,
+                Message = "Invalid gmail token"
+            };
+        }
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Data = payload,
+            Message = "Valid gmail token"
+        };
+    }
+
 }

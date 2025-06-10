@@ -34,6 +34,8 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IJobRepository jobRepository { get; }
     public IJobSkillsRepository jobSkillsRepository { get; private set; }
 
+    public IApplicationUserRepository ApplicationUserRepository { get; private set; }
+
     public IDbContextTransaction _transaction { get; private set; }
 
 
@@ -43,7 +45,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         IClientRepository clientRepository, IClientNotificationRepository clientNotificationRepository, ICategoryRepository categoryRepository,
         IProjectRepository projectRepository, IProjectImagesRepository projectImagesRepository, IJobRepository jobRepository,
         IProjectSkillsRepository projectSkillsRepository, IProposalRepository proposalRepository, IJobSkillsRepository jobSkillsRepository,
-        IProposalImagesRepository proposalImageRepository, ISkillRepository skillRepository, IRateRepository rateRepository)
+        IProposalImagesRepository proposalImageRepository, ISkillRepository skillRepository, IRateRepository rateRepository,IApplicationUserRepository applicationUserRepository)
     {
         _context = context;
         this.freelancerRepository = freelancerRepository;
@@ -61,6 +63,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         this.proposalImageRepository = proposalImageRepository;
         this.skillRepository = skillRepository;
         this.rateRepository = rateRepository;
+        this.ApplicationUserRepository = applicationUserRepository;
     }
     public int Save()
     {
