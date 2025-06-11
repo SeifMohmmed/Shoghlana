@@ -12,6 +12,14 @@ public interface IJobService : IGenericService<Job>
 {
     public ActionResult<GeneralResponse> GetAll();
 
+    public ActionResult<GeneralResponse> GetPaginatedJobs(
+        int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
+        int page, int pageSize, string[] includes = null);
+
+    public Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync(
+        int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
+        int page, int pageSize, string[] includes = null);
+
     public ActionResult<GeneralResponse> Get(int id);
 
     public ActionResult<GeneralResponse> GetByFreelancerId([FromQuery] int id);

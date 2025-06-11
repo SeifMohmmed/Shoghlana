@@ -105,7 +105,7 @@ public class RateService : GenericService<Rate>, IRateService
 
         if (existingJob.FreelancerId.HasValue)
         {
-            var client = _unitOfWork.clientRepository.GetById(existingJob.ClientId.Value);
+            var client = _unitOfWork.clientRepository.GetById((int)existingJob.ClientId);
 
             if (client is not null)
             {

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace Shoghlana.Core.DTOs;
 public class CategoryDTO
 {
+    public int Id { get; set; }
+
     public string Title { get; set; }
 
     public List<JobDTO>? Jobs { get; set; }

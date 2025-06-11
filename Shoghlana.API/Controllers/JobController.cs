@@ -7,6 +7,7 @@ using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF.Repositories;
 using Shoghlana.API.Services.Interfaces;
+using Shoghlana.API.Services.Implementations;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
@@ -15,9 +16,13 @@ public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
 
+    private const int defaultPageNumber = 1;
+
+    private const int defaultPageSize = 5;
+
     public JobController(IJobService jobService)
     {
-       _jobService = jobService;
+        _jobService = jobService;
     }
 
 
@@ -27,11 +32,26 @@ public class JobController : ControllerBase
         return _jobService.GetAll();
     }
 
+    [HttpGet("pagination")]
+    public ActionResult<GeneralResponse> GetPaginatedJobs
+          (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, string[] includes = null)
+    {
+        return _jobService
+         .GetPaginatedJobs(MinBudget, MaxBudget, CategoryId, ClientId, FreelancerId, page, pageSize, includes);
+    }
+
+    [HttpGet("paginationAsync")]
+    public async Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
+      (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, string[] includes = null)
+    {
+        return await _jobService.GetPaginatedJobsAsync(MinBudget, MaxBudget, CategoryId, ClientId, FreelancerId, page, pageSize, includes);
+    }
+
 
     [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
-       return _jobService.Get(id);
+        return _jobService.Get(id);
     }
 
 
@@ -45,7 +65,7 @@ public class JobController : ControllerBase
     [HttpGet("category/{id:int}")]
     public ActionResult<GeneralResponse> GetJobByCategoryId(int id)
     {
-      return _jobService.GetJobsByCategoryId(id);
+        return _jobService.GetJobsByCategoryId(id);
     }
 
 

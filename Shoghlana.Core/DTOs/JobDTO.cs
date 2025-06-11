@@ -19,24 +19,21 @@ public class JobDTO
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
-    // public List<Skill>? Skills { get; set; }
+    public List<SkillDTO> Skills { get; set; } = new List<SkillDTO>();
 
-    // public List<Proposal>? Proposals { get; set; }
+    public List<FreelancerDTO> Freelancers { get; set; } = new List<FreelancerDTO>();
 
-    //public Rate? Rate { get; set; }
-
-    public List<SkillDTO> skillsDTO { get; set; } = new List<SkillDTO>();
-
-    public List<FreelancerDTO> freelancersDTO { get; set; } = new List<FreelancerDTO>();
-
-    public List<ProposalDTO> proposalsDTO { get; set; } = new List<ProposalDTO>();
+    public List<ProposalDTO> Proposals { get; set; } = new List<ProposalDTO>();
 
     public JobStatus JobStatus { get; set; } = JobStatus.Active;
 
+    public int ProposalCount { get; set; }
+
+    public JobStatus Status { get; set; } = JobStatus.Active;
 
     public int ClientId { get; set; }
 
-    public string? ClientName { get; set; }
+    public string ClientName { get; set; }
 
     public int AcceptedFreelancerId { get; set; }
 
@@ -45,6 +42,9 @@ public class JobDTO
     public int CategoryId { get; set; }
 
     public string? CategoryTitle { get; set; }
+
+    public RateDTO? Rate { get; set; }
+
 
     //public List<Freelancer>? AppliedFreelancers { get; set; }
 

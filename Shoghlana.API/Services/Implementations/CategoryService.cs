@@ -25,11 +25,11 @@ public class CategoryService : GenericService<Category>, ICategoryService
 
         if (categories != null)
         {
-            var categoryDTOs = new List<GetTitleOfCategoryDTO>();
+            var categoryDTOs = new List<CategoryDTO>();
 
             foreach (var category in categories)
             {
-                var categoryDTO = _mapper.Map<GetTitleOfCategoryDTO>(category);
+                var categoryDTO = _mapper.Map<CategoryDTO>(category);
 
                 categoryDTOs.Add(categoryDTO);
             }

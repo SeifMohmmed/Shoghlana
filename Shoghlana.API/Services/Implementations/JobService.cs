@@ -36,13 +36,13 @@ public class JobService : GenericService<Job>, IJobService
             foreach (var proposal in job.Proposals)
             {
                 var freelancer = _unitOfWork.freelancerRepository.GetById(proposal.FreelancerId);
-                jobDTOs.freelancersDTO.Add(new FreelancerDTO
+                jobDTOs.Freelancers.Add(new FreelancerDTO
                 {
                     Name = freelancer.Name,
                     Id = freelancer.Id
                 });
 
-                jobDTOs.proposalsDTO.Add(new ProposalDTO
+                jobDTOs.Proposals.Add(new ProposalDTO
                 {
                     Description = proposal.Description,
                     Id = proposal.Id
@@ -52,7 +52,7 @@ public class JobService : GenericService<Job>, IJobService
             {
                 Skill? skill = _unitOfWork.skillRepository.GetById(jobskill.SkillId);
 
-                jobDTOs.skillsDTO.Add(new SkillDTO
+                jobDTOs.Skills.Add(new SkillDTO
                 {
                     Title = skill.Title,
                     Id = skill.Id
@@ -88,11 +88,23 @@ public class JobService : GenericService<Job>, IJobService
         {
             jobDTOs[i].ClientName = jobs[i].Client.Name;
             jobDTOs[i].CategoryTitle = jobs[i].Category.Title;
+            
+            var client = 
+                _unitOfWork.clientRepository.GetById(jobDTOs[i].ClientId);
+
+            var category =
+                _unitOfWork.categoryRepository.GetById(jobDTOs[i].CategoryId);
+
+            var freelancer=
+                _unitOfWork.freelancerRepository.GetById(jobDTOs[i].AcceptedFreelancerId);
+
+            jobDTOs[i].ProposalCount = 
+                _unitOfWork.proposalRepository.GetCount();
 
             foreach (JobSkills jobskill in jobs[i].Skills)
             {
                 var skill = _unitOfWork.skillRepository.GetById(jobskill.SkillId);
-                jobDTOs[i].skillsDTO.Add(new SkillDTO
+                jobDTOs[i].Skills.Add(new SkillDTO
                 {
                     Title = skill.Title,
                     Id = skill.Id,
@@ -108,7 +120,84 @@ public class JobService : GenericService<Job>, IJobService
         };
     }
 
-    
+
+    public ActionResult<GeneralResponse> GetPaginatedJobs
+        (int MinBudget,int MaxBudget,int CategoryId,int ClientId,int FreelancerId,
+        int page, int pageSize, string[]includes = null)
+    {
+        var paginatedJobs = _unitOfWork.jobRepository.GetPaginatedJobs(MinBudget, MaxBudget, CategoryId, ClientId
+                            , FreelancerId, page, pageSize, includes);
+
+        if(paginatedJobs.Items is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Data = new PaginationListDTO<JobDTO>
+                {
+                    CurrentPage=paginatedJobs.CurrentPage,
+                    TotalPages=paginatedJobs.TotalPages,
+                    TotalItems=paginatedJobs.TotalItems,
+                    Items=null
+                },
+                Status=200,
+                Message= "No Jobs Found with this filteration"
+            };
+        }
+
+        var jobDTOs= new List<JobDTO>();
+
+        foreach (var job in paginatedJobs.Items)
+        {
+            var jobDTO=_mapper.Map<Job,JobDTO>(job);
+
+            var client = 
+                _unitOfWork.clientRepository.GetById(jobDTO.ClientId);
+            jobDTO.ClientName = client?.Name ?? "NA";
+
+            var category =
+                _unitOfWork.categoryRepository.GetById(jobDTO.CategoryId);
+            jobDTO.CategoryTitle = category?.Title ?? "NA";
+
+            var freelancer =
+                _unitOfWork.freelancerRepository.GetById(jobDTO.AcceptedFreelancerId);
+            jobDTO.AcceptedFreelancerName = freelancer?.Name ?? "NA";
+
+            jobDTO.ProposalCount=_unitOfWork.proposalRepository.GetCount();
+
+            jobDTOs.Add(jobDTO);
+        }
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Data = new PaginationListDTO<JobDTO>
+            {
+                CurrentPage=paginatedJobs.CurrentPage,
+                TotalItems=paginatedJobs.TotalItems,
+                TotalPages=paginatedJobs.TotalPages,
+                Items=jobDTOs
+            },
+            Status=200,
+        };
+    }
+
+    public async Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
+    (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
+    int page, int pageSize, string[] includes = null)
+    {
+        var paginatedJobs = await _unitOfWork.jobRepository.GetPaginatedJobsAsync(MinBudget, MaxBudget, CategoryId, ClientId
+                            , FreelancerId, page, pageSize, includes);
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Data = paginatedJobs,
+            Status = 200
+        };
+    }
+
+
     [HttpGet("freelancer")]
     public ActionResult<GeneralResponse> GetByFreelancerId([FromQuery] int id)
     {
@@ -140,7 +229,7 @@ public class JobService : GenericService<Job>, IJobService
             foreach (JobSkills jobSkill in jobs[i].Skills)
             {
                 Skill? skill = _unitOfWork.skillRepository.GetById(jobSkill.SkillId);
-                jobDTOs[i].skillsDTO.Add(new SkillDTO
+                jobDTOs[i].Skills.Add(new SkillDTO
                 {
                     Title = skill.Title,
                     Id = skill.Id,
@@ -260,7 +349,7 @@ public class JobService : GenericService<Job>, IJobService
             foreach (JobSkills jobSkill in jobs[i].Skills)
             {
                 Skill? skill = _unitOfWork.skillRepository.GetById(jobSkill.SkillId);
-                jobDTOs[i].skillsDTO.Add(new SkillDTO
+                jobDTOs[i].Skills.Add(new SkillDTO
                 {
                     Title = skill.Title,
                     Id = skill.Id,
@@ -287,7 +376,7 @@ public class JobService : GenericService<Job>, IJobService
             _unitOfWork.jobRepository.Add(job);
             _unitOfWork.Save();
 
-            foreach (SkillDTO skillDTO in jobDTO.skillsDTO)
+            foreach (SkillDTO skillDTO in jobDTO.Skills)
             {
                 job.Skills.Add(new JobSkills
                 {
@@ -335,7 +424,7 @@ public class JobService : GenericService<Job>, IJobService
         _unitOfWork.jobSkillsRepository.DeleteRange(jobSkills);
 
         List<JobSkills> skills = new List<JobSkills>();
-        foreach (SkillDTO skillDto in jobDto.skillsDTO)
+        foreach (SkillDTO skillDto in jobDto.Skills)
         {
             skills.Add(new JobSkills
             {
