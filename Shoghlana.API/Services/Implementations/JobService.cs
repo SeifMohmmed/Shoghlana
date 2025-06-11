@@ -17,62 +17,67 @@ public class JobService : GenericService<Job>, IJobService
     {
         _mapper = mapper;
     }
-    
+
     [HttpGet]
     public ActionResult<GeneralResponse> Get(int id)
     {
-        Job? job = new Job();
+        Job? job =
+            _unitOfWork.jobRepository.Find(criteria: j => j.Id == id, includes: ["Proposals", "Skills", "Category", "Client"]);
 
-        var jobDTOs = new JobDTO();
-
-        try
-        {
-            job = _unitOfWork.jobRepository.Find(includes: new string[] { "Skills", "Category", "Proposals", "Client" }, criteria: j => j.Id == id);
-
-            jobDTOs = _mapper.Map<Job, JobDTO>(job);
-            jobDTOs.ClientName = job.Client.Name;
-            jobDTOs.CategoryTitle = job.Category.Title;
-
-            foreach (var proposal in job.Proposals)
-            {
-                var freelancer = _unitOfWork.freelancerRepository.GetById(proposal.FreelancerId);
-                jobDTOs.Freelancers.Add(new FreelancerDTO
-                {
-                    Name = freelancer.Name,
-                    Id = freelancer.Id
-                });
-
-                jobDTOs.Proposals.Add(new ProposalDTO
-                {
-                    Description = proposal.Description,
-                    Id = proposal.Id
-                });
-            }
-            foreach (var jobskill in job.Skills)
-            {
-                Skill? skill = _unitOfWork.skillRepository.GetById(jobskill.SkillId);
-
-                jobDTOs.Skills.Add(new SkillDTO
-                {
-                    Title = skill.Title,
-                    Id = skill.Id
-                });
-            }
-        }
-        catch (Exception ex)
+        if (job is null)
         {
             return new GeneralResponse()
             {
                 IsSuccess = false,
                 Data = null,
-                Message = ex.Message
+                Message = "No Job found with this ID"
             };
         }
+
+        var jobDTO = new JobDTO();
+        var skillDTOs = new List<SkillDTO>();
+
+        foreach (var skill in skillDTOs)
+        {
+            var skillDTO = _mapper.Map<SkillDTO>(skill);
+
+            skillDTOs.Add(skillDTO);
+        }
+
+        jobDTO.Skills = skillDTOs;
+
+        if (job.Proposals is not null)
+        {
+            var proposalDTOs = new List<GetProposalDTO>();
+
+            foreach (var proposal in job.Proposals)
+            {
+                var proposalDTO = _mapper.Map<GetProposalDTO>(proposal);
+
+                proposalDTOs.Add(proposalDTO);
+            }
+
+            jobDTO.Proposals = proposalDTOs;
+        }
+        jobDTO.ClientName = job.Client?.Name ?? "NA";
+
+        jobDTO.CategoryTitle = job.Category?.Title ?? "NA";
+
+        Freelancer? acceptedFreelancer = _unitOfWork.freelancerRepository.GetById(job.FreelancerId ?? 0);
+
+        if (acceptedFreelancer is not null)
+        {
+            jobDTO.AcceptedFreelancerId = acceptedFreelancer.Id;
+            jobDTO.AcceptedFreelancerName = acceptedFreelancer.Name;
+        }
+
+        jobDTO = _mapper.Map<Job, JobDTO>(job);
+
         return new GeneralResponse
         {
             IsSuccess = true,
-            Data = jobDTOs,
-            Message = "Job is retrieved successfully"
+            Data = jobDTO,
+            Message = "Job is retrieved Successfully !"
         };
     }
 
@@ -88,17 +93,17 @@ public class JobService : GenericService<Job>, IJobService
         {
             jobDTOs[i].ClientName = jobs[i].Client.Name;
             jobDTOs[i].CategoryTitle = jobs[i].Category.Title;
-            
-            var client = 
+
+            var client =
                 _unitOfWork.clientRepository.GetById(jobDTOs[i].ClientId);
 
             var category =
                 _unitOfWork.categoryRepository.GetById(jobDTOs[i].CategoryId);
 
-            var freelancer=
+            var freelancer =
                 _unitOfWork.freelancerRepository.GetById(jobDTOs[i].AcceptedFreelancerId);
 
-            jobDTOs[i].ProposalCount = 
+            jobDTOs[i].ProposalCount =
                 _unitOfWork.proposalRepository.GetCount();
 
             foreach (JobSkills jobskill in jobs[i].Skills)
@@ -122,36 +127,36 @@ public class JobService : GenericService<Job>, IJobService
 
 
     public ActionResult<GeneralResponse> GetPaginatedJobs
-        (int MinBudget,int MaxBudget,int CategoryId,int ClientId,int FreelancerId,
-        int page, int pageSize, string[]includes = null)
+        (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
+        int page, int pageSize, string[] includes = null)
     {
         var paginatedJobs = _unitOfWork.jobRepository.GetPaginatedJobs(MinBudget, MaxBudget, CategoryId, ClientId
                             , FreelancerId, page, pageSize, includes);
 
-        if(paginatedJobs.Items is null)
+        if (paginatedJobs.Items is null)
         {
             return new GeneralResponse()
             {
                 IsSuccess = false,
                 Data = new PaginationListDTO<JobDTO>
                 {
-                    CurrentPage=paginatedJobs.CurrentPage,
-                    TotalPages=paginatedJobs.TotalPages,
-                    TotalItems=paginatedJobs.TotalItems,
-                    Items=null
+                    CurrentPage = paginatedJobs.CurrentPage,
+                    TotalPages = paginatedJobs.TotalPages,
+                    TotalItems = paginatedJobs.TotalItems,
+                    Items = null
                 },
-                Status=200,
-                Message= "No Jobs Found with this filteration"
+                Status = 200,
+                Message = "No Jobs Found with this filteration"
             };
         }
 
-        var jobDTOs= new List<JobDTO>();
+        var jobDTOs = new List<JobDTO>();
 
         foreach (var job in paginatedJobs.Items)
         {
-            var jobDTO=_mapper.Map<Job,JobDTO>(job);
+            var jobDTO = _mapper.Map<Job, JobDTO>(job);
 
-            var client = 
+            var client =
                 _unitOfWork.clientRepository.GetById(jobDTO.ClientId);
             jobDTO.ClientName = client?.Name ?? "NA";
 
@@ -163,7 +168,7 @@ public class JobService : GenericService<Job>, IJobService
                 _unitOfWork.freelancerRepository.GetById(jobDTO.AcceptedFreelancerId);
             jobDTO.AcceptedFreelancerName = freelancer?.Name ?? "NA";
 
-            jobDTO.ProposalCount=_unitOfWork.proposalRepository.GetCount();
+            jobDTO.ProposalCount = _unitOfWork.proposalRepository.GetCount();
 
             jobDTOs.Add(jobDTO);
         }
@@ -173,12 +178,12 @@ public class JobService : GenericService<Job>, IJobService
             IsSuccess = true,
             Data = new PaginationListDTO<JobDTO>
             {
-                CurrentPage=paginatedJobs.CurrentPage,
-                TotalItems=paginatedJobs.TotalItems,
-                TotalPages=paginatedJobs.TotalPages,
-                Items=jobDTOs
+                CurrentPage = paginatedJobs.CurrentPage,
+                TotalItems = paginatedJobs.TotalItems,
+                TotalPages = paginatedJobs.TotalPages,
+                Items = jobDTOs
             },
-            Status=200,
+            Status = 200,
         };
     }
 
@@ -405,7 +410,7 @@ public class JobService : GenericService<Job>, IJobService
         };
     }
 
-    
+
     [HttpPut]
     public ActionResult<GeneralResponse> Update(JobDTO jobDto)
     {
@@ -458,7 +463,7 @@ public class JobService : GenericService<Job>, IJobService
         }
     }
 
-    
+
     [HttpDelete]
     public ActionResult<GeneralResponse> Delete(int id)
     {
