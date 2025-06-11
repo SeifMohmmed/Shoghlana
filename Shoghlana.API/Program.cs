@@ -41,7 +41,8 @@ namespace Shoghlana.API
             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                            .AddEntityFrameworkStores<ApplicationDbContext>()
+                            .AddDefaultTokenProviders();
 
             builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
@@ -73,6 +74,11 @@ namespace Shoghlana.API
 
                   };
               });
+
+
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.AddScoped<IMailService,MailService>();
+
 
             // Registering the Unit of work inside the application container.
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

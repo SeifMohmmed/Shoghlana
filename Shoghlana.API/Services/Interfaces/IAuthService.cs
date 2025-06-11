@@ -3,6 +3,7 @@ using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ public interface IAuthService
     Task<AuthModel> RefreshTokenAsync(string token);
 
     Task<bool> RevokeTokenAsync(string token);
+
+    Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user);
 
 
     //Google Authentication

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Shoghlana.API.Response;
@@ -13,11 +14,13 @@ namespace Shoghlana.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    private readonly IGoogleAuthService _googleAuthService;
-    public AuthController(IAuthService authService)// IGoogleAuthService googleAuthService)
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IMailService _mailService;
+    public AuthController(IAuthService authService, UserManager<ApplicationUser> userManager, IMailService mailService)
     {
         _authService = authService;
-        //_googleAuthService = googleAuthService;
+        _userManager = userManager;
+        _mailService = mailService;
     }
 
 
@@ -27,16 +30,40 @@ public class AuthController : ControllerBase
         if (ModelState.IsValid)
         {
             var result = await _authService.RegisterAsync(registerModel);
+            //ApplicationUser user = await _userManager.FindByEmailAsync(registerModel.Email);
+            //if (user == null || string.IsNullOrEmpty(user.Email))
+            //{
+            //    return new GeneralResponse
+            //    {
+            //        IsSuccess = false,
+            //        Status = 400,
+            //        Data = ModelState,
+            //        Message = "Invalid Mail Address or there is no user"
+            //    };
+            //}
+            //else
+            //{
+            //    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //    string confirmationLink = Url.Action("ConfirmEmail", "Auth", new { userEmail = user.Email, token }, Request.Scheme);
+
+            //    string subject = "Email Confirmation";
+            //    string body = $"<h1>Welcome to Shoghlana!</h1>" +
+            //                  $"<p>Please confirm your email by clicking on the link below:</p>" +
+            //                  $"<a href='{confirmationLink}'>Confirm Email</a>";
+
+            //    await _mailService.SendEmailAsync(user.Email, subject, body);
+            //}
+
             if (result.IsAuthenticated)
             {
-                SetRefreshTokenInCookie(result.RefreshToken,result.RefreshTokenExpiration);
+                SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
                 return new GeneralResponse
                 {
                     Data = result,
                     IsSuccess = true,
                     Message = "Authenticated",
-                    Token = result.Token
+                    // Token = result.Token
                 };
             }
             else
@@ -46,8 +73,8 @@ public class AuthController : ControllerBase
                     Data = registerModel,
                     IsSuccess = false,
                     Message = result.Message,
-                    Status=400,
-                    
+                    Status = 400,
+
                 };
             }
         }
@@ -63,28 +90,52 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("googleRegister")]
-    public async Task<GeneralResponse> GoogleRegisterAsync(GoogleSignupDTO googleSignupDTO)
-    {
-        //var googleSignupDto = new GoogleSignupDTO();
+    //[HttpPost("ConfirmEmail")]
+    //public async Task<GeneralResponse> ConfirmEmail(string userEmail, string token)
+    //{
+    //    var user = await _userManager.FindByEmailAsync(userEmail);
 
-        if(!ModelState.IsValid)
-        {
-            var errors= new List<string>();
+    //    if (user is null)
+    //    {
+    //        return new GeneralResponse()
+    //        {
+    //            IsSuccess = false,
+    //            Status = 400,
+    //            Data = null,
+    //            Message = "Invalid mail address"
+    //        };
+    //    }
 
-            errors=ModelState.Values.SelectMany(v=>v.Errors)
-                                    .Select(e=>e.ErrorMessage)
-                                    .ToList();
+    //    var result = await _userManager.ConfirmEmailAsync(user, token);
 
-            return await Task.FromResult(new GeneralResponse()
-            {
-                IsSuccess = false,
-                Data = errors,
-                Message = "Invalid model state"
-            });
-        }
-        return await _authService.RegisterAsync(googleSignupDTO);
-    }
+    //    if (result.Succeeded)
+    //    {
+    //        user.EmailConfirmed = true;
+
+    //        var jwtSecurityToken = await _authService.CreateJwtToken(user);
+
+    //        await _userManager.UpdateAsync(user);
+
+    //        return new GeneralResponse()
+    //        {
+    //            IsSuccess = true,
+    //            Data = user.Email,
+    //            Status = 200,
+    //            Message = "Email Confirmed Successfully",
+    //            Token = jwtSecurityToken.ToString()
+    //        };
+    //    }
+    //    else
+    //    {
+    //        return new GeneralResponse()
+    //        {
+    //            IsSuccess = false,
+    //            Status = 400,
+    //            Data = result.Errors,
+    //            Message = "Error Confirming Email !"
+    //        };
+    //    }
+    //}
 
     [HttpPost("Token")]
     public async Task<GeneralResponse> GetTokenAsync([FromBody] TokenRequestModel registerModel)
@@ -92,7 +143,10 @@ public class AuthController : ControllerBase
         if (ModelState.IsValid)
         {
             var result = await _authService.GetTokenAsync(registerModel);
-            if (result.IsAuthenticated)
+
+            var user = await _userManager.FindByEmailAsync(registerModel.Email);
+
+            if (result.IsAuthenticated&&user.EmailConfirmed)
             {
                 if (!string.IsNullOrEmpty(result.RefreshToken))
                 {
@@ -203,7 +257,7 @@ public class AuthController : ControllerBase
     }
 
 
-    private void SetRefreshTokenInCookie(string refreshToken,DateTime expires)
+    private void SetRefreshTokenInCookie(string refreshToken, DateTime expires)
     {
         var cookieOptions = new CookieOptions
         {
@@ -213,6 +267,6 @@ public class AuthController : ControllerBase
             IsEssential = true,
             SameSite = SameSiteMode.None,
         };
-        Response.Cookies.Append("refreshtoken",refreshToken,cookieOptions);
+        Response.Cookies.Append("refreshtoken", refreshToken, cookieOptions);
     }
 }

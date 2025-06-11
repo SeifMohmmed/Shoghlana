@@ -81,7 +81,7 @@ public class AuthService : IAuthService
         // Send a welcome notification to the user
         await SendWelcomeNotificationAsync(user);
 
-        var jwtSecurityToken = await CreateJwtToken(user);
+       // var jwtSecurityToken = await CreateJwtToken(user);
 
         // Determine the user's roles
         var roles = await _userManager.GetRolesAsync(user);
@@ -92,10 +92,10 @@ public class AuthService : IAuthService
         return new AuthModel
         {
             Email = user.Email,
-            ExpiresOn = jwtSecurityToken.ValidTo,
+           // ExpiresOn = jwtSecurityToken.ValidTo,
             IsAuthenticated = true,
             Roles = roles.ToList(),
-            Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+            //Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
             Username = user.UserName,
             RefreshToken = refreshToken.Token,
             RefreshTokenExpiration = refreshToken.ExpiresOn,
