@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.DTOs;
+using Shoghlana.Core.Enums;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 
@@ -127,11 +128,10 @@ public class JobService : GenericService<Job>, IJobService
 
 
     public ActionResult<GeneralResponse> GetPaginatedJobs
-        (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
-        int page, int pageSize, string[] includes = null)
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
     {
-        var paginatedJobs = _unitOfWork.jobRepository.GetPaginatedJobs(MinBudget, MaxBudget, CategoryId, ClientId
-                            , FreelancerId, page, pageSize, includes);
+        var paginatedJobs = _unitOfWork.jobRepository.
+            GetPaginatedJobs(status, MinBudget, MaxBudget, ClientId, FreelancerId, page, pageSize, requestBody);
 
         if (paginatedJobs.Items is null)
         {
@@ -188,17 +188,64 @@ public class JobService : GenericService<Job>, IJobService
     }
 
     public async Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
-    (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
-    int page, int pageSize, string[] includes = null)
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
     {
-        var paginatedJobs = await _unitOfWork.jobRepository.GetPaginatedJobsAsync(MinBudget, MaxBudget, CategoryId, ClientId
-                            , FreelancerId, page, pageSize, includes);
+        var paginatedJobs = await _unitOfWork.jobRepository
+            .GetPaginatedJobsAsync(status, MinBudget, MaxBudget, ClientId, FreelancerId, page, pageSize, requestBody);
+
+
+        if (paginatedJobs.Items is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Data = new PaginationListDTO<JobDTO>()
+                {
+                    CurrentPage = paginatedJobs.CurrentPage,
+                    TotalPages = paginatedJobs.TotalPages,
+                    TotalItems = paginatedJobs.TotalItems,
+                    Items = null
+                },
+                Status = 400,
+
+                Message = "No Jobs Found with this filteration"
+            };
+        }
+
+        var jobDTOs = new List<JobDTO>();
+
+        foreach (var job in paginatedJobs.Items)
+        {
+            var jobDTO = _mapper.Map<Job, JobDTO>(job);
+
+            var client =
+                _unitOfWork.clientRepository.GetById(jobDTO.ClientId);
+            jobDTO.ClientName = client?.Name ?? "NA";
+
+            var category =
+                _unitOfWork.categoryRepository.GetById(jobDTO.CategoryId);
+            jobDTO.CategoryTitle = category?.Title ?? "NA";
+
+            var freelancer =
+                _unitOfWork.freelancerRepository.GetById(jobDTO.AcceptedFreelancerId);
+            jobDTO.AcceptedFreelancerName = freelancer?.Name ?? "NA";
+
+            jobDTO.ProposalCount = _unitOfWork.proposalRepository.GetCount();
+
+            jobDTOs.Add(jobDTO);
+        }
 
         return new GeneralResponse()
         {
             IsSuccess = true,
-            Data = paginatedJobs,
-            Status = 200
+            Data = new PaginationListDTO<JobDTO>
+            {
+                CurrentPage = paginatedJobs.CurrentPage,
+                TotalItems = paginatedJobs.TotalItems,
+                TotalPages = paginatedJobs.TotalPages,
+                Items = jobDTOs
+            },
+            Status = 200,
         };
     }
 

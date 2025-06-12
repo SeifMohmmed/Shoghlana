@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shoghlana.Core.DTOs;
 using Shoghlana.API.Response;
+using Shoghlana.API.Services.Implementations;
+using Shoghlana.API.Services.Interfaces;
+using Shoghlana.Core.DTOs;
+using Shoghlana.Core.Enums;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF.Repositories;
-using Shoghlana.API.Services.Interfaces;
-using Shoghlana.API.Services.Implementations;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
@@ -34,17 +35,17 @@ public class JobController : ControllerBase
 
     [HttpGet("pagination")]
     public ActionResult<GeneralResponse> GetPaginatedJobs
-          (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, string[] includes = null)
+    (int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, JobStatus? status = JobStatus.All, PaginatedJobsRequestBodyDTO requestBody = null)
     {
         return _jobService
-         .GetPaginatedJobs(MinBudget, MaxBudget, CategoryId, ClientId, FreelancerId, page, pageSize, includes);
+         .GetPaginatedJobs(status, MinBudget, MaxBudget, ClientId, FreelancerId, page, pageSize, requestBody);
     }
 
     [HttpGet("paginationAsync")]
     public async Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
-      (int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, string[] includes = null)
+    (int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, JobStatus? status = JobStatus.All, PaginatedJobsRequestBodyDTO requestBody = null)
     {
-        return await _jobService.GetPaginatedJobsAsync(MinBudget, MaxBudget, CategoryId, ClientId, FreelancerId, page, pageSize, includes);
+        return await _jobService.GetPaginatedJobsAsync(status, MinBudget, MaxBudget, ClientId, FreelancerId, page, pageSize, requestBody);
     }
 
 

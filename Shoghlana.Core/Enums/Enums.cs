@@ -10,6 +10,7 @@ public enum ExperienceLevel
     Beginner = 0,
 
     Intermediate = 1,
+
     Professional = 2,
 }
 public enum JobStatus
@@ -17,7 +18,10 @@ public enum JobStatus
     Active = 0,
 
     Closed = 1,
+
     Completed = 2,
+
+    All = 3,
 }
 public enum ProposalStatus
 {
@@ -30,11 +34,13 @@ public enum ProposalStatus
 public enum OrderWay
 {
     Ascending = 1,
+
     Descending = 2,
 }
 
 public enum UserRole
 {
     Freelancer = 0,
+
     Client = 1
 }

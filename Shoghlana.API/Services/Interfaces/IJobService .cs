@@ -2,6 +2,7 @@
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Implementations;
 using Shoghlana.Core.DTOs;
+using Shoghlana.Core.Enums;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF.Repositories;
@@ -12,13 +13,13 @@ public interface IJobService : IGenericService<Job>
 {
     public ActionResult<GeneralResponse> GetAll();
 
-    public ActionResult<GeneralResponse> GetPaginatedJobs(
-        int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
-        int page, int pageSize, string[] includes = null);
+    public ActionResult<GeneralResponse> GetPaginatedJobs
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody);
 
-    public Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync(
-        int MinBudget, int MaxBudget, int CategoryId, int ClientId, int FreelancerId,
-        int page, int pageSize, string[] includes = null);
+
+    public Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody);
+
 
     public ActionResult<GeneralResponse> Get(int id);
 
