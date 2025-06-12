@@ -21,6 +21,7 @@ using Shoghlana.API.Response;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
 using Google.Apis.Auth;
 using Shoghlana.EF.Configurations;
+using Shoghlana.Core.Enums;
 
 namespace Shoghlana.API.Services.Implementations;
 public class AuthService : IAuthService
@@ -32,17 +33,19 @@ public class AuthService : IAuthService
     private readonly IHubContext<NotificationHub> _hubContext;
     private readonly GoogleAuthConfig _googleAuthConfig;
     private readonly IFreelancerService _freelancerService;
+    private readonly IClientService _clientService;
 
     public AuthService
         (UserManager<ApplicationUser> userManager, IOptions<JWT> jwt,
         RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork, IHubContext<NotificationHub> hubContext,
-        IFreelancerService freelancerService, IOptions<GoogleAuthConfig> googleAuthConfig)
+        IFreelancerService freelancerService, IOptions<GoogleAuthConfig> googleAuthConfig, IClientService clientService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _unitOfWork = unitOfWork;
         _hubContext = hubContext;
         _freelancerService = freelancerService;
+        _clientService = clientService;
         _googleAuthConfig = googleAuthConfig.Value;
         _jwt = jwt.Value;
     }
@@ -325,36 +328,77 @@ public class AuthService : IAuthService
             //    Message = "This email has already been registered before"
             //});
 
-            var freelancer = new Freelancer() // consider it is a freelancer for testing
+            if (googleSignupDto.Role == (int)UserRole.Freelancer)
             {
-                Name = googleSignupDto.FirstName,
-
-                // convert img from string to bytes and save it in freelancer
-            };
-            try
-            {
-                _freelancerService.Add(freelancer); // add + save inside the same method
-
-            }
-
-            catch (Exception ex)
-            {
-                return new GeneralResponse()
+                var freelancer = new Freelancer() // consider it is a freelancer for testing
                 {
-                    IsSuccess = false,
-                    Data = null,
-                    Message = ex.Message
+                    Name = googleSignupDto.FirstName,
+
+                    // convert img from string to bytes and save it in freelancer
                 };
 
+
+                try
+                {
+                    _freelancerService.Add(freelancer); // add + save inside the same method
+
+                }
+
+                catch (Exception ex)
+                {
+                    return new GeneralResponse()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Message = ex.Message
+                    };
+
+                }
+
+                User = new ApplicationUser()
+                {
+                    UserName = googleSignupDto.FirstName, // should add guid as suffix as gmail allow username duplication but identity user doesnot
+                    Email = googleSignupDto.Email,
+                    FreelancerId = freelancer.Id,
+                    EmailConfirmed = true, // as he registered using gmail
+                };
             }
 
-            User = new ApplicationUser()
+            else
             {
-                UserName = googleSignupDto.FirstName, // should add guid as suffix as gmail allow username duplication but identity user doesnot
-                Email = googleSignupDto.Email,
-                FreelancerId = freelancer.Id,
-                EmailConfirmed = true, // as he registered using gmail
-            };
+                var client = new Client()
+                {
+                    Name = googleSignupDto.FirstName,
+                    // convert img from string to bytes and save it in client
+                };
+
+
+                try
+                {
+                    _clientService.Add(client); // add + save inside the same method
+
+                }
+
+                catch (Exception ex)
+                {
+                    return new GeneralResponse()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Message = ex.Message
+                    };
+
+                }
+
+                User = new ApplicationUser()
+                {
+                    UserName = googleSignupDto.FirstName, // should add guid as suffix as gmail allow username duplication but identity user doesnot
+                    Email = googleSignupDto.Email,
+                    ClientId = client.Id,
+                    EmailConfirmed = true, // as he registered using gmail
+                };
+            }
+
 
             try
             {
@@ -387,7 +431,6 @@ public class AuthService : IAuthService
                     Message = "Error on sending welcome notification"
                 };
             }
-
         }
 
         //Logic for Login

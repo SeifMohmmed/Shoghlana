@@ -19,4 +19,6 @@ public class GoogleSignupDTO
 
     public string FirstName { get; set; }
 
+    public int Role { get; set; }
+
 }
