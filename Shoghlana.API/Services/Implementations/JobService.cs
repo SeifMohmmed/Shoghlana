@@ -145,7 +145,7 @@ public class JobService : GenericService<Job>, IJobService
                     TotalItems = paginatedJobs.TotalItems,
                     Items = null
                 },
-                Status = 200,
+                Status = 400,
                 Message = "No Jobs Found with this filteration"
             };
         }

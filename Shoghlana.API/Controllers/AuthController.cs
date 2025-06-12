@@ -30,29 +30,6 @@ public class AuthController : ControllerBase
         if (ModelState.IsValid)
         {
             var result = await _authService.RegisterAsync(registerModel);
-            //ApplicationUser user = await _userManager.FindByEmailAsync(registerModel.Email);
-            //if (user == null || string.IsNullOrEmpty(user.Email))
-            //{
-            //    return new GeneralResponse
-            //    {
-            //        IsSuccess = false,
-            //        Status = 400,
-            //        Data = ModelState,
-            //        Message = "Invalid Mail Address or there is no user"
-            //    };
-            //}
-            //else
-            //{
-            //    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            //    string confirmationLink = Url.Action("ConfirmEmail", "Auth", new { userEmail = user.Email, token }, Request.Scheme);
-
-            //    string subject = "Email Confirmation";
-            //    string body = $"<h1>Welcome to Shoghlana!</h1>" +
-            //                  $"<p>Please confirm your email by clicking on the link below:</p>" +
-            //                  $"<a href='{confirmationLink}'>Confirm Email</a>";
-
-            //    await _mailService.SendEmailAsync(user.Email, subject, body);
-            //}
 
             if (result.IsAuthenticated)
             {
@@ -63,7 +40,6 @@ public class AuthController : ControllerBase
                     Data = result,
                     IsSuccess = true,
                     Message = "Authenticated",
-                    // Token = result.Token
                 };
             }
             else
@@ -90,52 +66,34 @@ public class AuthController : ControllerBase
         }
     }
 
-    //[HttpPost("ConfirmEmail")]
-    //public async Task<GeneralResponse> ConfirmEmail(string userEmail, string token)
-    //{
-    //    var user = await _userManager.FindByEmailAsync(userEmail);
+    [HttpPost("GoogleAuthentication")]
+    public async Task<GeneralResponse> GoogleAuthentication(GoogleSignupDTO googleSignupDto)
+    {
+        // GoogleSignupDto googleSignupDto = new GoogleSignupDto();
+        if (!ModelState.IsValid)
+        {
+            List<string> errors = new List<string>();
+            errors = ModelState.Values.SelectMany(v => v.Errors)
+                                      .Select(e => e.ErrorMessage)
+                                      .ToList();
 
-    //    if (user is null)
-    //    {
-    //        return new GeneralResponse()
-    //        {
-    //            IsSuccess = false,
-    //            Status = 400,
-    //            Data = null,
-    //            Message = "Invalid mail address"
-    //        };
-    //    }
+            return await Task.FromResult(new GeneralResponse()
+            {
+                IsSuccess = false,
+                Data = errors,
+                Message = "Invalid model state"
+            });
+        }
 
-    //    var result = await _userManager.ConfirmEmailAsync(user, token);
+        var result = await _authService.IsGmailTokenValidAsync(googleSignupDto.IdToken);
 
-    //    if (result.Succeeded)
-    //    {
-    //        user.EmailConfirmed = true;
+        if (result.IsSuccess)
+        {
+            return await _authService.GoogleAuthenticationAsync(googleSignupDto);
+        }
 
-    //        var jwtSecurityToken = await _authService.CreateJwtToken(user);
-
-    //        await _userManager.UpdateAsync(user);
-
-    //        return new GeneralResponse()
-    //        {
-    //            IsSuccess = true,
-    //            Data = user.Email,
-    //            Status = 200,
-    //            Message = "Email Confirmed Successfully",
-    //            Token = jwtSecurityToken.ToString()
-    //        };
-    //    }
-    //    else
-    //    {
-    //        return new GeneralResponse()
-    //        {
-    //            IsSuccess = false,
-    //            Status = 400,
-    //            Data = result.Errors,
-    //            Message = "Error Confirming Email !"
-    //        };
-    //    }
-    //}
+        return result;
+    }
 
     [HttpPost("Token")]
     public async Task<GeneralResponse> GetTokenAsync([FromBody] TokenRequestModel registerModel)
@@ -146,7 +104,7 @@ public class AuthController : ControllerBase
 
             var user = await _userManager.FindByEmailAsync(registerModel.Email);
 
-            if (result.IsAuthenticated&&user.EmailConfirmed)
+            if (result.IsAuthenticated && user.EmailConfirmed)
             {
                 if (!string.IsNullOrEmpty(result.RefreshToken))
                 {

@@ -10,6 +10,7 @@ using Shoghlana.Core.Helpers;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF;
+using Shoghlana.EF.Configurations;
 using Shoghlana.EF.Hubs;
 using Shoghlana.EF.Repositories;
 using System.Text;
@@ -79,6 +80,8 @@ namespace Shoghlana.API
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddScoped<IMailService,MailService>();
 
+            // registering Ioptions<GoogleAuthConfig>
+            builder.Services.Configure<GoogleAuthConfig>(builder.Configuration.GetSection("Authentication:Google"));
 
             // Registering the Unit of work inside the application container.
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

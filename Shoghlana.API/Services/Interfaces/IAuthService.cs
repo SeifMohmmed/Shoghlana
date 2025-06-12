@@ -29,7 +29,9 @@ public interface IAuthService
 
     Task<ApplicationUser> GetByEmailAsync(string email);
 
-    Task<GeneralResponse> RegisterAsync(GoogleSignupDTO googleSignupDto);
+    Task<GeneralResponse> GoogleAuthenticationAsync(GoogleSignupDTO googleSignupDto);
+
+    Task<GeneralResponse> IsGmailTokenValidAsync(string GmailToken);
 
 
 }

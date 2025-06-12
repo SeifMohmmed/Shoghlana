@@ -63,12 +63,12 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
         int totalPages = (int)Math.Ceiling(totalFilteredItems
                         / (double)pageSize);
 
-        if (page > totalPages)
-        {
-            page = totalPages;
-        }
+        //if (page > totalPages)
+        //{
+        //    page = totalPages;
+        //}
 
-        if (page == 0)
+        if (totalPages == 0)
         {
             return new PaginationListDTO<Job>
             {

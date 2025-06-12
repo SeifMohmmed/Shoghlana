@@ -20,6 +20,7 @@ using Shoghlana.API.Services.Interfaces;
 using Shoghlana.API.Response;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
 using Google.Apis.Auth;
+using Shoghlana.EF.Configurations;
 
 namespace Shoghlana.API.Services.Implementations;
 public class AuthService : IAuthService
@@ -29,18 +30,20 @@ public class AuthService : IAuthService
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly GoogleAuthConfig _googleAuthConfig;
     private readonly IFreelancerService _freelancerService;
 
     public AuthService
         (UserManager<ApplicationUser> userManager, IOptions<JWT> jwt,
-        RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork,IHubContext<NotificationHub> hubContext,
-        IFreelancerService freelancerService)
+        RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork, IHubContext<NotificationHub> hubContext,
+        IFreelancerService freelancerService, IOptions<GoogleAuthConfig> googleAuthConfig)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _unitOfWork = unitOfWork;
         _hubContext = hubContext;
         _freelancerService = freelancerService;
+        _googleAuthConfig = googleAuthConfig.Value;
         _jwt = jwt.Value;
     }
 
@@ -81,7 +84,7 @@ public class AuthService : IAuthService
         // Send a welcome notification to the user
         await SendWelcomeNotificationAsync(user);
 
-       // var jwtSecurityToken = await CreateJwtToken(user);
+        // var jwtSecurityToken = await CreateJwtToken(user);
 
         // Determine the user's roles
         var roles = await _userManager.GetRolesAsync(user);
@@ -92,7 +95,7 @@ public class AuthService : IAuthService
         return new AuthModel
         {
             Email = user.Email,
-           // ExpiresOn = jwtSecurityToken.ValidTo,
+            // ExpiresOn = jwtSecurityToken.ValidTo,
             IsAuthenticated = true,
             Roles = roles.ToList(),
             //Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
@@ -307,11 +310,12 @@ public class AuthService : IAuthService
         return await _unitOfWork.ApplicationUserRepository.GetByEmailAsync(email);
     }
 
-    public async Task<GeneralResponse> RegisterAsync(GoogleSignupDTO googleSignupDto)
+    public async Task<GeneralResponse> GoogleAuthenticationAsync(GoogleSignupDTO googleSignupDto)
     {
-        ApplicationUser? user = await _unitOfWork.ApplicationUserRepository.GetByEmailAsync(googleSignupDto.Email);
+        ApplicationUser? User = await _unitOfWork.ApplicationUserRepository
+                                      .GetByEmailAsync(googleSignupDto.Email);
 
-        if (user == null)
+        if (User == null)
         {
             //// apply login logic here
             //return await Task.FromResult(new GeneralResponse()
@@ -344,7 +348,7 @@ public class AuthService : IAuthService
 
             }
 
-            user = new ApplicationUser()
+            User = new ApplicationUser()
             {
                 UserName = googleSignupDto.FirstName, // should add guid as suffix as gmail allow username duplication but identity user doesnot
                 Email = googleSignupDto.Email,
@@ -354,7 +358,8 @@ public class AuthService : IAuthService
 
             try
             {
-                await _unitOfWork.ApplicationUserRepository.InsertAsync(user);
+                // should add role 
+                await _unitOfWork.ApplicationUserRepository.InsertAsync(User);
 
             }
 
@@ -370,7 +375,7 @@ public class AuthService : IAuthService
 
             try
             {
-                await SendWelcomeNotificationAsync(user);
+                await SendWelcomeNotificationAsync(User);
             }
 
             catch (Exception ex)
@@ -388,14 +393,14 @@ public class AuthService : IAuthService
         //Logic for Login
         AuthModel authModel = new AuthModel();
 
-        var jwtSecurityToken = await CreateJwtToken(user);
-        var roleList = await _userManager.GetRolesAsync(user);
+        var jwtSecurityToken = await CreateJwtToken(User);
+        var roleList = await _userManager.GetRolesAsync(User);
 
         authModel.IsAuthenticated = true;
         authModel.Token =
             new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        authModel.Email = user.Email;
-        authModel.Username = user.UserName;
+        authModel.Email = User.Email;
+        authModel.Username = User.UserName;
         authModel.ExpiresOn = jwtSecurityToken.ValidTo;
         authModel.Roles = roleList.ToList();
 
@@ -424,19 +429,36 @@ public class AuthService : IAuthService
         {
             IsSuccess = true,
             Data = authModel,
-            Message = "Login successful"
+            Message = "Successfully authenticated using gmail"
         };
     }
 
 
-    public async Task<GeneralResponse> IsGmailTokenValid(string GmailToken)
+    public async Task<GeneralResponse> IsGmailTokenValidAsync(string GmailToken)
     {
         ValidationSettings settings = new GoogleJsonWebSignature.ValidationSettings
         {
-            //Audience = new string[] { _googleAuthConfig.ClientId }
+            Audience = new string[] { _googleAuthConfig.ClientId }
         };
 
-        Payload payload = await GoogleJsonWebSignature.ValidateAsync(GmailToken, settings); // validate that aud of token matches clienId of my project on google cloud api
+        var payload = new Payload();
+
+        try
+        {
+            payload = await GoogleJsonWebSignature.ValidateAsync(GmailToken, settings);
+            // validate that aud of token matches clienId of my project on google cloud api   
+        }
+
+        catch (Exception ex)
+        {
+            return new GeneralResponse
+            {
+                IsSuccess = false,
+                Data = null,
+                Message = "Invalid gmail token"
+            };
+        }
+
         if (payload == null)
         {
             return new GeneralResponse
