@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace Shoghlana.Core.DTOs;
 public class GetProjectDTO
 {
+    public int Id { get; set; }
+
     [Required(ErrorMessage = "Title is required")]
     [MinLength(3, ErrorMessage = "Title must be at least 3 characters long")]
     [MaxLength(100, ErrorMessage = "Title cannot exceed 100 characters")]

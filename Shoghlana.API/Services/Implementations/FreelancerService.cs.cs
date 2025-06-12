@@ -23,7 +23,8 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
     [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
-        var freelancers = _unitOfWork.freelancerRepository.FindAll(includes: new[] { "Skills" }).ToList();
+        var freelancers = _unitOfWork.freelancerRepository
+                          .FindAll(includes: new[] { "Skills" }).ToList();
 
         var freelancerDTOs = new List<FreelancerDTO>(freelancers.Count());
 
@@ -45,7 +46,8 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
     [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
-        var freelancer = _unitOfWork.freelancerRepository.Find(criteria: null, includes: new[] { "Skills" });
+        var freelancer = _unitOfWork.freelancerRepository
+                         .Find(criteria: f => f.Id == id, includes: new[] { "Skills", "Portfolio" });
 
         if (freelancer is null)
         {
@@ -58,13 +60,61 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
             };
         }
 
-        var freelancerDTO = _mapper.Map<Freelancer, FreelancerDTO>(freelancer);
+        //var freelancerDTO = _mapper.Map<Freelancer, FreelancerDTO>(freelancer);
+
+        var GetFreelancerDTO = new GetFreelancerDTO()
+        {
+            Id = freelancer.Id,
+            Name = freelancer.Name,
+            Address = freelancer.Address,
+            OverView = freelancer.Overview,
+            PersonalImageBytes = freelancer.PersonalImageBytes,
+            Title = freelancer.Title
+        };
+
+
+        var Skills = new List<Skill>();
+
+        foreach (var freelancerSkill in freelancer.Skills)
+        {
+            var skill = _unitOfWork.skillRepository.GetById(freelancerSkill.SkillId);
+
+            Skills.Add(skill);
+        }
+
+        var SkillsDTOs = _mapper.Map<List<Skill>, List<SkillDTO>>(Skills);
+
+        GetFreelancerDTO.Skills = SkillsDTOs;
+
+        var getProjectsDTOs = new List<GetProjectDTO>();
+
+        getProjectsDTOs = _mapper.Map<List<Project>, List<GetProjectDTO>>(freelancer.Portfolio);
+
+        for (int i = 0; i < freelancer.Portfolio.Count; i++)
+        {
+            var projectSkillsIds = _unitOfWork.projectSkillsRepository
+                .FindAll(criteria: ps => ps.ProjectId == freelancer.Portfolio[i].Id)
+                .Select(ps => ps.SkillId).ToList();
+
+            var ProjectSkills = new List<Skill>();
+
+            foreach (var skillId in projectSkillsIds)
+            {
+                var skill = _unitOfWork.skillRepository.GetById(skillId);
+
+                ProjectSkills.Add(skill);
+            }
+
+            var skillDTOs = _mapper.Map<List<Skill>, List<SkillDTO>>(ProjectSkills);
+            getProjectsDTOs[i].Skills = skillDTOs;
+        }
+        GetFreelancerDTO.Portfolio = getProjectsDTOs;
 
         return new GeneralResponse()
         {
             IsSuccess = true,
             Status = 200,
-            Data = freelancerDTO
+            Data = GetFreelancerDTO
         };
     }
 

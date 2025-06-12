@@ -57,6 +57,8 @@ public class ProjectService : GenericService<Project>, IProjectService
                 projectDTO.Images.Add(imageDTO);
             }
 
+            projectDTO.Poster = project.Poster;
+
             projectDTOs.Add(projectDTO);
         }
 
