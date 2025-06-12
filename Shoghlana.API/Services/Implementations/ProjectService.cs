@@ -21,6 +21,55 @@ public class ProjectService : GenericService<Project>, IProjectService
     }
 
     [HttpGet]
+    public ActionResult<GeneralResponse> GetByFreelancerId(int id)
+    {
+        var projects = _unitOfWork.projectRepository
+            .FindAll(new  string []{"Images","Skills"},p=>p.FreelancerId==id).ToList();
+
+        if(projects is null || projects.Count== 0)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = true,
+                Data = null,
+                Message = $"No Projects found for this freelancer (ID = {id})",
+                Status = 400,
+            };
+        }
+
+        var projectDTOs= new List<GetProjectDTO>();
+
+        foreach(var project in projects)
+        {
+            var projectDTO = _mapper.Map<GetProjectDTO>(project);
+
+            foreach(var skill in project.Skills)
+            {
+                var skillDTO = _mapper.Map<SkillDTO>(skill);
+
+                projectDTO.Skills.Add(skillDTO);
+            }
+
+            foreach(var image in project.Images)
+            {
+                var imageDTO = _mapper.Map<GetImageDTO>(image);
+
+                projectDTO.Images.Add(imageDTO);
+            }
+
+            projectDTOs.Add(projectDTO);
+        }
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Data = projectDTOs,
+            Status = 200,
+            Message = $"The projects done by the freelancer with ID = {id}"
+        };
+    }
+
+    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var projects = _unitOfWork.projectRepository.FindAll(new string[] { "Images", "Skills" });
@@ -364,4 +413,6 @@ public class ProjectService : GenericService<Project>, IProjectService
         };
 
     }
+
+
 }

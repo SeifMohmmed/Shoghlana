@@ -19,11 +19,11 @@ public class Project
 
     public byte[] Poster { get; set; }
 
-    public List<ProjectImages>? Images { get; set; }
+    public List<ProjectImages>? Images { get; set; } = new List<ProjectImages>();
 
-    public List<ProjectSkills>? Skills { get; set; }
+    public List<ProjectSkills>? Skills { get; set; } = new List<ProjectSkills>();
 
-    public DateTime? TimePublished { get; set; }
+    public DateTime? TimePublished { get; set; } = DateTime.Now;
 
     //---------------------------------------------
 

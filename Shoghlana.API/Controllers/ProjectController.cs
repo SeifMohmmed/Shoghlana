@@ -30,6 +30,11 @@ public class ProjectController : ControllerBase
         return _projectService.GetById(id);
     }
 
+    [HttpGet("freelancer/{id:int}")]
+    public ActionResult<GeneralResponse> GetFreelancerId(int id)
+    {
+        return _projectService.GetByFreelancerId(id);
+    }
 
     [HttpPost]
     public async Task<ActionResult<GeneralResponse>> AddProject([FromForm] ProjectDTO projectDTO)

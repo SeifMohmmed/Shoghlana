@@ -11,6 +11,8 @@ public interface IProjectService : IGenericService<Project>
 
     ActionResult<GeneralResponse> GetById(int id);
 
+    ActionResult<GeneralResponse> GetByFreelancerId(int id);
+
     Task<ActionResult<GeneralResponse>> AddAsync([FromForm] ProjectDTO projectDTO);
 
     Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] ProjectDTO updatedProjectDTO);
