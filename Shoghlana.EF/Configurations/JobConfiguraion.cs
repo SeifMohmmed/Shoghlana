@@ -16,6 +16,12 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
     {
         builder.HasKey(j => j.Id);
 
+        builder.Property(j => j.Title)
+               .HasMaxLength(100);
+
+        builder.Property(j => j.Description)
+               .HasMaxLength(1000);
+
         builder.Property(j => j.MinBudget)
            .HasColumnType("decimal(18,2)");
 
@@ -29,9 +35,9 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
               .WithMany(c => c.Jobs)
               .HasForeignKey(j => j.ClientId);
 
-        builder.HasOne(j => j.Freelancer)
-              .WithMany(f => f.WorkingHistory)
-              .HasForeignKey(j => j.FreelancerId);
+        builder.HasOne(j => j.AcceptedFreelancer)
+               .WithMany(f => f.WorkingHistory)
+               .HasForeignKey(j => j.AcceptedFreelancerId);
 
         builder.HasOne(j => j.Category)
              .WithMany(c => c.Jobs)
@@ -49,7 +55,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Beginner,
                            Status = JobStatus.Active,
                            ClientId = 1,
-                           FreelancerId = 1,
+                           AcceptedFreelancerId = 1,
                            CategoryId = 1
                        },
                        new Job
@@ -63,7 +69,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Intermediate,
                            Status = JobStatus.Active,
                            ClientId = 2,
-                           FreelancerId = 2,
+                           AcceptedFreelancerId = 2,
                            CategoryId = 1
                        },
                        new Job
@@ -77,7 +83,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Professional,
                            Status = JobStatus.Active,
                            ClientId = 3,
-                           FreelancerId = 3,
+                           AcceptedFreelancerId = 3,
                            CategoryId = 1
                        },
                        new Job
@@ -91,7 +97,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Intermediate,
                            Status = JobStatus.Active,
                            ClientId = 4,
-                           FreelancerId = 4,
+                           AcceptedFreelancerId = 4,
                            CategoryId = 2
                        },
                        new Job
@@ -105,7 +111,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Beginner,
                            Status = JobStatus.Active,
                            ClientId = 5,
-                           FreelancerId = 5,
+                           AcceptedFreelancerId = 5,
                            CategoryId = 3
                        },
                        new Job
@@ -119,7 +125,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Professional,
                            Status = JobStatus.Active,
                            ClientId = 6,
-                           FreelancerId = 6,
+                           AcceptedFreelancerId = 6,
                            CategoryId = 4
                        },
                        new Job
@@ -133,7 +139,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            ExperienceLevel = ExperienceLevel.Intermediate,
                            Status = JobStatus.Active,
                            ClientId = 7,
-                           FreelancerId = 7,
+                           AcceptedFreelancerId = 7,
                            CategoryId = 3
                        },
                            new Job
@@ -147,7 +153,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                ExperienceLevel = ExperienceLevel.Beginner,
                                Status = JobStatus.Active,
                                ClientId = 8,
-                               FreelancerId = 8,
+                               AcceptedFreelancerId = 8,
                                CategoryId = 5
                            },
                            new Job
@@ -161,7 +167,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                ExperienceLevel = ExperienceLevel.Intermediate,
                                Status = JobStatus.Active,
                                ClientId = 9,
-                               FreelancerId = 9,
+                               AcceptedFreelancerId = 9,
                                CategoryId = 6
                            },
                            new Job
@@ -175,7 +181,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                ExperienceLevel = ExperienceLevel.Beginner,
                                Status = JobStatus.Active,
                                ClientId = 10,
-                               FreelancerId = 10,
+                               AcceptedFreelancerId = 10,
                                CategoryId = 1
                            },
                            new Job

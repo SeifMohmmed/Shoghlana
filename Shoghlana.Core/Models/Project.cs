@@ -23,7 +23,7 @@ public class Project
 
     public List<ProjectSkills>? Skills { get; set; } = new List<ProjectSkills>();
 
-    public DateTime? TimePublished { get; set; } = DateTime.Now;
+    public DateTime? TimePublished { get; set; } = new DateTime(2025, 6, 13);
 
     //---------------------------------------------
 

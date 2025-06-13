@@ -15,8 +15,13 @@ internal class ClientNotificationsConfiguration : IEntityTypeConfiguration<Clien
     {
         builder.HasKey(cn => cn.ClientId);
 
+        builder.Property(cn => cn.Title).IsRequired().HasMaxLength(50);
+        builder.Property(cn => cn.Description).IsRequired(false).HasMaxLength(100);
+
         builder.HasOne(cn => cn.Client)
-                  .WithMany(c => c.Notifications)
-                  .HasForeignKey(cn => cn.ClientId);
+               .WithMany(c => c.Notifications)
+               .HasForeignKey(cn => cn.ClientId);
+
+
     }
 }

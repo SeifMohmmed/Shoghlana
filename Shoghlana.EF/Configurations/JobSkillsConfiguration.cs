@@ -16,5 +16,13 @@ internal class JobSkillsConfiguration : IEntityTypeConfiguration<JobSkills>
 
         builder.HasKey(js => new { js.JobId, js.SkillId });
 
+        builder.HasOne(js => js.Job)
+               .WithMany(j => j.Skills)
+               .HasForeignKey(js => js.JobId);
+
+        builder.HasOne(js => js.Skill)
+            .WithMany()
+            .HasForeignKey(js => js.SkillId);
+
     }
 }

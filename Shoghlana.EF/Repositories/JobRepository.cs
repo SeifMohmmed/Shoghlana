@@ -54,7 +54,7 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
 
         if (FreelancerId > 0 && FreelancerId is not null)
         {
-            query = query.Where(j => j.FreelancerId == FreelancerId);
+            query = query.Where(j => j.AcceptedFreelancerId == FreelancerId);
         }
 
         if (requestBody?.Includes is not null && requestBody.Includes.Any())
@@ -147,7 +147,7 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
 
         if (FreelancerId > 0 && FreelancerId is not null)
         {
-            query = query.Where(j => j.FreelancerId == FreelancerId);
+            query = query.Where(j => j.AcceptedFreelancerId == FreelancerId);
         }
 
         if (requestBody?.Includes is not null && requestBody.Includes.Any())

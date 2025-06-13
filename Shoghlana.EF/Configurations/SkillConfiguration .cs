@@ -15,6 +15,9 @@ public class SkillConfiguration : IEntityTypeConfiguration<Skill>
     {
         builder.HasKey(c => c.Id);
 
+        builder.Property(s => s.Title).IsRequired().HasMaxLength(50);
+        builder.Property(s => s.Description).IsRequired(false).HasMaxLength(100);
+
         builder.HasData(
             new List<Skill>()
             {

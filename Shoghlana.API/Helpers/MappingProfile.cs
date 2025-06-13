@@ -14,6 +14,8 @@ public class MappingProfile : Profile
 
         CreateMap<SkillDTO, Skill>().ReverseMap();
 
+        CreateMap<JobSkills, SkillDTO>().ReverseMap();
+
         CreateMap<Project, GetProjectDTO>().ReverseMap();
 
         CreateMap<ProjectImages, GetImageDTO>().ReverseMap();

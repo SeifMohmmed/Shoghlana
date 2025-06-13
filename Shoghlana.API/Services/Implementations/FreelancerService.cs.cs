@@ -47,7 +47,7 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
     public ActionResult<GeneralResponse> GetById(int id)
     {
         var freelancer = _unitOfWork.freelancerRepository
-                         .Find(criteria: f => f.Id == id, includes: new[] { "Skills", "Portfolio" });
+                         .Find(criteria: f => f.Id == id, includes: new[] { "Skills", "Portfolio", "WorkingHistory" });
 
         if (freelancer is null)
         {
@@ -109,6 +109,26 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
             getProjectsDTOs[i].Skills = skillDTOs;
         }
         GetFreelancerDTO.Portfolio = getProjectsDTOs;
+
+        var jobDTOs=new List<JobDTO>();
+
+        foreach(var job in freelancer.WorkingHistory)
+        {
+            var jobDTO=_mapper.Map<Job,JobDTO>(job);
+
+            var rate = _unitOfWork.rateRepository.Find(r => r.JobId == job.Id);
+
+            var rateDTO = _mapper.Map<Rate,RateDTO>(rate);
+
+            jobDTO.Rate = rateDTO;
+
+            var category = _unitOfWork.categoryRepository.GetById(job.CategoryId);
+            jobDTO.CategoryTitle = category.Title;
+
+            jobDTOs.Add(jobDTO);
+        }
+        GetFreelancerDTO.WorkingHistory = jobDTOs;
+
 
         return new GeneralResponse()
         {

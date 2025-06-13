@@ -237,7 +237,7 @@ public class ProjectService : GenericService<Project>, IProjectService
 
         project.Skills = projectDTO.Skills?.Select(skillDTO => new ProjectSkills   // skills are added after project id is generated
         {
-            SkillId = skillDTO.Id,
+           // SkillId = skillDTO.Id,
             ProjectId = project.Id
         }).ToList();
 
@@ -346,7 +346,7 @@ public class ProjectService : GenericService<Project>, IProjectService
         {
             project.Skills.AddRange(updatedProjectDTO.Skills.Select(skillDto => new ProjectSkills
             {
-                SkillId = skillDto.Id,
+               // SkillId = skillDto.Id,
                 ProjectId = project.Id
             }));
         }

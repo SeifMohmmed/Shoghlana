@@ -103,7 +103,7 @@ public class RateService : GenericService<Rate>, IRateService
         _unitOfWork.Save();
 
 
-        if (existingJob.FreelancerId.HasValue)
+        if (existingJob.AcceptedFreelancerId.HasValue)
         {
             var client = _unitOfWork.clientRepository.GetById((int)existingJob.ClientId);
 
@@ -117,7 +117,7 @@ public class RateService : GenericService<Rate>, IRateService
                     SenderName = client.Name,
                     SenderImage = client.Image
                 };
-                await NotifyFreelancer(existingJob.FreelancerId.Value, notificationDto);
+                await NotifyFreelancer(existingJob.AcceptedFreelancerId.Value, notificationDto);
             }
         }
         return new GeneralResponse()

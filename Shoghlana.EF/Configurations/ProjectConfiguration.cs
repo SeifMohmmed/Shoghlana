@@ -15,6 +15,10 @@ internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
     {
         builder.HasKey(p => p.Id);
 
+        builder.Property(p => p.Title).IsRequired().HasMaxLength(50);
+        builder.Property(p => p.Description).IsRequired(false).HasMaxLength(100);
+        builder.Property(p => p.Link).IsRequired(false).HasMaxLength(50);
+
         builder.HasOne(p => p.Freelancer)
                  .WithMany(f => f.Portfolio)
                  .HasForeignKey(p => p.FreelancerId);
