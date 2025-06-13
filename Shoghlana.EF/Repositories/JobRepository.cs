@@ -16,7 +16,7 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
     public JobRepository(ApplicationDbContext context) : base(context)
     { }
     public PaginationListDTO<Job> GetPaginatedJobs
-      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
     {
         IQueryable<Job> query = dbSet;
 
@@ -34,6 +34,19 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
         if (MaxBudget > 0 && MaxBudget is not null)
         {
             query = query.Where(j => j.MinBudget <= MinBudget);
+        }
+
+        if (HasManyProposals is null)
+        {
+            switch (HasManyProposals)
+            {
+                case true:
+                    query = query.Where(j => j.ProposalsCount > 5);
+                    break;
+                case false:
+                    query = query.Where(j => j.ProposalsCount <= 5);
+                    break;
+            }
         }
 
         if (requestBody?.CategoriesIDs is not null && requestBody.CategoriesIDs.Any())
@@ -95,6 +108,12 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
                 Items = null
             };
         }
+
+        //List<Job> items =  dbSet.Where(j => j.MinBudget >= MinBudget).Where(j => j.MaxBudget <= MaxBudget)
+        //      .Where(j => requestBody.CategoriesIDs.Contains(j.CategoryId))
+        //      .Skip((page - 1) * pageSize)
+        //                   .Take(pageSize)
+        //                   .ToList();
 
         var items = query.Skip((page - 1) * pageSize)
                         .Take(pageSize)

@@ -49,8 +49,8 @@ namespace Shoghlana.EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,9 +64,10 @@ namespace Shoghlana.EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegisterationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
@@ -81,10 +82,10 @@ namespace Shoghlana.EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PersonalImageBytes = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Overview = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Overview = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,8 +98,8 @@ namespace Shoghlana.EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,9 +133,9 @@ namespace Shoghlana.EF.Migrations
                 {
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -197,9 +198,9 @@ namespace Shoghlana.EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FreelancerId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -218,16 +219,20 @@ namespace Shoghlana.EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PostTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MinBudget = table.Column<decimal>(type: "Money", nullable: false),
-                    MaxBudget = table.Column<decimal>(type: "Money", nullable: false),
+                    ApproveTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    MinBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MaxBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DurationInDays = table.Column<int>(type: "int", nullable: false),
+                    DeadLine = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProposalsCount = table.Column<int>(type: "int", nullable: true),
                     ExperienceLevel = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    ClientId = table.Column<int>(type: "int", nullable: true),
-                    FreelancerId = table.Column<int>(type: "int", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    AcceptedFreelancerId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,15 +241,17 @@ namespace Shoghlana.EF.Migrations
                         name: "FK_Jobs_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Jobs_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Jobs_Freelancers_FreelancerId",
-                        column: x => x.FreelancerId,
+                        name: "FK_Jobs_Freelancers_AcceptedFreelancerId",
+                        column: x => x.AcceptedFreelancerId,
                         principalTable: "Freelancers",
                         principalColumn: "Id");
                 });
@@ -255,9 +262,9 @@ namespace Shoghlana.EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Link = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     TimePublished = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FreelancerId = table.Column<int>(type: "int", nullable: true)
@@ -409,7 +416,8 @@ namespace Shoghlana.EF.Migrations
                 columns: table => new
                 {
                     JobId = table.Column<int>(type: "int", nullable: false),
-                    SkillId = table.Column<int>(type: "int", nullable: false)
+                    SkillId = table.Column<int>(type: "int", nullable: false),
+                    SkillId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -426,6 +434,11 @@ namespace Shoghlana.EF.Migrations
                         principalTable: "Skills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_JobSkills_Skills_SkillId1",
+                        column: x => x.SkillId1,
+                        principalTable: "Skills",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -442,7 +455,7 @@ namespace Shoghlana.EF.Migrations
                     Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     ReposLinks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FreelancerId = table.Column<int>(type: "int", nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: true)
+                    JobId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -457,7 +470,8 @@ namespace Shoghlana.EF.Migrations
                         name: "FK_Proposals_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -559,17 +573,37 @@ namespace Shoghlana.EF.Migrations
                 columns: new[] { "Id", "Description", "Title" },
                 values: new object[,]
                 {
-                    { 1, null, "Category1" },
-                    { 2, null, "Category2" }
+                    { 1, "Includes all services related to graphic design, industrial design, and web design.", "Design Services" },
+                    { 2, "Includes development and programming of applications and software for various systems and devices.", "Software Services" },
+                    { 3, "Includes article writing, instant translation, and content creation for websites and blogs.", "Writing and Translation Services" },
+                    { 4, "Includes managing digital marketing campaigns, social media advertising, and market analytics.", "Digital Marketing Services" },
+                    { 5, "Includes user support, troubleshooting technical issues, and enhancing system and network performance.", "Technical Support Services" },
+                    { 6, "Includes providing training courses, designing educational curricula, and developing learning resources.", "Education and Training Services" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Clients",
-                columns: new[] { "Id", "Country", "Description", "Image", "Name", "Phone" },
+                columns: new[] { "Id", "Country", "Description", "Image", "Name", "Phone", "RegisterationTime" },
                 values: new object[,]
                 {
-                    { 1, null, null, null, "Client1", null },
-                    { 2, null, null, null, "Client2", null }
+                    { 1, "Saudi Arabia", "A programmer and application developer specialized in web development.", null, "Abdulrahman Ahmed", "+966123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Egypt", "A professional graphic designer specializing in logo and poster design.", null, "Fatima Mohammed", "+201234567890", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "United Arab Emirates", "A professional digital marketer with experience in managing social media ad campaigns.", null, "Ali Alabdullah", "+971123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "Jordan", "A content writer specialized in creative writing and artistic articles.", null, "Maryam Hassan", "+962123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, "Iraq", "A photographer specializing in event and special occasion photography.", null, "Yousef Khalid", "+964123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, "Saudi Arabia", "A professional project manager in tech and software development.", null, "Lama Abdullah", "+966123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, "Egypt", "A creative content marketer working on promoting digital content for startups.", null, "Omar Ahmed", "+201234567890", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8, "Lebanon", "A professional app developer working in mobile app development.", null, "Rana Mahmoud", "+961123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 9, "Jordan", "A marketing manager specialized in digital marketing strategies.", null, "Ahmed Ali", "+962123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 10, "Saudi Arabia", "An expert in designing and managing websites for small and medium businesses.", null, "Huda Saleh", "+966123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 11, "United Arab Emirates", "A professional financial accountant working in financial reporting.", null, "Salma Abdullah", "+971123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 12, "Egypt", "An architect specialized in residential building design.", null, "Mohammed Hassan", "+201234567890", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 13, "Iraq", "A doctor specialized in pediatrics and mental health.", null, "Zainab Abdullah", "+964123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 14, "Lebanon", "A creative graphic designer working in commercial ad design.", null, "Ahmed Hussein", "+961123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 15, "Jordan", "A professional translator specializing in medical and scientific text translation.", null, "Fatima Ali", "+962123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 16, "Saudi Arabia", "A professional web developer in electronic application development.", null, "Abdullah Mahmoud", "+966123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 17, "Egypt", "An architectural engineer specialized in industrial facility design.", null, "Reem Abdullah", "+201234567890", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 18, "Lebanon", "A financial accountant with extensive experience in financial accounting.", null, "Omar Hassan", "+961123456789", new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -577,9 +611,16 @@ namespace Shoghlana.EF.Migrations
                 columns: new[] { "Id", "Address", "Name", "Overview", "PersonalImageBytes", "Title" },
                 values: new object[,]
                 {
-                    { 1, null, "Ahmed Mohammed", null, null, "Backend Developer" },
-                    { 2, null, "Ali Suleiman", null, null, "Frontend Developer" },
-                    { 3, null, "Wael Abdul Rahim", null, null, "Backend Developer" }
+                    { 1, "Cairo, Egypt", "Mohamed Ahmed", "A professional developer with experience in web and mobile application development.", null, "Specialized Application Developer" },
+                    { 2, "Riyadh, Saudi Arabia", "Fatima Ali", "A highly experienced designer in logo and poster design.", null, "Professional Graphic Designer" },
+                    { 3, "Cairo, Egypt", "Ahmed Khaled", "A programmer with experience in developing advanced applications using AI technologies.", null, "AI Specialist Programmer" },
+                    { 4, "Dubai, United Arab Emirates", "Sarah Hussein", "A graphic designer with experience in abstract design and creative arts.", null, "Creative Abstract Designer" },
+                    { 5, "Alexandria, Egypt", "Abdulrahman Mahmoud", "A professional developer with experience in building and developing large and complex websites.", null, "Advanced Web Developer" },
+                    { 6, "Jeddah, Saudi Arabia", "Rima Abdullah", "A graphic designer with extensive experience in logo and brand identity design.", null, "Professional Graphic Designer" },
+                    { 7, "Cairo, Egypt", "Mahmoud Ali", "A specialized developer with experience in mobile application development using the latest technologies.", null, "Mobile App Developer" },
+                    { 8, "Riyadh, Saudi Arabia", "Noor Abdullah", "A developer with experience in advanced web and mobile application development.", null, "Professional App Developer" },
+                    { 9, "Alexandria, Egypt", "Layla Mohammed", "A graphic designer and artist with experience in illustration and fine arts design.", null, "Creative Graphic Designer and Artist" },
+                    { 10, "Manama, Bahrain", "Ali Al-Husseini", "A developer with experience in web and mobile application development using multiple languages.", null, "Electronic Application Developer" }
                 });
 
             migrationBuilder.InsertData(
@@ -596,21 +637,98 @@ namespace Shoghlana.EF.Migrations
                 columns: new[] { "Id", "Description", "Title" },
                 values: new object[,]
                 {
-                    { 1, null, "C#" },
-                    { 2, null, "LINQ" },
-                    { 3, null, "EF" },
-                    { 4, null, "OOP" },
-                    { 5, null, "Agile" },
-                    { 6, null, "Blazor" }
+                    { 1, null, "Graphic Design" },
+                    { 2, null, "Industrial Drawing" },
+                    { 3, null, "Web Design" },
+                    { 4, null, "Brand Identity Design" },
+                    { 5, null, "Product Design" },
+                    { 6, null, "Logo Design" },
+                    { 7, null, "Mobile App Development" },
+                    { 8, null, "Web Development" },
+                    { 9, null, "Game Development" },
+                    { 10, null, "Computer Programming" },
+                    { 11, null, "Content Writing" },
+                    { 12, null, "Article Writing" },
+                    { 13, null, "Translation" },
+                    { 14, null, "Proofreading" },
+                    { 15, null, "Technical Writing" },
+                    { 16, null, "Digital Marketing" },
+                    { 17, null, "Search Engine Optimization (SEO)" },
+                    { 18, null, "Social Media Advertising" },
+                    { 19, null, "Email Marketing" },
+                    { 20, null, "Content Marketing" },
+                    { 21, null, "Technical Support" },
+                    { 22, null, "Network Administration" },
+                    { 23, null, "System Maintenance" },
+                    { 24, null, "Desktop Support" },
+                    { 25, null, "Cloud Computing Services" },
+                    { 26, null, "Educational Software Development" },
+                    { 27, null, "Curriculum Design" },
+                    { 28, null, "E-Learning Development" },
+                    { 29, null, "Lesson Design" },
+                    { 30, null, "Online Teaching" },
+                    { 31, null, "Advertisement Design" },
+                    { 32, null, "User Interface (UI) Design" },
+                    { 33, null, "User Experience (UX)" },
+                    { 34, null, "3D Modeling" },
+                    { 35, null, "Character Design" },
+                    { 36, null, "App Development with React.js" },
+                    { 37, null, "App Development with Node.js" },
+                    { 38, null, "App Development with Ruby on Rails" },
+                    { 39, null, "App Development with SQL" },
+                    { 40, null, "App Development with Django" },
+                    { 41, null, "Legal Article Writing" },
+                    { 42, null, "Creative Writing" },
+                    { 43, null, "Legal Verification" },
+                    { 44, null, "Localization" },
+                    { 45, null, "Market Analysis" },
+                    { 46, null, "Statistical Analysis" },
+                    { 47, null, "Performance Marketing" },
+                    { 48, null, "Affiliate Marketing" },
+                    { 49, null, "Online Marketing" },
+                    { 50, null, "Ad Campaign Management" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Jobs",
-                columns: new[] { "Id", "CategoryId", "ClientId", "Description", "ExperienceLevel", "FreelancerId", "MaxBudget", "MinBudget", "PostTime", "Title" },
+                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "DeadLine", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "ProposalsCount", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, "Description for Job1", 0, 1, 500m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Job1" },
-                    { 2, 2, 2, "Description for Job2", 1, 2, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(625), "Job2" }
+                    { 1, 1, null, 1, 1, null, "Professional design and artistic work", 0, 0, 500m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Professional and Unique Logo Design" },
+                    { 2, 2, null, 1, 2, null, "Design and administrative artwork", 0, 1, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Social Media Advertising Poster Design" },
+                    { 3, 3, null, 1, 3, null, "Business card design", 0, 2, 600m, 150m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Professional Business Card Design for Printing" },
+                    { 4, 4, null, 2, 4, null, "Website and application development", 0, 1, 800m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Lifetime Free Control Panel Installation" },
+                    { 5, 5, null, 3, 5, null, "Website programming", 0, 0, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Company Profile Website Design" },
+                    { 6, 6, null, 4, 6, null, "Programming and design of mobile apps", 0, 2, 3000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Mobile App Development for iOS and Android" },
+                    { 7, 7, null, 3, 7, null, "Programming and design of online shopping websites", 0, 1, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "E-Commerce Website Design and Development" },
+                    { 8, 8, null, 5, 8, null, "Marketing and advertising for companies and individuals", 0, 0, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Social Media Advertising Campaign Management" },
+                    { 9, 9, null, 6, 9, null, "Illustration and drawing arts", 0, 1, 600m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Illustration Design for Children's Books" },
+                    { 10, 10, null, 1, 10, null, "Marketing and advertising content writing", 0, 0, 300m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Advertising Content Writing for Website" },
+                    { 11, null, null, 2, 11, null, "Advanced administrative systems programming", 0, 2, 2000m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Employee Management System Design and Programming" },
+                    { 12, null, null, 3, 12, null, "Economic and financial analysis", 0, 2, 5000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Feasibility Study for Future Business Project" },
+                    { 13, null, null, 4, 13, null, "Educational and training courses", 0, 0, 200m, 50m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Programming Lessons for Beginners" },
+                    { 14, null, null, 5, 14, null, "Graphic design and advertising", 0, 1, 500m, 150m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Promotional Print Design for Cultural Event" },
+                    { 15, null, null, 6, 15, null, "Translation and writing", 0, 2, 800m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Translation of Scientific Articles from English to Arabic" },
+                    { 16, null, null, 1, 16, null, "Video game programming", 0, 2, 5000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Mobile Video Game Design and Development" },
+                    { 17, null, null, 2, 17, null, "Design and development of e-learning platforms", 0, 1, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Educational Platform Design" },
+                    { 18, null, null, 3, 18, null, "Content writing and editing", 0, 1, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Content Management for Tech Blog" },
+                    { 19, null, null, 4, 1, null, "CRM system programming and customization", 0, 2, 2500m, 800m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "CRM System Design and Development" },
+                    { 20, null, null, 5, 2, null, "Data analysis and report preparation", 0, 1, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Data Analysis and Strategic Report Preparation for Companies" },
+                    { 21, null, null, 6, 3, null, "Educational and research content writing", 0, 2, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Writing and Editing E-Books on AI" },
+                    { 22, null, null, 1, 4, null, "Programming and design of educational websites", 0, 1, 1200m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Educational Website Design and Development for Students" },
+                    { 23, null, null, 2, 5, null, "Design and programming of booking apps", 0, 1, 1800m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Event Booking Platform Design and Programming" },
+                    { 24, null, null, 3, 6, null, "Improving website search engine performance", 0, 0, 800m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Website Search Engine Optimization (SEO)" },
+                    { 25, null, null, 4, 7, null, "Integrated management systems programming", 0, 2, 2500m, 700m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Inventory and Sales Management System for Small Businesses" },
+                    { 26, null, null, 5, 8, null, "Economic and financial analysis for real estate projects", 0, 2, 5000m, 1500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Feasibility Study for a New Residential Project" },
+                    { 27, null, null, 6, 9, null, "Personal assistant app programming", 0, 2, 3000m, 800m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Personal Assistant App Design and Development" },
+                    { 28, null, null, 1, 10, null, "Marketing and fundraising", 0, 1, 1500m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Create and Manage Online Fundraising Campaign" },
+                    { 29, null, null, 2, 11, null, "Design and programming of interactive educational platforms", 0, 1, 2000m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Interactive Educational Platform for Teaching Mathematics" },
+                    { 30, null, null, 3, 12, null, "Educational game programming and design", 0, 0, 1200m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Educational Video Game Design for Children" },
+                    { 31, null, null, 4, 13, null, "Policy analysis and report preparation", 0, 0, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Research Report on Public Policy" },
+                    { 32, null, null, 5, 14, null, "Content management systems programming and customization", 0, 1, 1500m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Blog Content Management System Design and Programming" },
+                    { 33, null, null, 6, 15, null, "Product marketing and advertising", 0, 0, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Marketing Campaign for a New Product" },
+                    { 34, null, null, 1, 16, null, "Project management system programming", 0, 2, 2500m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Engineering Project Management System Design and Programming" },
+                    { 35, null, null, 2, 17, null, "Educational apps programming and design", 0, 1, 1800m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Programming Language Learning App Design and Development" }
                 });
 
             migrationBuilder.InsertData(
@@ -618,8 +736,8 @@ namespace Shoghlana.EF.Migrations
                 columns: new[] { "Id", "Description", "FreelancerId", "Link", "Poster", "TimePublished", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Description for Project1", 1, null, new byte[] { 32, 33, 34, 35 }, null, "Project1" },
-                    { 2, "Description for Project2", 2, null, new byte[] { 32, 33, 34, 35 }, null, "Project2" }
+                    { 1, "Description for Project1", 1, null, new byte[] { 32, 33, 34, 35 }, new DateTime(2025, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Project1" },
+                    { 2, "Description for Project2", 2, null, new byte[] { 32, 33, 34, 35 }, new DateTime(2025, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Project2" }
                 });
 
             migrationBuilder.InsertData(
@@ -711,6 +829,11 @@ namespace Shoghlana.EF.Migrations
                 column: "FreelancerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Jobs_AcceptedFreelancerId",
+                table: "Jobs",
+                column: "AcceptedFreelancerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_CategoryId",
                 table: "Jobs",
                 column: "CategoryId");
@@ -721,14 +844,14 @@ namespace Shoghlana.EF.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_FreelancerId",
-                table: "Jobs",
-                column: "FreelancerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_JobSkills_SkillId",
                 table: "JobSkills",
                 column: "SkillId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobSkills_SkillId1",
+                table: "JobSkills",
+                column: "SkillId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectImages_ProjectId",

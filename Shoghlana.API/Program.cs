@@ -78,7 +78,7 @@ namespace Shoghlana.API
 
 
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-            builder.Services.AddScoped<IMailService,MailService>();
+            builder.Services.AddScoped<IMailService, MailService>();
 
             // registering Ioptions<GoogleAuthConfig>
             builder.Services.Configure<GoogleAuthConfig>(builder.Configuration.GetSection("Authentication:Google"));
@@ -125,12 +125,31 @@ namespace Shoghlana.API
             builder.Services.AddScoped<IProjectService, ProjectService>();
             builder.Services.AddScoped<IRateService, RateService>();
             builder.Services.AddScoped<IClientService, ClientService>();
+            builder.Services.AddScoped<ISkillService, SkillService>();
             // builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
 
             builder.Services.AddAutoMapper(typeof(Program));
 
-            builder.Services.AddCors();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+
+                });
+
+                options.AddPolicy("AllowAngular", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200/")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+
+                });
+            });
+
 
             //************************************************************************
 
@@ -145,7 +164,10 @@ namespace Shoghlana.API
 
             app.UseHttpsRedirection();
 
-            app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            //app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+            app.UseCors("AllowAll");
+
 
             app.MapHub<NotificationHub>("/notificationHub");
 

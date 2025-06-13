@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
@@ -13,6 +14,7 @@ using Shoghlana.EF.Repositories;
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[EnableCors("AllowAngular")]// Apply the Angular-specific CORS policy to this controller
 public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
@@ -35,10 +37,10 @@ public class JobController : ControllerBase
 
     [HttpGet("pagination")]
     public ActionResult<GeneralResponse> GetPaginatedJobs
-    (int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, JobStatus? status = JobStatus.All, PaginatedJobsRequestBodyDTO requestBody = null)
+    (int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page = defaultPageNumber, int pageSize = defaultPageSize, JobStatus? status = JobStatus.All, PaginatedJobsRequestBodyDTO requestBody = null)
     {
         return _jobService
-         .GetPaginatedJobs(status, MinBudget, MaxBudget, ClientId, FreelancerId, page, pageSize, requestBody);
+         .GetPaginatedJobs(status, MinBudget, MaxBudget, ClientId, FreelancerId, HasManyProposals, IsNew, page, pageSize, requestBody);
     }
 
     [HttpGet("paginationAsync")]

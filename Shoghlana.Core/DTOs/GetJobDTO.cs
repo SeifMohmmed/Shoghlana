@@ -1,9 +1,12 @@
 ﻿using Shoghlana.Core.Enums;
-using Shoghlana.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Shoghlana.Core.DTOs;
-
-public class JobDTO
+public class GetJobDTO
 {
     public int Id { get; set; }
 
@@ -21,7 +24,7 @@ public class JobDTO
 
     public int DurationInDays { get; set; }
 
-    public DateTime? DeadLine { get; set; }
+   // public DateTime? DeadLine { get; set; }
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
@@ -47,7 +50,7 @@ public class JobDTO
 
     public int ClientId { get; set; }
 
-    public string ClientName { get; set; }
+    //public string ClientName { get; set; }
 
     //public int? AcceptedFreelancerId { get; set; }
 
@@ -55,10 +58,9 @@ public class JobDTO
 
     public int CategoryId { get; set; }
 
-     public string? CategoryTitle { get; set; }
+    public string? CategoryTitle { get; set; }
 
-   // public RateDTO? Rate { get; set; } // added manually after the freelancer finshes => the client gives him a rate
+    public RateDTO? Rate { get; set; } // added manually after the freelancer finshes => the client gives him a rate
 
     //public List<Freelancer>? AppliedFreelancers { get; set; }
-
 }

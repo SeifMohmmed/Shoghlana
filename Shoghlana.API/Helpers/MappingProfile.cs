@@ -22,6 +22,8 @@ public class MappingProfile : Profile
 
         CreateMap<Job, JobDTO>().ReverseMap();
 
+        CreateMap<GetJobDTO, Job>().ReverseMap();
+
         CreateMap<Proposal, GetProposalDTO>().ReverseMap();
 
         CreateMap<Proposal, GetPropsalImageDTO>().ReverseMap();

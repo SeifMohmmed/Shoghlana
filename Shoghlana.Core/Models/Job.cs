@@ -41,15 +41,18 @@ public class Job
     ///  you can also set it manually (added it in order not to breaka an existent code)
     ///  shorlty like this using Lampda expression : 
     /// </summary>
+
+    private int? _manualProposalsCount = null;
+
     public int? ProposalsCount
     {
-        get => Proposals?.Count() ?? 0;
-        set => ProposalsCount = value;
+        get => _manualProposalsCount ?? Proposals?.Count() ?? 0;
+        set => _manualProposalsCount = value;
     }
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
-    public List<JobSkills> Skills { get; set; } = new List<JobSkills>();
+    public List<JobSkills>? Skills { get; set; } = new List<JobSkills>();
 
     public List<Proposal>? Proposals { get; set; } = new List<Proposal>();
 

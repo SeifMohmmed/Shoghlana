@@ -110,17 +110,17 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
         }
         GetFreelancerDTO.Portfolio = getProjectsDTOs;
 
-        var jobDTOs=new List<JobDTO>();
+        var jobDTOs=new List<GetJobDTO>();
 
         foreach(var job in freelancer.WorkingHistory)
         {
-            var jobDTO=_mapper.Map<Job,JobDTO>(job);
+            var jobDTO=_mapper.Map<Job,GetJobDTO>(job);
 
             var rate = _unitOfWork.rateRepository.Find(r => r.JobId == job.Id);
 
             var rateDTO = _mapper.Map<Rate,RateDTO>(rate);
 
-            jobDTO.Rate = rateDTO;
+            //jobDTO.Rate = rateDTO;
 
             var category = _unitOfWork.categoryRepository.GetById(job.CategoryId);
             jobDTO.CategoryTitle = category.Title;

@@ -750,7 +750,7 @@ namespace Shoghlana.EF.Migrations
                     b.Property<DateTime?>("ApproveTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClientId")
@@ -2031,7 +2031,9 @@ namespace Shoghlana.EF.Migrations
 
                     b.HasOne("Shoghlana.Core.Models.Category", "Category")
                         .WithMany("Jobs")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Shoghlana.Core.Models.Client", "Client")
                         .WithMany("Jobs")
