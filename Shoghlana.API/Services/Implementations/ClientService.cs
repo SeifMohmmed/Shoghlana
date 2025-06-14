@@ -100,8 +100,8 @@ public class ClientService : GenericService<Client>, IClientService
             {
                 foreach (Job job in client.Jobs)
                 {
-                    JobDTO jobDTO = new JobDTO();
-                    jobDTO = _mapper.Map<Job, JobDTO>(job);
+                    AddJobDTO jobDTO = new AddJobDTO();
+                    jobDTO = _mapper.Map<Job, AddJobDTO>(job);
                     clientsDTO.Jobs.Add(jobDTO);
                 }
             }
@@ -137,7 +137,7 @@ public class ClientService : GenericService<Client>, IClientService
 
             clientWithJobsDTO.Name = client.Name;
             clientWithJobsDTO.Image = client.Image;
-            clientWithJobsDTO.Jobs = client.Jobs.Select(job => new JobDTO
+            clientWithJobsDTO.Jobs = client.Jobs.Select(job => new AddJobDTO
             {
                 Title = job.Title,
                 Description = job.Description,

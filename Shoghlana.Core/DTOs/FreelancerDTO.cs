@@ -21,7 +21,7 @@ public class FreelancerDTO
     // should be uncommented and optional >> added on edit freelancer profile >> not added on freelancer creation >> use projectdto on adding , getprojectdto onretrieving
     public List<GetProjectDTO>? Portfolio { get; set; }
 
-    public List<JobDTO>? WorkingHistory { get; set; }
+    public List<AddJobDTO>? WorkingHistory { get; set; }
 
     public List<ProposalDTO>? Proposals { get; set; }
 

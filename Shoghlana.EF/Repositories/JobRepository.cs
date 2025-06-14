@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 namespace Shoghlana.EF.Repositories;
 public class JobRepository : GenericRepository<Job>, IJobRepository
 {
+    private DateTime FiveDaysAgo = DateTime.Now.Subtract(TimeSpan.FromDays(5));
+
     public JobRepository(ApplicationDbContext context) : base(context)
     { }
     public PaginationListDTO<Job> GetPaginatedJobs
@@ -36,19 +38,6 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
             query = query.Where(j => j.MinBudget <= MinBudget);
         }
 
-        if (HasManyProposals is null)
-        {
-            switch (HasManyProposals)
-            {
-                case true:
-                    query = query.Where(j => j.ProposalsCount > 5);
-                    break;
-                case false:
-                    query = query.Where(j => j.ProposalsCount <= 5);
-                    break;
-            }
-        }
-
         if (requestBody?.CategoriesIDs is not null && requestBody.CategoriesIDs.Any())
         {
             var validCategoriesIDs = requestBody.CategoriesIDs.Where(id => id > 0).ToList();
@@ -57,7 +46,6 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
             {
                 query = query.Where(j => validCategoriesIDs.Contains((int)j.CategoryId));
             }
-
         }
 
         if (ClientId > 0 && ClientId is not null)
@@ -82,6 +70,34 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
             }
         }
 
+        if (HasManyProposals is not null)
+        {
+            switch (HasManyProposals)
+            {
+                case true:
+                    query = query.Where(j => j.Proposals.Count() > 5);
+                    break;
+
+                case false:
+                    query = query.Where(j => j.Proposals.Count() <= 5);
+                    break;
+            }
+
+        }
+
+        if (IsNew is not null)
+        {
+            switch (IsNew)
+            {
+                case true:
+                    query = query.Where(j => j.PostTime > FiveDaysAgo);
+                    break;
+
+                case false:
+                    query = query.Where(j => j.PostTime < FiveDaysAgo);
+                    break;
+            }
+        }
 
         int totalFilteredItems = query.Count();
 
@@ -109,15 +125,10 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
             };
         }
 
-        //List<Job> items =  dbSet.Where(j => j.MinBudget >= MinBudget).Where(j => j.MaxBudget <= MaxBudget)
-        //      .Where(j => requestBody.CategoriesIDs.Contains(j.CategoryId))
-        //      .Skip((page - 1) * pageSize)
-        //                   .Take(pageSize)
-        //                   .ToList();
-
         var items = query.Skip((page - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
+
         return new PaginationListDTO<Job>
         {
             TotalItems = totalFilteredItems,
@@ -128,7 +139,7 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
     }
 
     public async Task<PaginationListDTO<Job>> GetPaginatedJobsAsync
-      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
     {
         IQueryable<Job> query = dbSet;
 
@@ -181,6 +192,34 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
             }
         }
 
+        if (HasManyProposals is not null)
+        {
+            switch (HasManyProposals)
+            {
+                case true:
+                    query = query.Where(j => j.Proposals.Count() > 5);
+                    break;
+
+                case false:
+                    query = query.Where(j => j.Proposals.Count() <= 5);
+                    break;
+            }
+
+        }
+
+        if (IsNew is not null)
+        {
+            switch (IsNew)
+            {
+                case true:
+                    query = query.Where(j => j.PostTime > FiveDaysAgo);
+                    break;
+
+                case false:
+                    query = query.Where(j => j.PostTime < FiveDaysAgo);
+                    break;
+            }
+        }
 
         int totalFilteredItems = await query.CountAsync();
 

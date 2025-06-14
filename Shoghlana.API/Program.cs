@@ -32,6 +32,10 @@ namespace Shoghlana.API
             //});
 
             builder.Services.AddSignalR();
+
+            builder.Services.AddSingleton<IDictionary<string, UserRoomConnection>>(opt =>
+                new Dictionary<string, UserRoomConnection>());
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -135,9 +139,10 @@ namespace Shoghlana.API
             {
                 options.AddPolicy("AllowAll", builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder.WithOrigins("https://localhost:4200")
                            .AllowAnyMethod()
-                           .AllowAnyHeader();
+                           .AllowAnyHeader()
+                           .AllowCredentials();
 
                 });
 
@@ -167,10 +172,17 @@ namespace Shoghlana.API
             //app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseCors("AllowAll");
+            app.UseCors();
 
 
             app.MapHub<NotificationHub>("/notificationHub");
 
+            app.MapHub<ChatHub>("/ChatHub");
+
+            //app.UseEndpoints(Endpoint =>
+            //{
+            //    Endpoint.MapHub<ChatHub>("/ChatHub");
+            //});
 
             app.UseAuthentication();
 

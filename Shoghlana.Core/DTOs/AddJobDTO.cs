@@ -3,7 +3,7 @@ using Shoghlana.Core.Models;
 
 namespace Shoghlana.Core.DTOs;
 
-public class JobDTO
+public class AddJobDTO
 {
     public int Id { get; set; }
 
@@ -25,7 +25,8 @@ public class JobDTO
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
-    public List<SkillDTO>? Skills { get; set; } = new List<SkillDTO>();
+    //public List<SkillDTO>? Skills { get; set; } = new List<SkillDTO>();
+    public List<int>? SkillsIds { get; set; } = new List<int>();
 
     //public List<GetProposalDTO>? Proposals { get; set; } = new List<GetProposalDTO>();
 
@@ -55,9 +56,9 @@ public class JobDTO
 
     public int CategoryId { get; set; }
 
-     public string? CategoryTitle { get; set; }
+    public string? CategoryTitle { get; set; }
 
-   // public RateDTO? Rate { get; set; } // added manually after the freelancer finshes => the client gives him a rate
+    // public RateDTO? Rate { get; set; } // added manually after the freelancer finshes => the client gives him a rate
 
     //public List<Freelancer>? AppliedFreelancers { get; set; }
 

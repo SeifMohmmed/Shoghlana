@@ -22,7 +22,7 @@ public class GetJobDTO
 
     public decimal MinBudget { get; set; }
 
-    public int DurationInDays { get; set; }
+    //public int DurationInDays { get; set; }
 
    // public DateTime? DeadLine { get; set; }
 
@@ -46,7 +46,7 @@ public class GetJobDTO
 
     //public JobStatus JobStatus { get; set; } = JobStatus.Active;
 
-    //public JobStatus Status { get; set; } = JobStatus.Active;
+    public JobStatus Status { get; set; } = JobStatus.Active;
 
     public int ClientId { get; set; }
 

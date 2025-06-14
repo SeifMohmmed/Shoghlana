@@ -20,7 +20,7 @@ public class MappingProfile : Profile
 
         CreateMap<ProjectImages, GetImageDTO>().ReverseMap();
 
-        CreateMap<Job, JobDTO>().ReverseMap();
+        CreateMap<Job, AddJobDTO>().ReverseMap();
 
         CreateMap<GetJobDTO, Job>().ReverseMap();
 

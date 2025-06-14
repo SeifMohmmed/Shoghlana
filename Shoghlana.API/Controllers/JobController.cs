@@ -45,9 +45,9 @@ public class JobController : ControllerBase
 
     [HttpGet("paginationAsync")]
     public async Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
-    (int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page = defaultPageNumber, int pageSize = defaultPageSize, JobStatus? status = JobStatus.All, PaginatedJobsRequestBodyDTO requestBody = null)
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
     {
-        return await _jobService.GetPaginatedJobsAsync(status, MinBudget, MaxBudget, ClientId, FreelancerId, page, pageSize, requestBody);
+        return await _jobService.GetPaginatedJobsAsync(status, MinBudget, MaxBudget, ClientId, FreelancerId, HasManyProposals, IsNew, page, pageSize, requestBody);
     }
 
 
@@ -86,14 +86,14 @@ public class JobController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GeneralResponse> Add(JobDTO jobDTO)
+    public ActionResult<GeneralResponse> Add(AddJobDTO jobDTO)
     {
         return _jobService.Add(jobDTO);
     }
 
 
     [HttpPut]
-    public ActionResult<GeneralResponse> Update(JobDTO jobDto)
+    public ActionResult<GeneralResponse> Update(AddJobDTO jobDto)
     {
         return _jobService.Update(jobDto);
     }
@@ -103,5 +103,21 @@ public class JobController : ControllerBase
     public ActionResult<GeneralResponse> Delete(int id)
     {
         return _jobService.Delete(id);
+    }
+
+    [HttpGet("Search")]
+    public async Task<ActionResult<GeneralResponse>> SearchByJobTitleAsync(string KeyWord)
+    {
+        if (KeyWord == null || KeyWord == "")
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Data = null,
+                Message = "No keyword to use in search"
+            };
+        }
+
+        return await _jobService.SearchByJobTitleAsync(KeyWord);
     }
 }

@@ -19,7 +19,7 @@ public interface IJobService : IGenericService<Job>
 
 
     public Task<ActionResult<GeneralResponse>> GetPaginatedJobsAsync
-      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody);
+      (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody);
 
 
     public ActionResult<GeneralResponse> Get(int id);
@@ -32,9 +32,13 @@ public interface IJobService : IGenericService<Job>
 
     public ActionResult<GeneralResponse> GetByClientId([FromQuery] int id);
 
-    public ActionResult<GeneralResponse> Add(JobDTO jobDTO);
+    public ActionResult<GeneralResponse> Add(AddJobDTO jobDTO);
 
-    public ActionResult<GeneralResponse> Update(JobDTO jobDTO);
+    public ActionResult<GeneralResponse> Update(AddJobDTO jobDTO);
 
     public ActionResult<GeneralResponse> Delete(int id);
+
+    public Task<ActionResult<GeneralResponse>> SearchByJobTitleAsync(string KeyWord);
+
+
 }

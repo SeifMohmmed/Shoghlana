@@ -27,13 +27,13 @@ public class Job
     public int DurationInDays { get; set; }
 
 
-    private DateTime? _manualDeadLine;
+    //private DateTime? _manualDeadLine;
 
-    public DateTime? DeadLine
-    {
-        get => _manualDeadLine ?? ApproveTime?.AddDays(DurationInDays);
-        set => _manualDeadLine = value;
-    }
+    //public DateTime? DeadLine
+    //{
+    //    get => _manualDeadLine ?? ApproveTime?.AddDays(DurationInDays);
+    //    set => _manualDeadLine = value;
+    //}
 
     /// <summary>
     ///  any time you access the ProposalsCount property,
@@ -42,13 +42,13 @@ public class Job
     ///  shorlty like this using Lampda expression : 
     /// </summary>
 
-    private int? _manualProposalsCount = null;
+    //private int? _manualProposalsCount = null;
 
-    public int? ProposalsCount
-    {
-        get => _manualProposalsCount ?? Proposals?.Count() ?? 0;
-        set => _manualProposalsCount = value;
-    }
+    //public int? ProposalsCount
+    //{
+    //    get => _manualProposalsCount ?? Proposals?.Count() ?? 0;
+    //    set => _manualProposalsCount = value;
+    //}
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
