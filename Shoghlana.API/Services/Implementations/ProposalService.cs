@@ -149,7 +149,12 @@ public class ProposalService : GenericService<Proposal>, IProposalService
 
         foreach (var proposal in proposals)
         {
+            var jobDTO = _unitOfWork.jobRepository.Find(j => j.Id == proposal.JobId, new string[] { "Client" });
+
             var getProposalDTO = _mapper.Map<Proposal, GetProposalDTO>(proposal);
+
+            getProposalDTO.JobTitle = jobDTO.Title;
+            getProposalDTO.ClientName = jobDTO?.Client.Name;
 
             getProposalDTOs.Add(getProposalDTO);
         }

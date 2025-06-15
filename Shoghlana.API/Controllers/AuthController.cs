@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
 
             if (result.IsAuthenticated)
             {
-                SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+                //SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
                 return new GeneralResponse
                 {
@@ -89,7 +89,19 @@ public class AuthController : ControllerBase
 
         if (result.IsSuccess)
         {
-            return await _authService.GoogleAuthenticationAsync(googleSignupDto);
+            var authResult= await _authService.GoogleAuthenticationAsync(googleSignupDto);
+
+            if (authResult.IsSuccess)
+            {
+                var authModel = (AuthModel)result.Data;
+
+                if(!string.IsNullOrEmpty(authModel.RefreshToken))
+                {
+                    SetRefreshTokenInCookie(authModel.RefreshToken,authModel.RefreshTokenExpiration);
+                }
+            }
+
+            return authResult;
         }
 
         return result;

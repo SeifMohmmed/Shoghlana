@@ -23,6 +23,10 @@ public interface IAuthService
 
     Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user);
 
+    //reset password 
+    //Task<AuthModel> ForgotPasswordAsync(string email);
+
+    //Task<AuthModel> ResetPasswordAsync(ResetPasswordRequest request);
 
     //Google Authentication
     Task<ApplicationUser> GetByIdAsync(string id);

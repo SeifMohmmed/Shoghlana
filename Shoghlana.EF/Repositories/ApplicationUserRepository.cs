@@ -45,7 +45,10 @@ public class ApplicationUserRepository : IApplicationUserRepository
             result = await _userManager.CreateAsync(User, Password);
         }
 
-        await _userManager.AddToRoleAsync(User, Role);
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(User, Role);
+        }
 
         return result;
     }

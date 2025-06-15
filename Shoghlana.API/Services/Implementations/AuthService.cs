@@ -134,8 +134,8 @@ public class AuthService : IAuthService
 
         // Determine the user's roles
         var roles = await _userManager.GetRolesAsync(user);
-        var refreshToken = GenerateRefreshToken();
-        user.RefreshTokens?.Add(refreshToken);
+        //var refreshToken = GenerateRefreshToken();
+        // user.RefreshTokens?.Add(refreshToken);
         await _userManager.UpdateAsync(user);
 
         return new AuthModel
@@ -146,8 +146,8 @@ public class AuthService : IAuthService
             Roles = roles.ToList(),
             //Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
             Username = user.UserName,
-            RefreshToken = refreshToken.Token,
-            RefreshTokenExpiration = refreshToken.ExpiresOn,
+            //RefreshToken = refreshToken.Token,
+            //RefreshTokenExpiration = refreshToken.ExpiresOn,
         };
     }
 
@@ -193,7 +193,7 @@ public class AuthService : IAuthService
         if (user is null ||
             !await _userManager.CheckPasswordAsync(user, model.Password))
         {
-            authModel.Message = "Email Or Password is Incorrect!";
+            authModel.Message = "كلمة المرور او البريد الالكتروني غير صحيح";
 
             return authModel;
         }
@@ -514,6 +514,12 @@ public class AuthService : IAuthService
         var jwtSecurityToken = await CreateJwtToken(User);
         var roleList = await _userManager.GetRolesAsync(User);
 
+        //Refresh Token 
+
+        var refreshToken = GenerateRefreshToken();
+
+        User.RefreshTokens.Add(refreshToken);
+
         authModel.IsAuthenticated = true;
         authModel.Token =
             new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -521,27 +527,8 @@ public class AuthService : IAuthService
         authModel.Username = User.UserName;
         authModel.ExpiresOn = jwtSecurityToken.ValidTo;
         authModel.Roles = roleList.ToList();
-
-        // Refresh Token
-        //if (user.RefreshTokens.Any(t => t.IsActive))
-        //{
-        //    var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
-
-        //    authModel.RefreshToken = activeRefreshToken.Token;
-        //    authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
-
-        //}
-        //else
-        //{
-        //    var refreshToken = GenerateRefreshToken();
-
-        //    authModel.RefreshToken = refreshToken.Token;
-        //    authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
-
-        //    user.RefreshTokens.Add(refreshToken);
-
-        //    await _userManager.UpdateAsync(user);
-        //}
+        authModel.RefreshToken = refreshToken.Token;
+        authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
 
         return new GeneralResponse()
         {
