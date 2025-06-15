@@ -17,6 +17,7 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
 
     public JobRepository(ApplicationDbContext context) : base(context)
     { }
+
     public PaginationListDTO<Job> GetPaginatedJobs
       (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody)
     {
@@ -257,5 +258,12 @@ public class JobRepository : GenericRepository<Job>, IJobRepository
             CurrentPage = page,
             Items = items
         };
+    }
+    public List<Job> GetByCategoryId(int id)
+    {
+        var jobs = context.Jobs.Where(j => j.CategoryId == id)
+                             .ToList();
+
+        return jobs;
     }
 }

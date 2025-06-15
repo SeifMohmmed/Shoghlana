@@ -28,4 +28,6 @@ public class RegisterModel
 
     [Required, StringLength(50)]
     public string PhoneNumber { get; set; }
+
+    public int Role { get; set; }
 }

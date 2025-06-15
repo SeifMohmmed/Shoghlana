@@ -25,5 +25,9 @@
     <ProjectReference Include="..\Shoghlana.Core\Shoghlana.Core.csproj" />
     <ProjectReference Include="..\Shoghlana.EF\Shoghlana.EF.csproj" />
   </ItemGroup>
-
+	
+	<ItemGroup>
+		<Folder Include="wwwroot\Images\" />
+	</ItemGroup>
+	
 </Project>

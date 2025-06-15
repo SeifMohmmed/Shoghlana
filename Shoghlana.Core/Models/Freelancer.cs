@@ -27,7 +27,7 @@ public class Freelancer
 
     public List<Proposal>? Proposals { get; set; }
 
-    public List<FreelancerSkills>? Skills { get; set; }
+    public List<FreelancerSkills>? Skills { get; set; } = new List<FreelancerSkills> { };
 
     public List<FreelancerNotification>? Notifications { get; set; }
 

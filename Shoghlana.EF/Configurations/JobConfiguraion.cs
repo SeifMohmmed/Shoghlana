@@ -137,7 +137,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                            MinBudget = 500,
                            MaxBudget = 1500,
                            ExperienceLevel = ExperienceLevel.Intermediate,
-                           Status = JobStatus.Active,
+                           Status = JobStatus.Completed,
                            ClientId = 7,
                            AcceptedFreelancerId = 7,
                            CategoryId = 3
@@ -151,7 +151,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 300,
                                MaxBudget = 1000,
                                ExperienceLevel = ExperienceLevel.Beginner,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Completed,
                                ClientId = 8,
                                AcceptedFreelancerId = 8,
                                CategoryId = 5
@@ -165,7 +165,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 200,
                                MaxBudget = 600,
                                ExperienceLevel = ExperienceLevel.Intermediate,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Completed,
                                ClientId = 9,
                                AcceptedFreelancerId = 9,
                                CategoryId = 6
@@ -179,7 +179,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 100,
                                MaxBudget = 300,
                                ExperienceLevel = ExperienceLevel.Beginner,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Completed,
                                ClientId = 10,
                                AcceptedFreelancerId = 10,
                                CategoryId = 1
@@ -318,7 +318,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 300,
                                MaxBudget = 1000,
                                ExperienceLevel = ExperienceLevel.Intermediate,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 2,
                                //FreelancerId = 20,
                                CategoryId = 5
@@ -332,7 +332,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 500,
                                MaxBudget = 1500,
                                ExperienceLevel = ExperienceLevel.Professional,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 3,
                                //FreelancerId = 21,
                                CategoryId = 6
@@ -346,7 +346,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 400,
                                MaxBudget = 1200,
                                ExperienceLevel = ExperienceLevel.Intermediate,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 4,
                                //FreelancerId = 22,
                                CategoryId = 1
@@ -360,7 +360,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 600,
                                MaxBudget = 1800,
                                ExperienceLevel = ExperienceLevel.Intermediate,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 5,
                                //FreelancerId = 23,
                                CategoryId = 2
@@ -374,7 +374,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 200,
                                MaxBudget = 800,
                                ExperienceLevel = ExperienceLevel.Beginner,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 6,
                                //FreelancerId = 24,
                                CategoryId = 3
@@ -388,7 +388,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 700,
                                MaxBudget = 2500,
                                ExperienceLevel = ExperienceLevel.Professional,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 7,
                                //FreelancerId = 25,
                                CategoryId = 4
@@ -402,7 +402,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 1500,
                                MaxBudget = 5000,
                                ExperienceLevel = ExperienceLevel.Professional,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 8,
                                //FreelancerId = 26,
                                CategoryId = 5
@@ -416,7 +416,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 800,
                                MaxBudget = 3000,
                                ExperienceLevel = ExperienceLevel.Professional,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 9,
                                //FreelancerId = 27,
                                CategoryId = 6
@@ -430,7 +430,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 400,
                                MaxBudget = 1500,
                                ExperienceLevel = ExperienceLevel.Intermediate,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 10,
                                //FreelancerId = 28,
                                CategoryId = 1
@@ -444,7 +444,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 600,
                                MaxBudget = 2000,
                                ExperienceLevel = ExperienceLevel.Intermediate,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 11,
                                //FreelancerId = 29,
                                CategoryId = 2
@@ -458,7 +458,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 300,
                                MaxBudget = 1200,
                                ExperienceLevel = ExperienceLevel.Beginner,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 12,
                                //FreelancerId = 30,
                                CategoryId = 3
@@ -472,7 +472,7 @@ internal class JobConfiguraion : IEntityTypeConfiguration<Job>
                                MinBudget = 200,
                                MaxBudget = 700,
                                ExperienceLevel = ExperienceLevel.Beginner,
-                               Status = JobStatus.Active,
+                               Status = JobStatus.Closed,
                                ClientId = 13,
                                //FreelancerId = 31,
                                CategoryId = 4

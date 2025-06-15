@@ -8,7 +8,7 @@ public class FreelancerDTO
     // , we want to send its id 
     public int Id { get; set; }
 
-    public IFormFile[]? PersonalImageBytes { get; set; }
+    public byte[]? PersonalImageBytes { get; set; }
 
     public string Name { get; set; }
 
@@ -19,9 +19,9 @@ public class FreelancerDTO
     public string? OverView { get; set; }
 
     // should be uncommented and optional >> added on edit freelancer profile >> not added on freelancer creation >> use projectdto on adding , getprojectdto onretrieving
-    public List<GetProjectDTO>? Portfolio { get; set; }
+    public List<AddProjectDTO>? Portfolio { get; set; }
 
-    public List<AddJobDTO>? WorkingHistory { get; set; }
+    public List<GetJobDTO>? WorkingHistory { get; set; }
 
     public List<ProposalDTO>? Proposals { get; set; }
 

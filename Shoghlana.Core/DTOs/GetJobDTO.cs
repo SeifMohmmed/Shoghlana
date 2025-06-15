@@ -24,13 +24,13 @@ public class GetJobDTO
 
     //public int DurationInDays { get; set; }
 
-   // public DateTime? DeadLine { get; set; }
+    // public DateTime? DeadLine { get; set; }
 
     public ExperienceLevel ExperienceLevel { get; set; }
 
     public List<SkillDTO>? Skills { get; set; } = new List<SkillDTO>();
 
-    //public List<GetProposalDTO>? Proposals { get; set; } = new List<GetProposalDTO>();
+    public List<GetProposalDTO>? Proposals { get; set; } = new List<GetProposalDTO>();
 
     /// <summary>
     ///  any time you access the readonly ProposalsCount property,
@@ -50,11 +50,11 @@ public class GetJobDTO
 
     public int ClientId { get; set; }
 
-    //public string ClientName { get; set; }
+    public string ClientName { get; set; }
 
-    //public int? AcceptedFreelancerId { get; set; }
+    public int? AcceptedFreelancerId { get; set; }
 
-    //public string? AcceptedFreelancerName { get; set; }
+    public string? AcceptedFreelancerName { get; set; }
 
     public int CategoryId { get; set; }
 

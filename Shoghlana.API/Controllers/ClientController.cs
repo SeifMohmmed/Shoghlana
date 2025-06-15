@@ -60,8 +60,8 @@ public class ClientController : ControllerBase
     }
 
 
-    [HttpPut("{id:int}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateClient(int id, [FromForm] ClientDTO clientDTO)
+    [HttpPut]
+    public async Task<ActionResult<GeneralResponse>> UpdateClient(ClientDTO clientDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -73,7 +73,7 @@ public class ClientController : ControllerBase
             };
         }
 
-        return await _clientService.UpdateClient(id, clientDTO);
+        return await _clientService.UpdateClient(clientDTO);
     }
 
 

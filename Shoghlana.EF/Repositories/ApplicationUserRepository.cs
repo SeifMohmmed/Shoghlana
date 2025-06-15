@@ -31,10 +31,29 @@ public class ApplicationUserRepository : IApplicationUserRepository
         return user;
     }
 
-    public async Task<IdentityResult> InsertAsync(ApplicationUser User)
+    public async Task<IdentityResult> InsertAsync(ApplicationUser User, string Role, string Password = null)
     {
-        IdentityResult result = await _userManager.CreateAsync(User);
+        IdentityResult result;
+
+        if (Password == null)
+        {
+            result = await _userManager.CreateAsync(User);
+        }
+
+        else
+        {
+            result = await _userManager.CreateAsync(User, Password);
+        }
+
+        await _userManager.AddToRoleAsync(User, Role);
 
         return result;
     }
+
+    //public async Task<IdentityResult> InsertWithPasswordAsync(ApplicationUser User, string Role, string Password) Add commentMore actions
+    //{
+    //    IdentityResult result = await userManager.CreateAsync(User, Password);
+    //    await userManager.AddToRoleAsync(User, Role);
+    //    return result;
+    //}
 }

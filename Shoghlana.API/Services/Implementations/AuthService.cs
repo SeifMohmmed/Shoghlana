@@ -1,27 +1,29 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Google.Apis.Auth;
+using Google.Apis.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Shoghlana.API.Response;
+using Shoghlana.API.Services.Interfaces;
+using Shoghlana.Core.DTOs;
+using Shoghlana.Core.Enums;
+using Shoghlana.Core.Helpers;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
-using Shoghlana.Core.Helpers;
+using Shoghlana.EF.Configurations;
+using Shoghlana.EF.Hubs;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.SignalR;
-using Shoghlana.EF.Hubs;
-using Shoghlana.Core.DTOs;
-using System.Security.Cryptography;
-using Microsoft.EntityFrameworkCore;
-using Shoghlana.API.Services.Interfaces;
-using Shoghlana.API.Response;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
-using Google.Apis.Auth;
-using Shoghlana.EF.Configurations;
-using Shoghlana.Core.Enums;
+using IClientService = Shoghlana.API.Services.Interfaces.IClientService;
 
 namespace Shoghlana.API.Services.Implementations;
 public class AuthService : IAuthService
@@ -56,16 +58,29 @@ public class AuthService : IAuthService
         {
             return new AuthModel { Message = "Email is already registered!" };
         }
+
         if (await _userManager.FindByNameAsync(model.Username) is not null)
         {
             return new AuthModel { Message = "Username is already registered!" };
         }
 
-        var user = new ApplicationUser
-        {
-            UserName = model.Username,
-            Email = model.Email,
+        var user = new ApplicationUser();
 
+        if (model.Role == (int)UserRole.Freelancer)
+        {
+            var freelancer = new Freelancer()
+            {
+                Name = model.Username
+                // convert img from string to bytes and save it in freelancer
+            };
+
+            _freelancerService.Add(freelancer);   // add + save inside the same method
+
+            user.UserName = model.Username;
+
+            user.Email = model.Email;
+
+            user.FreelancerId = freelancer.Id;
             //PhoneNumber = model.PhoneNumber,
 
             //NormalizedEmail = model.Email ,
@@ -73,16 +88,44 @@ public class AuthService : IAuthService
             //PasswordHash = model.Password,
 
             // TODO the mail and password ? 
-        };
 
-        var result =
-            await _userManager.CreateAsync(user, model.Password);
 
-        if (!result.Succeeded)
-        {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            return new AuthModel { Message = errors };
+            var result =
+                await _unitOfWork.ApplicationUserRepository.InsertAsync(user, "Freelancer", model.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return new AuthModel { Message = errors };
+            }
         }
+
+        else if (model.Role == (int)UserRole.Client)
+        {
+            var client = new Client()
+            {
+                Name = model.Username
+                // convert img from string to bytes and save it in freelancer
+            };
+
+            _clientService.Add(client);   // add + save inside the same method
+
+            user.UserName = model.Username;
+
+            user.Email = model.Email;
+
+            user.ClientId = client.Id;
+
+            var result = await _unitOfWork.ApplicationUserRepository.InsertAsync(user, "Client", model.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return new AuthModel { Message = errors };
+            }
+        }
+
+
 
         // Send a welcome notification to the user
         await SendWelcomeNotificationAsync(user);
@@ -157,6 +200,15 @@ public class AuthService : IAuthService
         var jwtSecurityToken = await CreateJwtToken(user);
 
         var roleList = await _userManager.GetRolesAsync(user);
+
+        if (user.ClientId != null)
+        {
+            authModel.Id = (int)user.ClientId;
+        }
+        else if (user.FreelancerId != null)
+        {
+            authModel.Id = (int)user.FreelancerId;
+        }
 
         authModel.IsAuthenticated = true;
         authModel.Token =
@@ -297,7 +349,7 @@ public class AuthService : IAuthService
         return new RefreshToken
         {
             Token = Convert.ToBase64String(randomNumber),
-            ExpiresOn = DateTime.UtcNow.AddDays(10),
+            ExpiresOn = DateTime.UtcNow.AddDays(60),
             CreatedOn = DateTime.UtcNow,
         };
     }
@@ -315,8 +367,8 @@ public class AuthService : IAuthService
 
     public async Task<GeneralResponse> GoogleAuthenticationAsync(GoogleSignupDTO googleSignupDto)
     {
-        ApplicationUser? User = await _unitOfWork.ApplicationUserRepository
-                                      .GetByEmailAsync(googleSignupDto.Email);
+        var User = await _unitOfWork.ApplicationUserRepository
+                                       .GetByEmailAsync(googleSignupDto.Email);
 
         if (User == null)
         {
@@ -362,16 +414,30 @@ public class AuthService : IAuthService
                     FreelancerId = freelancer.Id,
                     EmailConfirmed = true, // as he registered using gmail
                 };
+
+                try
+                {
+                    // should add role 
+                    await _unitOfWork.ApplicationUserRepository.InsertAsync(User, "Freelancer");
+                }
+                catch (Exception ex)
+                {
+                    return await Task.FromResult(new GeneralResponse()
+                    {
+                        IsSuccess = false,
+                        Data = ex.Message,
+                        Message = "Error on account creation"
+                    });
+                }
             }
 
-            else
+            else if (googleSignupDto.Role == (int)UserRole.Client)
             {
                 var client = new Client()
                 {
                     Name = googleSignupDto.FirstName,
                     // convert img from string to bytes and save it in client
                 };
-
 
                 try
                 {
@@ -403,8 +469,7 @@ public class AuthService : IAuthService
             try
             {
                 // should add role 
-                await _unitOfWork.ApplicationUserRepository.InsertAsync(User);
-
+                await _unitOfWork.ApplicationUserRepository.InsertAsync(User, "Client");
             }
 
             catch (Exception ex)
@@ -434,7 +499,17 @@ public class AuthService : IAuthService
         }
 
         //Logic for Login
-        AuthModel authModel = new AuthModel();
+        var authModel = new AuthModel();
+
+        if (User.ClientId != null)
+        {
+            authModel.Id = (int)User.ClientId;
+        }
+
+        else if (User.FreelancerId != null)
+        {
+            authModel.Id = (int)User.FreelancerId;
+        }
 
         var jwtSecurityToken = await CreateJwtToken(User);
         var roleList = await _userManager.GetRolesAsync(User);

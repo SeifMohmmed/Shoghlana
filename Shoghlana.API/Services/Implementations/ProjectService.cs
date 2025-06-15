@@ -24,9 +24,9 @@ public class ProjectService : GenericService<Project>, IProjectService
     public ActionResult<GeneralResponse> GetByFreelancerId(int id)
     {
         var projects = _unitOfWork.projectRepository
-            .FindAll(new  string []{"Images","Skills"},p=>p.FreelancerId==id).ToList();
+            .FindAll(new string[] { "Images", "Skills" }, p => p.FreelancerId == id).ToList();
 
-        if(projects is null || projects.Count== 0)
+        if (projects is null || projects.Count == 0)
         {
             return new GeneralResponse()
             {
@@ -37,20 +37,32 @@ public class ProjectService : GenericService<Project>, IProjectService
             };
         }
 
-        var projectDTOs= new List<GetProjectDTO>();
+        var projectDTOs = new List<GetProjectDTO>();
 
-        foreach(var project in projects)
+        foreach (var project in projects)
         {
             var projectDTO = _mapper.Map<GetProjectDTO>(project);
 
-            foreach(var skill in project.Skills)
-            {
-                var skillDTO = _mapper.Map<SkillDTO>(skill);
+            var skillsIDs = project?.Skills?.Select(s => s.SkillId).ToList();
 
-                projectDTO.Skills.Add(skillDTO);
+            if (skillsIDs is not null && skillsIDs.Any())
+            {
+                var skills = _unitOfWork.skillRepository.FindAll(criteria: s => skillsIDs.Contains(s.Id)).ToList();
+
+                var skillsDTOs = new List<SkillDTO>();
+
+                foreach (var skill in skills)
+                {
+                    var skillDTO = _mapper.Map<SkillDTO>(skill);
+
+                    projectDTO.Skills.Add(skillDTO);
+                }
+
+                projectDTO.Skills = skillsDTOs;
+
             }
 
-            foreach(var image in project.Images)
+            foreach (var image in project.Images)
             {
                 var imageDTO = _mapper.Map<GetImageDTO>(image);
 
@@ -76,7 +88,7 @@ public class ProjectService : GenericService<Project>, IProjectService
     {
         var projects = _unitOfWork.projectRepository.FindAll(new string[] { "Images", "Skills" });
 
-        List<GetProjectDTO> projectDTOs = projects.Select(project => new GetProjectDTO
+        var projectDTOs = projects.Select(project => new GetProjectDTO
         {
             Title = project.Title,
             Description = project.Description,
@@ -156,9 +168,9 @@ public class ProjectService : GenericService<Project>, IProjectService
 
 
     [HttpPost]
-    public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] ProjectDTO projectDTO)
+    public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddProjectDTO projectDTO)
     {
-        if (projectDTO.Poster == null)
+        if (projectDTO.Poster is null)
         {
             return new GeneralResponse
             {
@@ -235,31 +247,56 @@ public class ProjectService : GenericService<Project>, IProjectService
             Images = projectImages
         };
 
-        project.Skills = projectDTO.Skills?.Select(skillDTO => new ProjectSkills   // skills are added after project id is generated
-        {
-           // SkillId = skillDTO.Id,
-            ProjectId = project.Id
-        }).ToList();
 
-        _unitOfWork.projectRepository.Update(project);
-        _unitOfWork.Save();
+        _unitOfWork.projectRepository.AddAsync(project);
+
+        _unitOfWork.SaveAsync();// so that the project takes ID from EF
+
+        var skills = (await _unitOfWork.skillRepository
+            .FindAllAsync(criteria: s => projectDTO.SkillIDs.Contains(s.Id))).ToList();
+
+        var projectSkills = new List<ProjectSkills>(skills.Count);
+
+        foreach (var skill in skills)
+        {
+            ProjectSkills projectSkill = new ProjectSkills()
+            {
+                SkillId = skill.Id,
+                ProjectId = project.Id
+            };
+
+            projectSkills.Add(projectSkill);
+        }
+
+        project.Skills = projectSkills;
+
+        await _unitOfWork.SaveAsync();
+
+        //project.Skills = projectDTO.Skills?.Select(skillDTO => new ProjectSkills   // skills are added after project id is generated
+        //{
+        //    //SkillId = skillDTO.Id,
+        //    ProjectId = project.Id
+        //}).ToList();
+
+        //_unitOfWork.projectRepository.Update(project);
+
 
         return new GeneralResponse()
         {
             IsSuccess = true,
             Status = 200,
-            Data = projectDTO,
+            Data = null,
             Message = "Added Successfully"
         };
     }
 
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] ProjectDTO updatedProjectDTO)
+    public async Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] AddProjectDTO updatedProjectDTO)
     {
-        var project = _unitOfWork.projectRepository.GetById(id);
+        var project = await _unitOfWork.projectRepository.GetByIdAsync(id);
 
-        if (project == null)
+        if (project is null)
         {
             return new GeneralResponse()
             {
@@ -269,7 +306,7 @@ public class ProjectService : GenericService<Project>, IProjectService
             };
         }
 
-        if (updatedProjectDTO.Poster != null)
+        if (updatedProjectDTO.Poster is not null)
         {
             if (!allowedExtensions.Contains(Path.GetExtension(updatedProjectDTO.Poster.FileName).ToLower()))
             {
@@ -298,7 +335,7 @@ public class ProjectService : GenericService<Project>, IProjectService
 
         var projectImages = new List<ProjectImages>();
 
-        if (updatedProjectDTO.Images != null)
+        if (updatedProjectDTO.Images is not null && updatedProjectDTO.Images.Any())
         {
             foreach (var imageDTO in updatedProjectDTO.Images)
             {
@@ -327,9 +364,9 @@ public class ProjectService : GenericService<Project>, IProjectService
                 await imageDTO.Image.CopyToAsync(imageDataStream);
 
                 projectImages.Add(new ProjectImages { Image = imageDataStream.ToArray() });
-            }
 
-            project.Images = projectImages;
+                project.Images = projectImages;
+            }
         }
 
         project.Title = updatedProjectDTO.Title;
@@ -342,48 +379,67 @@ public class ProjectService : GenericService<Project>, IProjectService
 
         project.Skills.Clear();
 
-        if (updatedProjectDTO.Skills != null)
+        if (updatedProjectDTO.SkillIDs is not null && updatedProjectDTO.SkillIDs.Any())
         {
-            project.Skills.AddRange(updatedProjectDTO.Skills.Select(skillDto => new ProjectSkills
+            // deleing the prev list first before adding the new one
+
+            var oldprojectSkills = await _unitOfWork.projectSkillsRepository
+                .FindAllAsync(criteria: ps => ps.ProjectId == updatedProjectDTO.ProjectId);
+
+            _unitOfWork.projectSkillsRepository.DeleteRange(oldprojectSkills);
+
+            var skills = (await _unitOfWork.skillRepository
+                .FindAllAsync(criteria: s => updatedProjectDTO.SkillIDs.Contains(s.Id))).ToList();
+
+            var newProjectSkills = new List<ProjectSkills>(skills.Count);
+
+            foreach (var skill in skills)
             {
-               // SkillId = skillDto.Id,
-                ProjectId = project.Id
-            }));
+                ProjectSkills projectSkill = new ProjectSkills()
+                {
+                    SkillId = skill.Id,
+                    ProjectId = project.Id
+                };
+
+                newProjectSkills.Add(projectSkill);
+            }
+
+            project.Skills = newProjectSkills;
         }
 
         _unitOfWork.Save();
 
-        var projectDTO = new ProjectDTO()
-        {
-            Title = updatedProjectDTO.Title,
-            Description = updatedProjectDTO.Description,
-            Link = updatedProjectDTO.Link,
-            TimePublished = updatedProjectDTO.TimePublished,
-            FreelancerId = updatedProjectDTO.FreelancerId,
+        //var projectDTO = new AddProjectDTO()
+        //{
+        //    Title = updatedProjectDTO.Title,
+        //    Description = updatedProjectDTO.Description,
+        //    Link = updatedProjectDTO.Link,
+        //    TimePublished = updatedProjectDTO.TimePublished,
+        //    FreelancerId = updatedProjectDTO.FreelancerId,
 
-            Skills = updatedProjectDTO.Skills?.Select(skill => new SkillDTO()
-            {
-                Title = _unitOfWork.skillRepository.GetById(skill.Id).Title,
-                Description = _unitOfWork.skillRepository.GetById(skill.Id).Description,
-            }).ToList(),
+        //    Skills = updatedProjectDTO.Skills?.Select(skill => new SkillDTO()
+        //    {
+        //        Title = _unitOfWork.skillRepository.GetById(skill.Id).Title,
+        //        Description = _unitOfWork.skillRepository.GetById(skill.Id).Description,
+        //    }).ToList(),
 
-            Images = project.Images?.Select(image => new ImageDTO
-            {
-                Image = new FormFile(new MemoryStream(image.Image), 0,
-            image.Image.Length, null, Path.GetFileName(image.Image.ToString()))
-            }).ToList(),
+        //    Images = project.Images?.Select(image => new ImageDTO
+        //    {
+        //        Image = new FormFile(new MemoryStream(image.Image), 0,
+        //    image.Image.Length, null, Path.GetFileName(image.Image.ToString()))
+        //    }).ToList(),
 
 
-            Poster = project.Poster != null ? new FormFile(new MemoryStream(project.Poster), 0, project.Poster.Length,
-            null, Path.GetFileName(project.Poster.ToString())) : null,
+        //    Poster = project.Poster != null ? new FormFile(new MemoryStream(project.Poster), 0, project.Poster.Length,
+        //    null, Path.GetFileName(project.Poster.ToString())) : null,
 
-        };
+        //};
 
         return new GeneralResponse
         {
             IsSuccess = true,
             Status = 200,
-            Data = updatedProjectDTO,
+            //Data = updatedProjectDTO,
             Message = "Project updated successfully"
         };
     }
@@ -403,6 +459,11 @@ public class ProjectService : GenericService<Project>, IProjectService
                 Message = "There is no Project found with this ID!"
             };
         }
+        // deleing the prev list first before adding the new one
+
+        var oldprojectSkills = _unitOfWork.projectSkillsRepository.FindAll(criteria: ps => ps.ProjectId == id);
+
+        _unitOfWork.projectSkillsRepository.DeleteRange(oldprojectSkills);
 
         _unitOfWork.projectRepository.Delete(project);
         _unitOfWork.Save();

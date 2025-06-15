@@ -17,4 +17,6 @@ public interface IJobRepository : IGenericRepository<Job>
     public Task<PaginationListDTO<Job>> GetPaginatedJobsAsync
       (JobStatus? status, int? MinBudget, int? MaxBudget, int? ClientId, int? FreelancerId, bool? HasManyProposals, bool? IsNew, int page, int pageSize, PaginatedJobsRequestBodyDTO requestBody);
 
+    public List<Job> GetByCategoryId(int id);
+
 }

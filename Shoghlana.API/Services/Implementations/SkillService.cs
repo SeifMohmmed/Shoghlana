@@ -66,4 +66,5 @@ public class SkillService : GenericService<Skill>, ISkillService
             Message = "Skills were retrieved successfully"
         };
     }
+
 }

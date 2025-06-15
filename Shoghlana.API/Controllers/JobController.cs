@@ -14,7 +14,6 @@ using Shoghlana.EF.Repositories;
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-[EnableCors("AllowAngular")]// Apply the Angular-specific CORS policy to this controller
 public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
@@ -58,15 +57,15 @@ public class JobController : ControllerBase
     }
 
 
-    [HttpGet("freelancer")]
-    public ActionResult<GeneralResponse> GetByFreelancerId([FromQuery] int id)
+    [HttpGet("freelancer/{id:int}")]
+    public ActionResult<GeneralResponse> GetByFreelancerId(int id)
     {
         return _jobService.GetByFreelancerId(id);
     }
 
 
     [HttpGet("category/{id:int}")]
-    public ActionResult<GeneralResponse> GetJobByCategoryId(int id)
+    public ActionResult<GeneralResponse> GetJobByCategoryId([FromRoute] int id)
     {
         return _jobService.GetJobsByCategoryId(id);
     }
@@ -79,8 +78,8 @@ public class JobController : ControllerBase
     }
 
 
-    [HttpGet("client")]
-    public ActionResult<GeneralResponse> GetByClientId([FromQuery] int id)
+    [HttpGet("client/{id:int}")]
+    public ActionResult<GeneralResponse> GetByClientId([FromRoute] int id)
     {
         return _jobService.GetByClientId(id);
     }
@@ -88,6 +87,17 @@ public class JobController : ControllerBase
     [HttpPost]
     public ActionResult<GeneralResponse> Add(AddJobDTO jobDTO)
     {
+        if (!ModelState.IsValid)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Data = ModelState,
+                Message = "Invalid Model State !"
+            };
+        }
+
         return _jobService.Add(jobDTO);
     }
 
@@ -95,6 +105,17 @@ public class JobController : ControllerBase
     [HttpPut]
     public ActionResult<GeneralResponse> Update(AddJobDTO jobDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Data = ModelState,
+                Message = "Invalid Model State !"
+            };
+        }
+
         return _jobService.Update(jobDto);
     }
 

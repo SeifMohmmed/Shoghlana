@@ -14,7 +14,7 @@ public class ClientService : GenericService<Client>, IClientService
 {
     private readonly IHubContext<NotificationHub> _hubContext;
     private readonly IMapper _mapper;
-    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png" };
+    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png", ".jpeg" };
     private long maxAllowedImageSize = 1_048_576;
 
     public ClientService(IUnitOfWork unitOfWork, IGenericRepository<Client> repository, IHubContext<NotificationHub> hubContext
@@ -24,7 +24,6 @@ public class ClientService : GenericService<Client>, IClientService
         _mapper = mapper;
     }
 
-    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var clients = _unitOfWork.clientRepository.FindAll();
@@ -74,8 +73,6 @@ public class ClientService : GenericService<Client>, IClientService
         }
     }
 
-
-    [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
         //var client = _unitOfWork.clientRepository.GetById(id);
@@ -125,8 +122,6 @@ public class ClientService : GenericService<Client>, IClientService
         }
     }
 
-
-    [HttpGet("jobs/{id:int}")]
     public ActionResult<GeneralResponse> GetJobsByClientId(int id)
     {
         var client = _unitOfWork.clientRepository.Find(criteria: c => c.Id == id, includes: new string[] { "Jobs" });
@@ -165,7 +160,6 @@ public class ClientService : GenericService<Client>, IClientService
     }
 
 
-    [HttpPost]
     public async Task<ActionResult<GeneralResponse>> CreateClient([FromForm] ClientDTO clientDTO)
     {
 
@@ -186,7 +180,7 @@ public class ClientService : GenericService<Client>, IClientService
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "Only JPG and PNG image formats are allowed!"
+                Message = "Only JPG , PNG and JPEG image formats are allowed!"
 
             };
         }
@@ -239,44 +233,9 @@ public class ClientService : GenericService<Client>, IClientService
         };
     }
 
-
-    [HttpPut("{id:int}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateClient(int id, [FromForm] ClientDTO clientDTO)
+    public async Task<ActionResult<GeneralResponse>> UpdateClient(ClientDTO clientDTO)
     {
-        if (clientDTO.Image is null)
-        {
-            return new GeneralResponse()
-            {
-                IsSuccess = false,
-                Status = 400,
-                Message = "Image is Required !"
-            };
-        }
-
-        if (!allowedExtensions.Contains(Path.GetExtension(clientDTO.Image.FileName).ToLower()))
-        {
-            return new GeneralResponse()
-            {
-                IsSuccess = false,
-                Status = 400,
-                Message = "The allowed Personal Image Extensions => {jpg , png}",
-            };
-        }
-
-        if (clientDTO.Image.Length > maxAllowedImageSize)
-        {
-            return new GeneralResponse()
-            {
-                IsSuccess = false,
-                Status = 400,
-                Message = "The max Allowed Personal Image Size => 1 MB ",
-            };
-        }
-        using var dataStream = new MemoryStream();
-
-        await clientDTO.Image.CopyToAsync(dataStream);
-
-        var existingClient = _unitOfWork.clientRepository.GetById(id);
+        var existingClient = _unitOfWork.clientRepository.GetById(clientDTO.Id);
 
         if (existingClient == null)
         {
@@ -284,30 +243,54 @@ public class ClientService : GenericService<Client>, IClientService
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "Client Not Found !"
+                Message = "Client Not Found"
             };
+        }
+        if (clientDTO.Image is not null)
+        {
+            if (!allowedExtensions.Contains(Path.GetExtension(clientDTO.Image.FileName).ToLower()))
+            {
+                return new GeneralResponse()
+                {
+                    IsSuccess = false,
+                    Status = 400,
+                    Message = "Please use a (Jpg, Png, Jpeg) file",
+                    Data = GetById(clientDTO.Id)
+                };
+            }
+
+            if (clientDTO.Image.Length > maxAllowedImageSize)
+            {
+                return new GeneralResponse()
+                {
+                    IsSuccess = false,
+                    Status = 400,
+                    Message = "The max Allowed Image Size => 1 MB ",
+                };
+            }
+
+            using var dataStream = new MemoryStream();
+
+            await clientDTO.Image.CopyToAsync(dataStream);
+
+            existingClient.Image = dataStream.ToArray();
+
         }
 
         existingClient.Name = clientDTO.Name;
-        existingClient.Phone = clientDTO.Phone;
-        existingClient.Country = clientDTO.Country;
         existingClient.Description = clientDTO.Description;
-        existingClient.Image = dataStream.ToArray();
+        existingClient.Country = clientDTO.Country;
+        // existingClient.Phone = clientDTO.Phone;
 
         _unitOfWork.clientRepository.Update(existingClient);
+
         _unitOfWork.Save();
 
-        return new GeneralResponse()
-        {
-            IsSuccess = true,
-            Status = 200,
-            Message = "Client Updated Successfully !",
-            Data = clientDTO
-        };
+
+        return GetById(clientDTO.Id);
     }
 
 
-    [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> DeleteClient(int id)
     {
         var client = _unitOfWork.clientRepository.GetById(id);

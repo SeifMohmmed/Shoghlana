@@ -28,7 +28,7 @@ public class Project
     //---------------------------------------------
 
     //  [ForeignKey("Freelancer")]
-    public int? FreelancerId { get; set; }
+    public int FreelancerId { get; set; }
 
     public Freelancer Freelancer { get; set; }
 

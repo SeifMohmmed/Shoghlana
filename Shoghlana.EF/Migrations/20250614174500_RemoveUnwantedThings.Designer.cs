@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shoghlana.EF;
 
@@ -11,9 +12,11 @@ using Shoghlana.EF;
 namespace Shoghlana.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250614174500_RemoveUnwantedThings")]
+    partial class RemoveUnwantedThings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,29 +50,6 @@ namespace Shoghlana.EF.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "77b5a044-5c9e-495e-8442-76a816c17a66",
-                            ConcurrencyStamp = "89dfb7b5-d529-40d9-92f6-808adb869512",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "82841029-737c-4234-9b74-64e448755ee4",
-                            ConcurrencyStamp = "4535993f-2b05-49a0-a746-f2b830671da5",
-                            Name = "Client",
-                            NormalizedName = "CLIENT"
-                        },
-                        new
-                        {
-                            Id = "8f072cb2-2b03-4fb0-b15a-e2168fdb5f48",
-                            ConcurrencyStamp = "811a2238-0931-40ba-aedf-129fb1c8a22d",
-                            Name = "Freelancer",
-                            NormalizedName = "FREELANCER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -600,6 +580,7 @@ namespace Shoghlana.EF.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 

@@ -114,6 +114,7 @@ namespace Shoghlana.API
             builder.Services.AddScoped<IRateRepository, RateRepository>();
 
             builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+
             // Registering the Generic Repository inside the application container.
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -135,23 +136,15 @@ namespace Shoghlana.API
 
             builder.Services.AddAutoMapper(typeof(Program));
 
+            // Define CORS policies
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", builder =>
+                options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("https://localhost:4200")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
-
-                });
-
-                options.AddPolicy("AllowAngular", builder =>
-                {
-                    builder.WithOrigins("http://localhost:4200/")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-
+                    //builder.AllowAnyOrigin()
+                    builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
                 });
             });
 
@@ -167,27 +160,25 @@ namespace Shoghlana.API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            app.UseRouting();
 
-            //app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-
-            app.UseCors("AllowAll");
             app.UseCors();
-
-
-            app.MapHub<NotificationHub>("/notificationHub");
-
-            app.MapHub<ChatHub>("/ChatHub");
-
-            //app.UseEndpoints(Endpoint =>
-            //{
-            //    Endpoint.MapHub<ChatHub>("/ChatHub");
-            //});
 
             app.UseAuthentication();
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
+
+
+            app.MapHub<NotificationHub>("/notificationHub");
+            app.MapHub<ChatHub>("/ChatHub");
+
+
+            //app.UseEndpoints(Endpoint =>
+            //{
+            //    Endpoint.MapHub<ChatHub>("/ChatHub");
+            //});
 
             app.MapControllers();
 

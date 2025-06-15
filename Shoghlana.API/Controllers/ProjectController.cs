@@ -36,8 +36,8 @@ public class ProjectController : ControllerBase
         return _projectService.GetByFreelancerId(id);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<GeneralResponse>> AddProject([FromForm] ProjectDTO projectDTO)
+    [HttpPost("{id:int}")]
+    public async Task<ActionResult<GeneralResponse>> AddProject([FromForm] AddProjectDTO projectDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -54,7 +54,7 @@ public class ProjectController : ControllerBase
 
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<GeneralResponse>> UpdateProject(int id, [FromForm] ProjectDTO updatedProjectDTO)
+    public async Task<ActionResult<GeneralResponse>> UpdateProject(int id, [FromForm] AddProjectDTO updatedProjectDTO)
     {
         if (!ModelState.IsValid)
         {

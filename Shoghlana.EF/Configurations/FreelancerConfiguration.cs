@@ -14,7 +14,7 @@ internal class FreelancerConfiguration : IEntityTypeConfiguration<Freelancer>
     {
         builder.Property(f => f.Name).IsRequired().HasMaxLength(50);
 
-        builder.Property(f => f.Title).IsRequired().HasMaxLength(50);
+        builder.Property(f => f.Title).IsRequired(false).HasMaxLength(50);
 
         builder.Property(f => f.Address).IsRequired(false).HasMaxLength(50);
 

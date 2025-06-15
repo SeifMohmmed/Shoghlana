@@ -5,13 +5,13 @@ namespace Shoghlana.Core.DTOs;
 
 public class AddJobDTO
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     public string Title { get; set; }
 
     public string Description { get; set; }
 
-    public DateTime PostTime { get; set; } = DateTime.Now;
+    public DateTime? PostTime { get; set; } = DateTime.Now;
 
     //public DateTime? ApproveTime { get; set; } // added manually when the client accept a proposal
 
@@ -44,7 +44,7 @@ public class AddJobDTO
 
     //public JobStatus JobStatus { get; set; } = JobStatus.Active;
 
-    //public JobStatus Status { get; set; } = JobStatus.Active;
+    public JobStatus? Status { get; set; } = JobStatus.Active;
 
     public int ClientId { get; set; }
 

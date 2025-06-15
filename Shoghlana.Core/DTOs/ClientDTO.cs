@@ -7,9 +7,9 @@ public class ClientDTO
 {
     public int Id { get; set; }
 
-    [Required(ErrorMessage = ("Name is Required"))]
-    [MinLength(3, ErrorMessage = ("Name Must Be at Least 3 Character"))]
-    public string Name { get; set; }
+    //[Required(ErrorMessage = ("Name is Required"))]
+    //[MinLength(3, ErrorMessage = ("Name Must Be at Least 3 Character"))]
+    public string? Name { get; set; }
 
     public string? Description { get; set; }
 
@@ -19,10 +19,10 @@ public class ClientDTO
 
     public IFormFile? Image { get; set; }
 
-    public DateTime RegisterationTime { get; set; } = DateTime.Now;
+    public DateTime? RegisterationTime { get; set; } = DateTime.Now;  // cannot be updated from front
 
     public int? JobsCount { get; set; }
 
-    public int? CompletedJobsCount { get; set; }
+    //public int? CompletedJobsCount { get; set; }
 
 }

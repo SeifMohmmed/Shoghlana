@@ -13,6 +13,6 @@ public interface IApplicationUserRepository
 
     Task<ApplicationUser> GetByEmailAsync(string email);
 
-    Task<IdentityResult> InsertAsync(ApplicationUser User);
+    Task<IdentityResult> InsertAsync(ApplicationUser User, string Role, string Password = null);
 
 }
