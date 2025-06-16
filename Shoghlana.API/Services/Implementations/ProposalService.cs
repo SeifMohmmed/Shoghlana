@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
 using Shoghlana.Core.DTOs;
+using Shoghlana.Core.Enums;
 
 namespace Shoghlana.API.Services.Implementations;
 
@@ -164,10 +165,9 @@ public class ProposalService : GenericService<Proposal>, IProposalService
     }
 
 
-    [HttpPost]
     public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddProposalDTO addProposalDTO)
     {
-        Job? job = await _unitOfWork.jobRepository.GetByIdAsync(addProposalDTO.JobId);
+        var job = await _unitOfWork.jobRepository.GetByIdAsync(addProposalDTO.JobId);
 
         if (job is null)
         {
@@ -179,7 +179,7 @@ public class ProposalService : GenericService<Proposal>, IProposalService
             };
         }
 
-        Freelancer? freelancer = await _unitOfWork.freelancerRepository.GetByIdAsync(addProposalDTO.FreelancerId);
+        var freelancer = await _unitOfWork.freelancerRepository.GetByIdAsync(addProposalDTO.FreelancerId);
 
         if (freelancer is null)
         {
@@ -296,7 +296,6 @@ public class ProposalService : GenericService<Proposal>, IProposalService
 
 
     // TODO : Try To use Async in Find to reduce waiting time
-    [HttpPut("{id:int}")]
     public async Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] AddProposalDTO addProposalDTO)
     {
         var proposal = _unitOfWork.proposalRepository.Find(p => p.Id == id, new string[] { "Images" });
@@ -440,7 +439,6 @@ public class ProposalService : GenericService<Proposal>, IProposalService
     }
 
 
-    [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> Delete(int id)
     {
         var proposal = _unitOfWork.proposalRepository.Find(criteria: p => p.Id == id, new string[] { "Images" });
@@ -466,5 +464,52 @@ public class ProposalService : GenericService<Proposal>, IProposalService
             Message = $"The Proposal with ID ({proposal.Id}) is Deleted Successfully !"
         };
     }
+
+
+    public ActionResult<GeneralResponse> AcceptProposal(int proposalId)
+    {
+        var proposal = _unitOfWork.proposalRepository.GetById(proposalId);
+
+        if (proposal is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid Proposal ID : {proposalId}"
+            };
+        }
+
+        proposal.ApprovedTime = DateTime.Now;
+        proposal.Deadline = DateTime.Now.AddDays(proposal.Duration);
+        proposal.Status = ProposalStatus.Approved;
+
+        //--------------------------------------------------------
+
+        var job = _unitOfWork.jobRepository.GetById(proposal.JobId);
+
+        if (job is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid Job ID : {proposal.JobId}"
+            };
+        }
+
+        job.ApproveTime = DateTime.Now;
+        job.Status = JobStatus.Closed;
+        job.AcceptedFreelancerId = proposal.FreelancerId;
+
+        _unitOfWork.Save();
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Message = $"The client {job.ClientId} Accepted the proposal {proposalId} from freelancer {job.AcceptedFreelancerId} on job {job.Id} successfully"
+        };
+    }
+
 
 }

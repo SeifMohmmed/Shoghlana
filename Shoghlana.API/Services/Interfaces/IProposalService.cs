@@ -23,5 +23,6 @@ public interface IProposalService : IGenericService<Proposal>
 
     public ActionResult<GeneralResponse> Delete(int id);
 
+    public ActionResult<GeneralResponse> AcceptProposal(int proposalId);
 
 }

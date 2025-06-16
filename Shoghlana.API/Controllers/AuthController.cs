@@ -259,7 +259,8 @@ public class AuthController : ControllerBase
         return new GeneralResponse
         {
             IsSuccess = true,
-            Message = result.Message
+            Message = result.Message,
+            Token= result.Token,
         };
     }
 

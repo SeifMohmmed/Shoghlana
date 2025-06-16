@@ -638,7 +638,8 @@ public class AuthService : IAuthService
         return new AuthModel
         {
             Message = "Password Successfully Reset.",
-            IsAuthenticated = true
+            IsAuthenticated = true,
+            Token = user.PasswordResetToken
         };
     }
 }
