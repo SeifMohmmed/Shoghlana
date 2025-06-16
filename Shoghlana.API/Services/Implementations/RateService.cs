@@ -23,7 +23,6 @@ public class RateService : GenericService<Rate>, IRateService
     }
 
 
-    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var rates = _unitOfWork.rateRepository.FindAll();
@@ -56,7 +55,6 @@ public class RateService : GenericService<Rate>, IRateService
     }
 
 
-    [HttpGet("id")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
         var rate = _unitOfWork.rateRepository.GetById(id);
@@ -81,7 +79,6 @@ public class RateService : GenericService<Rate>, IRateService
     }
 
 
-    [HttpPost]
     public async Task<ActionResult<GeneralResponse>> CreateRateAsync(RateDTO rateDTO)
     {
         Job? existingJob = _unitOfWork.jobRepository.GetById(rateDTO.JobId);
@@ -138,7 +135,6 @@ public class RateService : GenericService<Rate>, IRateService
     }
 
 
-    [HttpPut("{id}")]
     public async Task<ActionResult<GeneralResponse>> UpdateRateAsync(int id, RateDTO rateDTO)
     {
         var existingRate = _unitOfWork.rateRepository.GetById(id);
@@ -169,7 +165,6 @@ public class RateService : GenericService<Rate>, IRateService
     }
 
 
-    [HttpDelete("id")]
     public ActionResult<GeneralResponse> DeleteRate(int id)
     {
         var existingRate = _unitOfWork.rateRepository.GetById(id);

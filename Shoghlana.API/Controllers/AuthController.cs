@@ -89,15 +89,15 @@ public class AuthController : ControllerBase
 
         if (result.IsSuccess)
         {
-            var authResult= await _authService.GoogleAuthenticationAsync(googleSignupDto);
+            var authResult = await _authService.GoogleAuthenticationAsync(googleSignupDto);
 
             if (authResult.IsSuccess)
             {
-                var authModel = (AuthModel)result.Data;
+                var authModel = (AuthModel)authResult.Data;
 
-                if(!string.IsNullOrEmpty(authModel.RefreshToken))
+                if (!string.IsNullOrEmpty(authModel.RefreshToken))
                 {
-                    SetRefreshTokenInCookie(authModel.RefreshToken,authModel.RefreshTokenExpiration);
+                    SetRefreshTokenInCookie(authModel.RefreshToken, authModel.RefreshTokenExpiration);
                 }
             }
 
@@ -238,5 +238,50 @@ public class AuthController : ControllerBase
             SameSite = SameSiteMode.None,
         };
         Response.Cookies.Append("refreshtoken", refreshToken, cookieOptions);
+    }
+
+    [HttpPost("forgot-password")]
+
+    public async Task<GeneralResponse> ForgotPassword(string email)
+    {
+        var result = await _authService.ForgotPasswordAsync(email);
+
+        if (result is null || !result.IsAuthenticated)
+        {
+            return new GeneralResponse
+            {
+                Data = result,
+                IsSuccess = false,
+                Message = result?.Message ?? "An error occurred during the password reset process."
+            };
+        }
+
+        return new GeneralResponse
+        {
+            IsSuccess = true,
+            Message = result.Message
+        };
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<GeneralResponse> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var result = await _authService.ResetPasswordAsync(request);
+
+        if (result is null || !result.IsAuthenticated)
+        {
+            return new GeneralResponse
+            {
+                Data = result,
+                IsSuccess = false,
+                Message = result?.Message ?? "An error occurred during the password reset process."
+            };
+        }
+
+        return new GeneralResponse
+        {
+            IsSuccess = true,
+            Message = result.Message
+        };
     }
 }

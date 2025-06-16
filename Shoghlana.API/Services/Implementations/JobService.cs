@@ -20,7 +20,6 @@ public class JobService : GenericService<Job>, IJobService
         _mapper = mapper;
     }
 
-    [HttpGet]
     public ActionResult<GeneralResponse> Get(int id)
     {
         var job =
@@ -93,7 +92,6 @@ public class JobService : GenericService<Job>, IJobService
     }
 
 
-    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var jobs = _unitOfWork.jobRepository.FindAll(new string[] { "Category", "Client", "Skills" }).ToList();
@@ -131,10 +129,33 @@ public class JobService : GenericService<Job>, IJobService
     {
         var paginatedJobs = new PaginationListDTO<GetJobDTO>();
 
+        requestBody.Includes = ["Proposals"];
+
         var jobs = _unitOfWork.jobRepository
               .GetPaginatedJobs(status, MinBudget, MaxBudget, ClientId, FreelancerId, HasManyProposals, IsNew, page, pageSize, requestBody);
 
         paginatedJobs.Items = _mapper.Map<IEnumerable<Job>, IEnumerable<GetJobDTO>>(jobs.Items);
+
+        foreach (var jobDTO in paginatedJobs.Items)
+        {
+            if (jobDTO.ClientId > 0)
+            {
+                jobDTO.ClientName = _unitOfWork.clientRepository.Find(criteria: c => c.Id == jobDTO.ClientId)?.Name ?? "NA";
+            }
+
+
+            if (jobDTO.AcceptedFreelancerId > 0)
+            {
+                jobDTO.AcceptedFreelancerName = _unitOfWork.freelancerRepository.Find(criteria: f => f.Id == jobDTO.AcceptedFreelancerId)?.Name ?? "NA";
+            }
+
+            jobDTO.ProposalsCount = jobDTO?.Proposals?.Count ?? 0;
+
+            // then I don't need the proposal list any more to make the payload lighterAdd commentMore actions
+            jobDTO.Proposals = null;
+
+        }
+
         paginatedJobs.TotalItems = jobs.TotalItems;
         paginatedJobs.CurrentPage = jobs.CurrentPage;
         paginatedJobs.TotalPages = jobs.TotalPages;
@@ -219,7 +240,6 @@ public class JobService : GenericService<Job>, IJobService
     }
 
 
-    [HttpGet("freelancer")]
     public ActionResult<GeneralResponse> GetByFreelancerId([FromQuery] int id)
     {
         List<Job> jobs;
@@ -286,8 +306,6 @@ public class JobService : GenericService<Job>, IJobService
         };
     }
 
-
-    [HttpGet("category/{id:int}")]
     public ActionResult<GeneralResponse> GetJobsByCategoryId(int id)
     {
         var Jobs = _unitOfWork.jobRepository.GetByCategoryId(id);
@@ -334,7 +352,6 @@ public class JobService : GenericService<Job>, IJobService
     }
 
 
-    [HttpGet("categories")]
     public ActionResult<GeneralResponse> GetJobsByCategoryIds([FromQuery] List<int> ids)
     {
         var jobs = new List<GetJobDTO>();
@@ -384,7 +401,6 @@ public class JobService : GenericService<Job>, IJobService
     }
 
 
-    [HttpGet("client/{id:int}")]
     public ActionResult<GeneralResponse> GetByClientId([FromRoute] int id)
     {
         List<Job> jobs;
@@ -445,8 +461,6 @@ public class JobService : GenericService<Job>, IJobService
         };
     }
 
-
-    [HttpPost]
     public ActionResult<GeneralResponse> Add(AddJobDTO jobDTO)
     {
         var job = _mapper.Map<AddJobDTO, Job>(jobDTO);
@@ -501,8 +515,6 @@ public class JobService : GenericService<Job>, IJobService
         };
     }
 
-
-    [HttpPut]
     public ActionResult<GeneralResponse> Update(AddJobDTO jobDto)
     {
         var job = _unitOfWork.jobRepository.GetById((int)jobDto.Id);
@@ -572,7 +584,6 @@ public class JobService : GenericService<Job>, IJobService
     }
 
 
-    [HttpDelete]
     public ActionResult<GeneralResponse> Delete(int id)
     {
         var job = _unitOfWork.jobRepository.GetById(id);
@@ -647,7 +658,6 @@ public class JobService : GenericService<Job>, IJobService
         };
     }
 
-    [HttpGet("Search")]
     public async Task<ActionResult<GeneralResponse>> SearchByJobTitleAsync(string KeyWord)
     {
         IList<Job> Jobs = (IList<Job>)await _unitOfWork.jobRepository

@@ -20,7 +20,6 @@ public class ProjectService : GenericService<Project>, IProjectService
         _mapper = mapper;
     }
 
-    [HttpGet]
     public ActionResult<GeneralResponse> GetByFreelancerId(int id)
     {
         var projects = _unitOfWork.projectRepository
@@ -83,7 +82,6 @@ public class ProjectService : GenericService<Project>, IProjectService
         };
     }
 
-    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var projects = _unitOfWork.projectRepository.FindAll(new string[] { "Images", "Skills" });
@@ -120,7 +118,6 @@ public class ProjectService : GenericService<Project>, IProjectService
     }
 
 
-    [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
         var project = _unitOfWork.projectRepository.Find(p => p.Id == id, new string[] { "Skills", "Images" });
@@ -167,7 +164,6 @@ public class ProjectService : GenericService<Project>, IProjectService
     }
 
 
-    [HttpPost]
     public async Task<ActionResult<GeneralResponse>> AddAsync([FromForm] AddProjectDTO projectDTO)
     {
         if (projectDTO.Poster is null)
@@ -291,7 +287,6 @@ public class ProjectService : GenericService<Project>, IProjectService
     }
 
 
-    [HttpPut("{id:int}")]
     public async Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] AddProjectDTO updatedProjectDTO)
     {
         var project = await _unitOfWork.projectRepository.GetByIdAsync(id);
@@ -445,7 +440,6 @@ public class ProjectService : GenericService<Project>, IProjectService
     }
 
 
-    [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> Delete(int id)
     {
         var project = _unitOfWork.projectRepository.GetById(id);

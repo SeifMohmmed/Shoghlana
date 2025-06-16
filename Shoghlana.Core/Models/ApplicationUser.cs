@@ -27,4 +27,8 @@ public class ApplicationUser : IdentityUser
 
     public List<RefreshToken>? RefreshTokens { get; set; }
 
+    public string? PasswordResetToken { get; set; }
+
+    public DateTime? ResetTokenExpires { get; set; }
+
 }

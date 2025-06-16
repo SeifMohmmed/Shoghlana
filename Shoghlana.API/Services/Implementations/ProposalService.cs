@@ -26,7 +26,6 @@ public class ProposalService : GenericService<Proposal>, IProposalService
     }
 
 
-    [HttpGet]
     public async Task<ActionResult<GeneralResponse>> GetAllAsync()
     {
         var proposals = _unitOfWork.proposalRepository.FindAll(new string[] { "Images" }).ToList();
@@ -48,7 +47,6 @@ public class ProposalService : GenericService<Proposal>, IProposalService
     }
 
 
-    [HttpGet("{id:int}")]
     public ActionResult<GeneralResponse> GetById(int id)
     {
         var proposal = _unitOfWork.proposalRepository.GetById(id);
@@ -72,7 +70,6 @@ public class ProposalService : GenericService<Proposal>, IProposalService
     }
 
 
-    [HttpGet("JobId/{id:int}")]
     public async Task<ActionResult<GeneralResponse>> GetByJobIdAsync(int id)
     {
         var job = await _unitOfWork.proposalRepository.GetByIdAsync(id);
@@ -118,7 +115,6 @@ public class ProposalService : GenericService<Proposal>, IProposalService
     }
 
 
-    [HttpGet("freelancerId/{id:int}")]
     public async Task<ActionResult<GeneralResponse>> GetByFreelancerIdAsync(int id)
     {
         var freelancer = await _unitOfWork.freelancerRepository.GetByIdAsync(id);

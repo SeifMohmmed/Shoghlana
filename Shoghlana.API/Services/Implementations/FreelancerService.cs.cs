@@ -20,7 +20,6 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
         _mapper = mapper;
     }
 
-    [HttpGet]
     public ActionResult<GeneralResponse> GetAll()
     {
         var freelancers = _unitOfWork.freelancerRepository
@@ -353,7 +352,6 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
     }
 
 
-    [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> Delete(int id)
     {
         var freelancer = _unitOfWork.freelancerRepository.GetById(id);
