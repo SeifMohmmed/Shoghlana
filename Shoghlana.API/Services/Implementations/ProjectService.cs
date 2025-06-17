@@ -11,7 +11,7 @@ namespace Shoghlana.API.Services.Implementations;
 public class ProjectService : GenericService<Project>, IProjectService
 {
     private readonly IMapper _mapper;
-    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png" };
+    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png", "jpeg" };
     private long maxAllowedImageSize = 1_048_576;  // 1 MB
 
     public ProjectService(IUnitOfWork unitOfWork, IGenericRepository<Project> repository, IMapper mapper)

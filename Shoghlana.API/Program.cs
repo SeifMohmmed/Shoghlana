@@ -38,6 +38,7 @@ namespace Shoghlana.API
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSingleton<ChatServices>();
             builder.Services.AddSwaggerGen();
 
 
@@ -143,8 +144,9 @@ namespace Shoghlana.API
                 {
                     //builder.AllowAnyOrigin()
                     builder.WithOrigins("http://localhost:4200")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
                 });
             });
 
@@ -172,7 +174,9 @@ namespace Shoghlana.API
 
 
             app.MapHub<NotificationHub>("/notificationHub");
+
             app.MapHub<ChatHub>("/ChatHub");
+            app.MapHub<IndividualChatHub>("/IndividualChatHub");
 
 
             //app.UseEndpoints(Endpoint =>

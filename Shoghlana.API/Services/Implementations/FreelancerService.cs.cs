@@ -11,7 +11,7 @@ namespace Shoghlana.API.Services.Implementations;
 public class FreelancerService : GenericService<Freelancer>, IFreelancerService
 {
     private readonly IMapper _mapper;
-    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png" };
+    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png", "jpeg" };
     private long maxAllowedPersonalImageSize = 1_048_576;  // 1 MB = 1024 * 1024 bytes
 
     public FreelancerService(IUnitOfWork unitOfWork, IGenericRepository<Freelancer> repository, IMapper mapper)

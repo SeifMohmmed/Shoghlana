@@ -16,7 +16,7 @@ namespace Shoghlana.API.Services.Implementations;
 public class ProposalService : GenericService<Proposal>, IProposalService
 {
     private readonly IMapper _mapper;
-    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png" };
+    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png", "jpeg" };
 
     private long maxAllowedImageSize = 1_048_576;  // 1 MB 
 

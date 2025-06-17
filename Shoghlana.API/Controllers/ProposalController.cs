@@ -91,7 +91,7 @@ public class ProposalController : ControllerBase
         return _proposalService.Delete(id);
     }
 
-    [HttpGet("Accept")]
+    [HttpGet("Accept/{proposalId:int}")]
     public ActionResult<GeneralResponse> AcceptProposal(int proposalId)
     {
         return _proposalService.AcceptProposal(proposalId);
