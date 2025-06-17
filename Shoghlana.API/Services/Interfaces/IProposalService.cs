@@ -25,4 +25,6 @@ public interface IProposalService : IGenericService<Proposal>
 
     public ActionResult<GeneralResponse> AcceptProposal(int proposalId);
 
+    ActionResult<GeneralResponse> RejectProposal(int proposalId);
+
 }

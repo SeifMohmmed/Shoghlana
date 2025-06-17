@@ -22,10 +22,12 @@ public class Notification
 
     public DateTime SentTime { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public NotificationReason Reason { get; set; }
 
     public int? NotificationTriggerId { get; set; }
+
+    public bool IsRead { get; set; }
 
 }

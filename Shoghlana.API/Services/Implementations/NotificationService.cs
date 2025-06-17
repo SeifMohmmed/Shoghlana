@@ -30,6 +30,13 @@ public class NotificationService : GenericService<Notification>, INotificationSe
         {
             var NotificationsDTO = _mapper.Map<List<GetNotificationDTO>>(Notifications);
 
+            foreach (var notification in NotificationsDTO)
+            {
+                notification.IsRead = true;
+            }
+
+            _unitOfWork.NotificationRepository.Save();
+
             return new GeneralResponse()
             {
                 IsSuccess = true,
@@ -57,6 +64,13 @@ public class NotificationService : GenericService<Notification>, INotificationSe
         {
             var NotificationsDTO = _mapper.Map<List<GetNotificationDTO>>(Notifications);
 
+            foreach (var notification in NotificationsDTO)
+            {
+                notification.IsRead = true;
+            }
+
+            _unitOfWork.NotificationRepository.Save();
+
             return new GeneralResponse()
             {
                 IsSuccess = true,
@@ -72,6 +86,6 @@ public class NotificationService : GenericService<Notification>, INotificationSe
             Data = null,
             Message = "No found Notifications for this freelancer"
         };
-        
+
     }
 }

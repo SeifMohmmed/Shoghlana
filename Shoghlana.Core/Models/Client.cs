@@ -25,7 +25,7 @@ public class Client
     public int JobsCount => Jobs.Count;
 
     [NotMapped]
-    public int CompletedJobsCount => Jobs.Where(j => j.Status == Enums.JobStatus.Completed).Count();
+    public int CompletedJobsCount => Jobs.Where(j => j.Status == Enums.JobStatus.Closed).Count();
 
     public List<Notification>? Notifications { get; set; } = new List<Notification> { };
 

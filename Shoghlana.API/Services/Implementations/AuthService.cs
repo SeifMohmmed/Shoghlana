@@ -128,7 +128,7 @@ public class AuthService : IAuthService
 
 
         // Send a welcome notification to the user
-        await SendWelcomeNotificationAsync(user);
+        SendWelcomeNotification(user);
 
         // var jwtSecurityToken = await CreateJwtToken(user);
 
@@ -151,18 +151,44 @@ public class AuthService : IAuthService
         };
     }
 
-    private async Task SendWelcomeNotificationAsync(ApplicationUser user)
+    private void SendWelcomeNotification(ApplicationUser user)
     {
-        var notification = new NotificationDTO
+        var notification = new Notification
         {
-            Title = "Welcome to Shoglana!",
+            // ClientId = job.ClientId,
+            Title = "مرحبا بك في شغلانة !",
             Description = $"Welcome, {user.UserName}! Thank you for joining us.",
             SentTime = DateTime.Now,
-            // You can include the user's image in the notification if available
-
+            //description = $"Congratulations , You successfully Accepted The freelancer {freelancer.Name} proposal for {job.Title}. You can now proceed with the next steps.",
+            //description = $"لقد قمت برفض عرض الفريلانسر \"{freelancer.Name}\" علي مشروع \"{job.Title}\" ",
+            Reason = NotificationReason.Welcome
         };
 
-        await _hubContext.Clients.User(user.Id).SendAsync("ReceiveNotification", notification);
+        if (user.ClientId != null)
+        {
+            notification.ClientId = user.ClientId;
+        }
+        else if (user.FreelancerId != null)
+        {
+            notification.FreelancerId = user.FreelancerId;
+        }
+
+        _unitOfWork.NotificationRepository.Add(notification);
+
+        //--------------------------------------------------------
+
+        _unitOfWork.Save();
+
+        //var notification = new NotificationDTO
+        //{
+        //    Title = "Welcome to Shoglana!",
+        //    description = $"Welcome, {user.UserName}! Thank you for joining us.",
+        //    sentTime = DateTime.Now,
+        //    // You can include the user's image in the notification if available
+
+        //};
+
+        //await _hubContext.Clients.User(user.Id).SendAsync("ReceiveNotification", notification);
     }
 
     public async Task<string> AddRoleAsync(AddRoleModel model)
@@ -204,10 +230,17 @@ public class AuthService : IAuthService
         if (user.ClientId != null)
         {
             authModel.Id = (int)user.ClientId;
+            authModel.UnReadNotificationsNum =
+                _unitOfWork.NotificationRepository.FindAll(criteria: n => n.ClientId == user.ClientId && n.IsRead == false)
+                .ToList().Count();
+
         }
         else if (user.FreelancerId != null)
         {
             authModel.Id = (int)user.FreelancerId;
+            authModel.UnReadNotificationsNum =
+                _unitOfWork.NotificationRepository.FindAll(criteria: n => n.FreelancerId == user.FreelancerId && n.IsRead == false)
+                .ToList().Count();
         }
 
         authModel.IsAuthenticated = true;
@@ -485,7 +518,7 @@ public class AuthService : IAuthService
 
             try
             {
-                await SendWelcomeNotificationAsync(User);
+                SendWelcomeNotification(User);
             }
 
             catch (Exception ex)
@@ -505,11 +538,17 @@ public class AuthService : IAuthService
         if (User.ClientId != null)
         {
             authModel.Id = (int)User.ClientId;
+            authModel.UnReadNotificationsNum =
+                _unitOfWork.NotificationRepository.FindAll(criteria: n => n.ClientId == User.ClientId && n.IsRead == false)
+                .ToList().Count();
         }
 
         else if (User.FreelancerId != null)
         {
             authModel.Id = (int)User.FreelancerId;
+            authModel.UnReadNotificationsNum =
+                _unitOfWork.NotificationRepository.FindAll(criteria: n => n.FreelancerId == User.FreelancerId && n.IsRead == false)
+                .ToList().Count();
         }
 
         var jwtSecurityToken = await CreateJwtToken(User);

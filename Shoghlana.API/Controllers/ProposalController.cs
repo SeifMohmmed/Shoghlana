@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shoghlana.Core.DTOs;
 using Shoghlana.API.Response;
+using Shoghlana.API.Services.Implementations;
+using Shoghlana.API.Services.Interfaces;
+using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
-using Shoghlana.API.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace Shoghlana.API.Controllers;
@@ -95,6 +96,12 @@ public class ProposalController : ControllerBase
     public ActionResult<GeneralResponse> AcceptProposal(int proposalId)
     {
         return _proposalService.AcceptProposal(proposalId);
+    }
+
+    [HttpGet("Reject/{proposalId:int}")]
+    public ActionResult<GeneralResponse> RejectProposal(int proposalId)
+    {
+        return _proposalService.RejectProposal(proposalId);
     }
 
 }

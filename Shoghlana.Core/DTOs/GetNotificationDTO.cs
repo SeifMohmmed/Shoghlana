@@ -22,4 +22,7 @@ public class GetNotificationDTO
 
     public int? NotificationTriggerId { get; set; }
 
+    public bool IsRead { get; set; }
+
+
 }

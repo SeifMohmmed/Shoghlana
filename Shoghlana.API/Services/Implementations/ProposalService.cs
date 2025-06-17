@@ -257,7 +257,7 @@ public class ProposalService : GenericService<Proposal>, IProposalService
                 Description = $"قام {freelancer.Name} بتقديم عرض علي مشروعك",
                 Reason = NotificationReason.NewProposalAdded,
                 NotificationTriggerId = job.Id,
-                SentTime=DateTime.Now
+                SentTime = DateTime.Now
             };
 
 
@@ -597,5 +597,78 @@ public class ProposalService : GenericService<Proposal>, IProposalService
         };
     }
 
+    public ActionResult<GeneralResponse> RejectProposal(int proposalId)
+    {
+        var proposal = _unitOfWork.proposalRepository.GetById(proposalId);
 
+        if (proposal is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid Proposal ID : {proposalId}"
+            };
+        }
+        proposal.Status = ProposalStatus.Rejected;
+
+        var job = _unitOfWork.jobRepository.GetById(proposal.JobId);
+
+        if (job is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid job ID : {proposal.JobId}"
+            };
+        }
+
+        var freelancer = _unitOfWork.freelancerRepository
+            .Find(criteria: f => f.Id == proposal.FreelancerId, includes: ["Notifications"]);
+
+        if (freelancer is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid freelancer ID : {proposal.FreelancerId}"
+            };
+        }
+
+        var freelancerNotification = new Notification()
+        {
+            FreelancerId = proposal.FreelancerId,
+            Title = "لم يحالفك الحظ !",
+            SentTime = DateTime.Now,
+            Description = $"تم رفض عرضك علي مشروع {job.Title}!",
+            Reason = NotificationReason.AcceptedProposal,
+            NotificationTriggerId = job.Id
+        };
+
+        _unitOfWork.NotificationRepository.Add(freelancerNotification);
+
+        var clientNotification = new Notification()
+        {
+            ClientId = job.ClientId,
+            Title = "تم رفض العرض !",
+            SentTime = DateTime.Now,
+            Description = $"لقد قمت برفض عرض الفريلانسر \"{freelancer.Name}\" علي مشروع \"{job.Title}\" ",
+            Reason = NotificationReason.AcceptedProposal,
+            NotificationTriggerId = job.Id
+        };
+
+        _unitOfWork.NotificationRepository.Add(clientNotification);
+
+        //--------------------------------------------------------
+
+        _unitOfWork.Save();
+
+        return new GeneralResponse
+        {
+            IsSuccess = true,
+            Message = $"The client {job.ClientId} rejected the proposal {proposalId} on job {job.Id} successfully"
+        };
+    }
 }
