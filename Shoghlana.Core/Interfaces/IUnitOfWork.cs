@@ -8,13 +8,13 @@ namespace Shoghlana.Core.Interfaces;
 public interface IUnitOfWork
 {
     IFreelancerRepository freelancerRepository { get; }
-    IFreelancerNotificationRepository freelancerNotificationRepository { get; }
+   // IFreelancerNotificationRepository freelancerNotificationRepository { get; }
     IFreelancerSkillsRepository freelancerSkillsRepository { get; }
 
     ICategoryRepository categoryRepository { get; }
 
     IClientRepository clientRepository { get; }
-    IClientNotificationRepository clientNotificationRepository { get; }
+    INotificationRepository NotificationRepository { get; }
 
     IJobRepository jobRepository { get; }
     IJobSkillsRepository jobSkillsRepository { get; }

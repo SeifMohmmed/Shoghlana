@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shoghlana.Core.DTOs;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Shoghlana.API.Response;
+using Shoghlana.API.Services.Implementations;
+using Shoghlana.API.Services.Interfaces;
+using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
-using Shoghlana.EF.Repositories;
-using Microsoft.AspNetCore.SignalR;
 using Shoghlana.EF.Hubs;
-using Microsoft.EntityFrameworkCore;
-using Shoghlana.API.Services.Interfaces;
+using Shoghlana.EF.Repositories;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
@@ -82,4 +83,14 @@ public class ClientController : ControllerBase
     {
         return _clientService.DeleteClient(id);
     }
+
+
+    [HttpGet("Notification/{clientId:int}")]
+    public ActionResult<GeneralResponse> GetNotificationByClientId(int clientId)
+    {
+        return
+            _clientService.GetNotificationByClientId(clientId);
+    }
+
+
 }

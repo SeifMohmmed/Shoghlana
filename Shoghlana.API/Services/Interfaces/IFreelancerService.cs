@@ -17,4 +17,7 @@ public interface IFreelancerService : IGenericService<Freelancer>
     public Task<ActionResult<GeneralResponse>> UpdateAsync(int id, [FromForm] AddFreelancerDTO addFreelancerDTO);
 
     public ActionResult<GeneralResponse> Delete(int id);
+
+    public ActionResult<GeneralResponse> GetNotificationByFreelancerId(int freelancerId);
+
 }

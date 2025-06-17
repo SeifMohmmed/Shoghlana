@@ -378,4 +378,45 @@ public class FreelancerService : GenericService<Freelancer>, IFreelancerService
         };
     }
 
+    public ActionResult<GeneralResponse> GetNotificationByFreelancerId(int freelancerId)
+    {
+        var freelancer =
+            _unitOfWork.freelancerRepository.Find(f => f.Id == freelancerId, includes: ["Notifications"]);
+
+        if (freelancer is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid Freelancer ID : {freelancerId}"
+            };
+        }
+
+        if (freelancer?.Notifications?.Count == 0)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 404,
+                Message = $"No Notifications found for this freelancer: {freelancerId}"
+            };
+        }
+
+        var freelancerNotificationDTOs = new List<GetNotificationDTO>();
+
+        foreach (var notification in freelancer.Notifications)
+        {
+            var freelancerNotificationDTO = _mapper.Map<Notification, GetNotificationDTO>(notification);
+
+            freelancerNotificationDTOs.Add(freelancerNotificationDTO);
+        }
+
+        return new GeneralResponse()
+        {
+            IsSuccess = false,
+            Data = freelancerNotificationDTOs,
+            Message = $"Freelancer with ID : {freelancerId} => All Notifications"
+        };
+    }
 }

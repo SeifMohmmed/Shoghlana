@@ -29,4 +29,6 @@ public class AuthModel
 
     public DateTime RefreshTokenExpiration { get; set; }
 
+    // public string? UserName { get; set; }
+
 }

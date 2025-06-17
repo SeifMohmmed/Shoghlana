@@ -1,15 +1,15 @@
-﻿using Shoghlana.Core.Interfaces;
-using Shoghlana.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using Shoghlana.Core.Interfaces;
+//using Shoghlana.Core.Models;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace Shoghlana.EF.Repositories;
-public class FreelancerNotificationRepository : GenericRepository<FreelancerNotification>, IFreelancerNotificationRepository
-{
-    public FreelancerNotificationRepository(ApplicationDbContext context) : base(context)
-    { }
+//namespace Shoghlana.EF.Repositories;
+//public class FreelancerNotificationRepository : GenericRepository<FreelancerNotification>, IFreelancerNotificationRepository
+//{
+//    public FreelancerNotificationRepository(ApplicationDbContext context) : base(context)
+//    { }
 
-}
+//}

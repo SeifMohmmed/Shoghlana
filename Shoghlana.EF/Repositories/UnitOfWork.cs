@@ -13,46 +13,39 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ApplicationDbContext _context;
 
+
     public IFreelancerRepository freelancerRepository { get; private set; }
-    public IFreelancerNotificationRepository freelancerNotificationRepository { get; private set; }
     public IFreelancerSkillsRepository freelancerSkillsRepository { get; private set; }
-
-    public ICategoryRepository categoryRepository { get; private set; }
+    //public IFreelancerNotificationRepository freelancerNotificationRepository { get; private set; }
     public IClientRepository clientRepository { get; private set; }
-    public IClientNotificationRepository clientNotificationRepository { get; private set; }
-
-    public IProjectImagesRepository projectImagesRepository { get; private set; }
+    public INotificationRepository NotificationRepository { get; private set; }
+    public ICategoryRepository categoryRepository { get; private set; }
     public IProjectRepository projectRepository { get; private set; }
+    public IProjectImagesRepository projectImagesRepository { get; private set; }
     public IProjectSkillsRepository projectSkillsRepository { get; private set; }
-   
     public IProposalRepository proposalRepository { get; private set; }
     public IProposalImagesRepository proposalImageRepository { get; private set; }
-
-    public ISkillRepository skillRepository { get; }
+    public ISkillRepository skillRepository { get; private set; }
     public IRateRepository rateRepository { get; private set; }
-
-    public IJobRepository jobRepository { get; }
-    public IJobSkillsRepository jobSkillsRepository { get; private set; }
-
-    public IApplicationUserRepository ApplicationUserRepository { get; private set; }
-
     public IDbContextTransaction _transaction { get; private set; }
-
+    public IJobRepository jobRepository { get; private set; }
+    public IJobSkillsRepository jobSkillsRepository { get; private set; }
+    public IApplicationUserRepository ApplicationUserRepository { get; private set; }
 
     public UnitOfWork
         (ApplicationDbContext context, IFreelancerRepository freelancerRepository,
-        IFreelancerSkillsRepository freelancerSkillsRepository, IFreelancerNotificationRepository freelancerNotificationRepository,
-        IClientRepository clientRepository, IClientNotificationRepository clientNotificationRepository, ICategoryRepository categoryRepository,
+        IFreelancerSkillsRepository freelancerSkillsRepository,
+        IClientRepository clientRepository, INotificationRepository NotificationRepository, ICategoryRepository categoryRepository,
         IProjectRepository projectRepository, IProjectImagesRepository projectImagesRepository, IJobRepository jobRepository,
         IProjectSkillsRepository projectSkillsRepository, IProposalRepository proposalRepository, IJobSkillsRepository jobSkillsRepository,
-        IProposalImagesRepository proposalImageRepository, ISkillRepository skillRepository, IRateRepository rateRepository,IApplicationUserRepository applicationUserRepository)
+        IProposalImagesRepository proposalImageRepository, ISkillRepository skillRepository, IRateRepository rateRepository, IApplicationUserRepository applicationUserRepository)
     {
-        _context = context;
+        this._context = context;
         this.freelancerRepository = freelancerRepository;
         this.freelancerSkillsRepository = freelancerSkillsRepository;
-        this.freelancerNotificationRepository = freelancerNotificationRepository;
+        //this.freelancerNotificationRepository = freelancerNotificationRepository;
         this.clientRepository = clientRepository;
-        this.clientNotificationRepository = clientNotificationRepository;
+        this.NotificationRepository = NotificationRepository;
         this.categoryRepository = categoryRepository;
         this.projectRepository = projectRepository;
         this.projectImagesRepository = projectImagesRepository;

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Shoghlana.Core.DTOs;
+﻿namespace Shoghlana.Core.DTOs;
 
 public class FreelancerDTO
 {

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoghlana.Core.Models;
 public class Client
@@ -32,7 +27,7 @@ public class Client
     [NotMapped]
     public int CompletedJobsCount => Jobs.Where(j => j.Status == Enums.JobStatus.Completed).Count();
 
-    public List<ClientNotification>? Notifications { get; set; }
+    public List<Notification>? Notifications { get; set; } = new List<Notification> { };
 
     public ApplicationUser? User { get; set; }
 }

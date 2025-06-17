@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Shoghlana.Core.Models;
 public class Freelancer
@@ -29,7 +24,7 @@ public class Freelancer
 
     public List<FreelancerSkills>? Skills { get; set; } = new List<FreelancerSkills> { };
 
-    public List<FreelancerNotification>? Notifications { get; set; }
+    public List<Notification>? Notifications { get; set; } = new List<Notification> { };
 
     public ApplicationUser? User { get; set; }
 

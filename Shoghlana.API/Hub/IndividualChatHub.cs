@@ -19,7 +19,6 @@ public class IndividualChatHub : Hub
     public override async Task OnConnectedAsync()
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, "come2chat");
-
         await Clients.Caller.SendAsync("UserConnected");
     }
 
@@ -56,13 +55,11 @@ public class IndividualChatHub : Hub
 
         await Groups.AddToGroupAsync(Context.ConnectionId, privateGroupName);
 
-        var toConnnectionId =
+        var toConnectionId =
             _chatService.GetConnectionByUser(message.To);
 
-        await Groups.AddToGroupAsync(toConnnectionId, privateGroupName);
-
         //opening Private Chatbox For other End Users
-        await Clients.Client(toConnnectionId).SendAsync("openPrivateChat", message);
+        await Clients.Client(toConnectionId).SendAsync("openPrivateChat", message);
     }
 
     public async Task ReceivePrivateMessage(MessageDTO message)
@@ -81,10 +78,9 @@ public class IndividualChatHub : Hub
 
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, privateGroupName);
 
-        var toConnectionId =
-            _chatService.GetConnectionByUser(To);
+        var toConnectionId = _chatService.GetConnectionByUser(To);
 
-        //await Groups.AddToGroupAsync(Context.ConnectionId, privateGroupName);
+        //await Groups.AddToGroupAsync(toConnectionId , privateGroupName);
 
         await Groups.RemoveFromGroupAsync(toConnectionId, privateGroupName);
 

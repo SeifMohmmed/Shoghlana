@@ -92,14 +92,14 @@ namespace Shoghlana.API
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
-            builder.Services.AddScoped<IClientNotificationRepository, ClientNotificationRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddScoped<IJobRepository, JobRepository>();
             builder.Services.AddScoped<IJobSkillsRepository, JobSkillsRepository>();
 
             builder.Services.AddScoped<IFreelancerRepository, FreelancerRepository>();
             builder.Services.AddScoped<IFreelancerSkillsRepository, FreelancerSkillsRepository>();
-            builder.Services.AddScoped<IFreelancerNotificationRepository, FreelancerNotificationRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<IProjectImagesRepository, ProjectImagesRepository>();
@@ -132,6 +132,7 @@ namespace Shoghlana.API
             builder.Services.AddScoped<IRateService, RateService>();
             builder.Services.AddScoped<IClientService, ClientService>();
             builder.Services.AddScoped<ISkillService, SkillService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
             // builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
 

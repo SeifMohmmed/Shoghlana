@@ -83,7 +83,7 @@ namespace Shoghlana.EF.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PersonalImageBytes = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Overview = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
@@ -131,15 +131,16 @@ namespace Shoghlana.EF.Migrations
                 name: "ClientNotifications",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientNotifications", x => x.ClientId);
+                    table.PrimaryKey("PK_ClientNotifications", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ClientNotifications_Clients_ClientId",
                         column: x => x.ClientId,
@@ -156,6 +157,8 @@ namespace Shoghlana.EF.Migrations
                     ClientId = table.Column<int>(type: "int", nullable: true),
                     FreelancerId = table.Column<int>(type: "int", nullable: true),
                     AdminId = table.Column<int>(type: "int", nullable: true),
+                    PasswordResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetTokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -200,7 +203,7 @@ namespace Shoghlana.EF.Migrations
                     FreelancerId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,8 +229,6 @@ namespace Shoghlana.EF.Migrations
                     MinBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MaxBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DurationInDays = table.Column<int>(type: "int", nullable: false),
-                    DeadLine = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProposalsCount = table.Column<int>(type: "int", nullable: true),
                     ExperienceLevel = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     ClientId = table.Column<int>(type: "int", nullable: false),
@@ -264,10 +265,10 @@ namespace Shoghlana.EF.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Link = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Link = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Poster = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     TimePublished = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FreelancerId = table.Column<int>(type: "int", nullable: true)
+                    FreelancerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -276,7 +277,8 @@ namespace Shoghlana.EF.Migrations
                         name: "FK_Projects_Freelancers_FreelancerId",
                         column: x => x.FreelancerId,
                         principalTable: "Freelancers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -448,7 +450,7 @@ namespace Shoghlana.EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ApprovedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApprovedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Duration = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "Money", nullable: false),
@@ -691,44 +693,72 @@ namespace Shoghlana.EF.Migrations
 
             migrationBuilder.InsertData(
                 table: "Jobs",
-                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "DeadLine", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "ProposalsCount", "Title" },
+                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, null, 1, 1, null, "Professional design and artistic work", 0, 0, 500m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Professional and Unique Logo Design" },
-                    { 2, 2, null, 1, 2, null, "Design and administrative artwork", 0, 1, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Social Media Advertising Poster Design" },
-                    { 3, 3, null, 1, 3, null, "Business card design", 0, 2, 600m, 150m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Professional Business Card Design for Printing" },
-                    { 4, 4, null, 2, 4, null, "Website and application development", 0, 1, 800m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Lifetime Free Control Panel Installation" },
-                    { 5, 5, null, 3, 5, null, "Website programming", 0, 0, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Company Profile Website Design" },
-                    { 6, 6, null, 4, 6, null, "Programming and design of mobile apps", 0, 2, 3000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Mobile App Development for iOS and Android" },
-                    { 7, 7, null, 3, 7, null, "Programming and design of online shopping websites", 0, 1, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "E-Commerce Website Design and Development" },
-                    { 8, 8, null, 5, 8, null, "Marketing and advertising for companies and individuals", 0, 0, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Social Media Advertising Campaign Management" },
-                    { 9, 9, null, 6, 9, null, "Illustration and drawing arts", 0, 1, 600m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Illustration Design for Children's Books" },
-                    { 10, 10, null, 1, 10, null, "Marketing and advertising content writing", 0, 0, 300m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Advertising Content Writing for Website" },
-                    { 11, null, null, 2, 11, null, "Advanced administrative systems programming", 0, 2, 2000m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Employee Management System Design and Programming" },
-                    { 12, null, null, 3, 12, null, "Economic and financial analysis", 0, 2, 5000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Feasibility Study for Future Business Project" },
-                    { 13, null, null, 4, 13, null, "Educational and training courses", 0, 0, 200m, 50m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Programming Lessons for Beginners" },
-                    { 14, null, null, 5, 14, null, "Graphic design and advertising", 0, 1, 500m, 150m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Promotional Print Design for Cultural Event" },
-                    { 15, null, null, 6, 15, null, "Translation and writing", 0, 2, 800m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Translation of Scientific Articles from English to Arabic" },
-                    { 16, null, null, 1, 16, null, "Video game programming", 0, 2, 5000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Mobile Video Game Design and Development" },
-                    { 17, null, null, 2, 17, null, "Design and development of e-learning platforms", 0, 1, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Educational Platform Design" },
-                    { 18, null, null, 3, 18, null, "Content writing and editing", 0, 1, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Content Management for Tech Blog" },
-                    { 19, null, null, 4, 1, null, "CRM system programming and customization", 0, 2, 2500m, 800m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "CRM System Design and Development" },
-                    { 20, null, null, 5, 2, null, "Data analysis and report preparation", 0, 1, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Data Analysis and Strategic Report Preparation for Companies" },
-                    { 21, null, null, 6, 3, null, "Educational and research content writing", 0, 2, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Writing and Editing E-Books on AI" },
-                    { 22, null, null, 1, 4, null, "Programming and design of educational websites", 0, 1, 1200m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Educational Website Design and Development for Students" },
-                    { 23, null, null, 2, 5, null, "Design and programming of booking apps", 0, 1, 1800m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Event Booking Platform Design and Programming" },
-                    { 24, null, null, 3, 6, null, "Improving website search engine performance", 0, 0, 800m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Website Search Engine Optimization (SEO)" },
-                    { 25, null, null, 4, 7, null, "Integrated management systems programming", 0, 2, 2500m, 700m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Inventory and Sales Management System for Small Businesses" },
-                    { 26, null, null, 5, 8, null, "Economic and financial analysis for real estate projects", 0, 2, 5000m, 1500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Feasibility Study for a New Residential Project" },
-                    { 27, null, null, 6, 9, null, "Personal assistant app programming", 0, 2, 3000m, 800m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Online Personal Assistant App Design and Development" },
-                    { 28, null, null, 1, 10, null, "Marketing and fundraising", 0, 1, 1500m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Create and Manage Online Fundraising Campaign" },
-                    { 29, null, null, 2, 11, null, "Design and programming of interactive educational platforms", 0, 1, 2000m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Interactive Educational Platform for Teaching Mathematics" },
-                    { 30, null, null, 3, 12, null, "Educational game programming and design", 0, 0, 1200m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Educational Video Game Design for Children" },
-                    { 31, null, null, 4, 13, null, "Policy analysis and report preparation", 0, 0, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Research Report on Public Policy" },
-                    { 32, null, null, 5, 14, null, "Content management systems programming and customization", 0, 1, 1500m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Blog Content Management System Design and Programming" },
-                    { 33, null, null, 6, 15, null, "Product marketing and advertising", 0, 0, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Marketing Campaign for a New Product" },
-                    { 34, null, null, 1, 16, null, "Project management system programming", 0, 2, 2500m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Engineering Project Management System Design and Programming" },
-                    { 35, null, null, 2, 17, null, "Educational apps programming and design", 0, 1, 1800m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 0, "Programming Language Learning App Design and Development" }
+                    { 1, 1, null, 1, 1, "Professional design and artistic work", 0, 0, 500m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Professional and Unique Logo Design" },
+                    { 2, 2, null, 1, 2, "Design and administrative artwork", 0, 1, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Social Media Advertising Poster Design" },
+                    { 3, 3, null, 1, 3, "Business card design", 0, 2, 600m, 150m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Professional Business Card Design for Printing" },
+                    { 4, 4, null, 2, 4, "Website and application development", 0, 1, 800m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Lifetime Free Control Panel Installation" },
+                    { 5, 5, null, 3, 5, "Website programming", 0, 0, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Company Profile Website Design" },
+                    { 6, 6, null, 4, 6, "Programming and design of mobile apps", 0, 2, 3000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Mobile App Development for iOS and Android" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Jobs",
+                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "Status", "Title" },
+                values: new object[,]
+                {
+                    { 7, 7, null, 3, 7, "Programming and design of online shopping websites", 0, 1, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 2, "E-Commerce Website Design and Development" },
+                    { 8, 8, null, 5, 8, "Marketing and advertising for companies and individuals", 0, 0, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 2, "Social Media Advertising Campaign Management" },
+                    { 9, 9, null, 6, 9, "Illustration and drawing arts", 0, 1, 600m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 2, "Illustration Design for Children's Books" },
+                    { 10, 10, null, 1, 10, "Marketing and advertising content writing", 0, 0, 300m, 100m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 2, "Advertising Content Writing for Website" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Jobs",
+                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "Title" },
+                values: new object[,]
+                {
+                    { 11, null, null, 2, 11, "Advanced administrative systems programming", 0, 2, 2000m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Employee Management System Design and Programming" },
+                    { 12, null, null, 3, 12, "Economic and financial analysis", 0, 2, 5000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Feasibility Study for Future Business Project" },
+                    { 13, null, null, 4, 13, "Educational and training courses", 0, 0, 200m, 50m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Online Programming Lessons for Beginners" },
+                    { 14, null, null, 5, 14, "Graphic design and advertising", 0, 1, 500m, 150m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Promotional Print Design for Cultural Event" },
+                    { 15, null, null, 6, 15, "Translation and writing", 0, 2, 800m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Translation of Scientific Articles from English to Arabic" },
+                    { 16, null, null, 1, 16, "Video game programming", 0, 2, 5000m, 1000m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Mobile Video Game Design and Development" },
+                    { 17, null, null, 2, 17, "Design and development of e-learning platforms", 0, 1, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Online Educational Platform Design" },
+                    { 18, null, null, 3, 18, "Content writing and editing", 0, 1, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Content Management for Tech Blog" },
+                    { 19, null, null, 4, 1, "CRM system programming and customization", 0, 2, 2500m, 800m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "CRM System Design and Development" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Jobs",
+                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "Status", "Title" },
+                values: new object[,]
+                {
+                    { 20, null, null, 5, 2, "Data analysis and report preparation", 0, 1, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Data Analysis and Strategic Report Preparation for Companies" },
+                    { 21, null, null, 6, 3, "Educational and research content writing", 0, 2, 1500m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Writing and Editing E-Books on AI" },
+                    { 22, null, null, 1, 4, "Programming and design of educational websites", 0, 1, 1200m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Educational Website Design and Development for Students" },
+                    { 23, null, null, 2, 5, "Design and programming of booking apps", 0, 1, 1800m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Online Event Booking Platform Design and Programming" },
+                    { 24, null, null, 3, 6, "Improving website search engine performance", 0, 0, 800m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Website Search Engine Optimization (SEO)" },
+                    { 25, null, null, 4, 7, "Integrated management systems programming", 0, 2, 2500m, 700m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Inventory and Sales Management System for Small Businesses" },
+                    { 26, null, null, 5, 8, "Economic and financial analysis for real estate projects", 0, 2, 5000m, 1500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Feasibility Study for a New Residential Project" },
+                    { 27, null, null, 6, 9, "Personal assistant app programming", 0, 2, 3000m, 800m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Online Personal Assistant App Design and Development" },
+                    { 28, null, null, 1, 10, "Marketing and fundraising", 0, 1, 1500m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Create and Manage Online Fundraising Campaign" },
+                    { 29, null, null, 2, 11, "Design and programming of interactive educational platforms", 0, 1, 2000m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Interactive Educational Platform for Teaching Mathematics" },
+                    { 30, null, null, 3, 12, "Educational game programming and design", 0, 0, 1200m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Educational Video Game Design for Children" },
+                    { 31, null, null, 4, 13, "Policy analysis and report preparation", 0, 0, 700m, 200m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), 1, "Research Report on Public Policy" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Jobs",
+                columns: new[] { "Id", "AcceptedFreelancerId", "ApproveTime", "CategoryId", "ClientId", "Description", "DurationInDays", "ExperienceLevel", "MaxBudget", "MinBudget", "PostTime", "Title" },
+                values: new object[,]
+                {
+                    { 32, null, null, 5, 14, "Content management systems programming and customization", 0, 1, 1500m, 400m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Blog Content Management System Design and Programming" },
+                    { 33, null, null, 6, 15, "Product marketing and advertising", 0, 0, 1000m, 300m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Marketing Campaign for a New Product" },
+                    { 34, null, null, 1, 16, "Project management system programming", 0, 2, 2500m, 600m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Engineering Project Management System Design and Programming" },
+                    { 35, null, null, 2, 17, "Educational apps programming and design", 0, 1, 1800m, 500m, new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615), "Programming Language Learning App Design and Development" }
                 });
 
             migrationBuilder.InsertData(
@@ -745,8 +775,8 @@ namespace Shoghlana.EF.Migrations
                 columns: new[] { "Id", "ApprovedTime", "Deadline", "Description", "Duration", "FreelancerId", "JobId", "Price", "ReposLinks", "Status" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.0, 1, 1, 300m, null, 1 },
-                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.0, 2, 2, 400m, null, 1 }
+                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.0, 1, 1, 300m, null, 1 },
+                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.0, 2, 2, 400m, null, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -817,6 +847,11 @@ namespace Shoghlana.EF.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientNotifications_ClientId",
+                table: "ClientNotifications",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FreelancerNotifications_FreelancerId",

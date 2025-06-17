@@ -217,6 +217,7 @@ public class AuthService : IAuthService
         authModel.Username = user.UserName;
         authModel.ExpiresOn = jwtSecurityToken.ValidTo;
         authModel.Roles = roleList.ToList();
+        // authModel.Username = user?.UserName;
 
         if (user.RefreshTokens.Any(t => t.IsActive))
         {

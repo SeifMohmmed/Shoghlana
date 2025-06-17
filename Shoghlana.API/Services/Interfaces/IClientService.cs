@@ -19,4 +19,6 @@ public interface IClientService : IGenericService<Client>
 
     public ActionResult<GeneralResponse> DeleteClient(int id);
 
+    public ActionResult<GeneralResponse> GetNotificationByClientId(int clientId);
+
 }

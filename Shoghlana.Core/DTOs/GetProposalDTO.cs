@@ -31,6 +31,10 @@ public class GetProposalDTO
 
     public int FreelancerId { get; set; }
 
+    public string? FreelancerName { get; set; }
+
+    public string? FreelancerTitle { get; set; }
+
     // public Freelancer Freelancer { get; set; }
 
     public int? JobId { get; set; }

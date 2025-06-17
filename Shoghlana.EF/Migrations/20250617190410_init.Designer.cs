@@ -12,8 +12,8 @@ using Shoghlana.EF;
 namespace Shoghlana.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250614174500_RemoveUnwantedThings")]
-    partial class RemoveUnwantedThings
+    [Migration("20250617190410_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,29 @@ namespace Shoghlana.EF.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "77b5a044-5c9e-495e-8442-76a816c17a66",
+                            ConcurrencyStamp = "89dfb7b5-d529-40d9-92f6-808adb869512",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "82841029-737c-4234-9b74-64e448755ee4",
+                            ConcurrencyStamp = "4535993f-2b05-49a0-a746-f2b830671da5",
+                            Name = "Client",
+                            NormalizedName = "CLIENT"
+                        },
+                        new
+                        {
+                            Id = "8f072cb2-2b03-4fb0-b15a-e2168fdb5f48",
+                            ConcurrencyStamp = "811a2238-0931-40ba-aedf-129fb1c8a22d",
+                            Name = "Freelancer",
+                            NormalizedName = "FREELANCER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -229,11 +252,17 @@ namespace Shoghlana.EF.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ResetTokenExpires")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -532,15 +561,18 @@ namespace Shoghlana.EF.Migrations
 
             modelBuilder.Entity("Shoghlana.Core.Models.ClientNotification", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("SentTime")
                         .HasColumnType("datetime2");
@@ -550,7 +582,9 @@ namespace Shoghlana.EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("ClientId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("ClientNotifications");
                 });
@@ -580,7 +614,6 @@ namespace Shoghlana.EF.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -680,8 +713,8 @@ namespace Shoghlana.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("FreelancerId")
                         .HasColumnType("int");
@@ -1414,7 +1447,7 @@ namespace Shoghlana.EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ApprovedTime")
+                    b.Property<DateTime?>("ApprovedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Deadline")
@@ -1455,7 +1488,6 @@ namespace Shoghlana.EF.Migrations
                         new
                         {
                             Id = 1,
-                            ApprovedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Deadline = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Duration = 0.0,
                             FreelancerId = 1,
@@ -1466,7 +1498,6 @@ namespace Shoghlana.EF.Migrations
                         new
                         {
                             Id = 2,
-                            ApprovedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Deadline = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Duration = 0.0,
                             FreelancerId = 2,

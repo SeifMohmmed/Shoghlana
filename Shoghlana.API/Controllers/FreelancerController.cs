@@ -14,7 +14,7 @@ namespace Shoghlana.API.Controllers;
 public class FreelancerController : ControllerBase
 {
     private readonly IFreelancerService _freelancerService;
-    
+
     public FreelancerController(IFreelancerService freelancerService)
     {
         _freelancerService = freelancerService;
@@ -67,7 +67,7 @@ public class FreelancerController : ControllerBase
             };
         }
 
-       return await _freelancerService.UpdateAsync(id, addFreelancerDTO);
+        return await _freelancerService.UpdateAsync(id, addFreelancerDTO);
 
     }
 
@@ -75,6 +75,16 @@ public class FreelancerController : ControllerBase
     [HttpDelete("{id:int}")]
     public ActionResult<GeneralResponse> Delete(int id)
     {
-       return _freelancerService.Delete(id);
+        return _freelancerService.Delete(id);
     }
+
+
+    [HttpGet("Notification/{freelancerId:int}")]
+    public ActionResult<GeneralResponse> GetNotificationByFreelancerId(int freelancerId)
+    {
+        return
+            _freelancerService.GetNotificationByFreelancerId(freelancerId);
+    }
+
+
 }

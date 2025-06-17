@@ -30,9 +30,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<ProjectSkills> ProjectSkills { get; set; }
 
-    public DbSet<FreelancerNotification> FreelancerNotifications { get; set; }
+   // public DbSet<FreelancerNotification> FreelancerNotifications { get; set; }
 
-    public DbSet<ClientNotification> ClientNotifications { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
 
     public DbSet<Proposal> Proposals { get; set; }
 

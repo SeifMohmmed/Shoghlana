@@ -43,5 +43,12 @@ public class MappingProfile : Profile
         CreateMap<Category, CategoryDTO>().ReverseMap();
 
         CreateMap<Category, GetTitleOfCategoryDTO>().ReverseMap();
+
+        //CreateMap<FreelancerNotification, GetFreelancerNotificationDTO>().ReverseMap();
+
+        //CreateMap<GetNotificationDTO, GetClientNotificationDTO>().ReverseMap();
+
+        CreateMap<Notification,GetNotificationDTO>().ReverseMap();
+
     }
 }

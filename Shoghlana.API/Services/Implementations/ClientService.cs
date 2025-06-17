@@ -316,5 +316,44 @@ public class ClientService : GenericService<Client>, IClientService
         };
     }
 
+    public ActionResult<GeneralResponse> GetNotificationByClientId(int clientId)
+    {
+        var client = _unitOfWork.clientRepository.Find(c => c.Id == clientId, includes: ["Notifications"]);
 
+        if (client is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid Client ID : {clientId}"
+            };
+        }
+
+        if (client?.Notifications?.Count == 0)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"No Notifications found for this client: {clientId}"
+            };
+        }
+
+        var clientNotificationDTOs = new List<GetNotificationDTO>();
+
+        foreach (var notification in client.Notifications)
+        {
+            var clientNotificationDTO = _mapper.Map<Notification, GetNotificationDTO>(notification);
+
+            clientNotificationDTOs.Add(clientNotificationDTO);
+        }
+
+        return new GeneralResponse()
+        {
+            IsSuccess = true,
+            Status = 200,
+            Message = $"Client with ID : {clientId} => All Notifications"
+        };
+    }
 }

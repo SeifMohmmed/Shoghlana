@@ -85,7 +85,7 @@ public class ProposalService : GenericService<Proposal>, IProposalService
             };
         }
 
-        var proposals = _unitOfWork.proposalRepository.FindAll(includes: null, p => p.JobId == id).ToList();
+        var proposals = _unitOfWork.proposalRepository.FindAll(includes: ["Freelancer"], p => p.JobId == id).ToList();
 
         if (proposals.Count == 0)
         {
@@ -102,6 +102,8 @@ public class ProposalService : GenericService<Proposal>, IProposalService
         foreach (var proposal in proposals)
         {
             var getProposalDTO = _mapper.Map<Proposal, GetProposalDTO>(proposal);
+
+            getProposalDTO.FreelancerName = proposal.Freelancer.Name;
 
             getProposalDTOs.Add(getProposalDTO);
 
@@ -248,6 +250,19 @@ public class ProposalService : GenericService<Proposal>, IProposalService
 
             var addProposal = await _unitOfWork.proposalRepository.AddAsync(propsal);
 
+            var ClientNotification = new Notification()
+            {
+                ClientId = job.ClientId,
+                Title = "عرض جديد !",
+                Description = $"قام {freelancer.Name} بتقديم عرض علي مشروعك",
+                Reason = NotificationReason.NewProposalAdded,
+                NotificationTriggerId = job.Id,
+                SentTime=DateTime.Now
+            };
+
+
+            _unitOfWork.NotificationRepository.Add(ClientNotification);
+
             _unitOfWork.Save();
 
             var getProposalDTO = _mapper.Map<Proposal, GetProposalDTO>(addProposal);
@@ -279,6 +294,18 @@ public class ProposalService : GenericService<Proposal>, IProposalService
                 Images = null
             };
             var addProposal = await _unitOfWork.proposalRepository.AddAsync(proposal);
+
+            var ClientNotification = new Notification()
+            {
+                ClientId = job.ClientId,
+                Title = "عرض جديد !",
+                Description = $"قام \"{freelancer.Name}\" بتقديم عرض علي مشروعك",
+                Reason = NotificationReason.NewProposalAdded,
+                NotificationTriggerId = job.Id,
+                SentTime = DateTime.Now
+            };
+
+            _unitOfWork.NotificationRepository.Add(ClientNotification);
 
             _unitOfWork.Save();
 
@@ -501,6 +528,65 @@ public class ProposalService : GenericService<Proposal>, IProposalService
         job.ApproveTime = DateTime.Now;
         job.Status = JobStatus.Closed;
         job.AcceptedFreelancerId = proposal.FreelancerId;
+
+        //--------------------------------------------------------
+
+        var freelancer =
+            _unitOfWork.freelancerRepository.Find(f => f.Id == proposal.FreelancerId, includes: ["Notifications"]);
+
+        if (freelancer is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid freelancer ID : {proposal.FreelancerId}"
+            };
+        }
+
+        var freelancerNotification = new Notification()
+        {
+            FreelancerId = proposal.FreelancerId,
+            Title = "تهانينا تم قبول عرضك !",
+            SentTime = DateTime.Now,
+            //Description = $"Your proposal for {job.Title} has been accepted by the client. Get ready to start the project!",
+            Description = $"لقد تم قبول عرضك علي عمل \"{job.Title}\" بواسطة العميل .. كن مستعدا لبداية العمل!",
+            Reason = NotificationReason.AcceptedProposal,
+            NotificationTriggerId = job.Id
+        };
+
+        _unitOfWork.NotificationRepository.Add(freelancerNotification);
+
+        //--------------------------------------------------------
+
+        var client =
+            _unitOfWork.clientRepository.Find(f => f.Id == job.ClientId, includes: ["Notifications"]);
+
+        if (client is null)
+        {
+            return new GeneralResponse()
+            {
+                IsSuccess = false,
+                Status = 400,
+                Message = $"Invalid Client ID : {job.ClientId}"
+            };
+        }
+
+        var clientNotification = new Notification()
+        {
+            ClientId = job.ClientId,
+            Title = "تم قبول العرض !",
+            SentTime = DateTime.Now,
+            //Description = $"Congratulations , You successfully Accepted The freelancer {freelancer.Name} proposal for {job.Title}. You can now proceed with the next steps.",
+            Description = $"لقد قمت بقبول عرض الفريلانسر \"{freelancer.Name}\" علي مشروع \"{job.Title}\" ",
+            Reason = NotificationReason.AcceptedProposal,
+            NotificationTriggerId = job.Id
+        };
+
+        _unitOfWork.NotificationRepository.Add(clientNotification);
+
+        //--------------------------------------------------------
+
 
         _unitOfWork.Save();
 

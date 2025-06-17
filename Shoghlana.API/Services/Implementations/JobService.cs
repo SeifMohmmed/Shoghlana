@@ -472,31 +472,34 @@ public class JobService : GenericService<Job>, IJobService
 
             var JobSkills = new List<JobSkills>();
 
-            foreach (int skillID in jobDTO.SkillsIds)
+            if (jobDTO.SkillsIds is not null && jobDTO.SkillsIds.Count > 0)
             {
-
-                var skill = _unitOfWork.skillRepository.GetById(skillID);
-
-                if (skill is not null)
+                foreach (int skillID in jobDTO.SkillsIds)
                 {
-                    var jobSkill = new JobSkills
+
+                    var skill = _unitOfWork.skillRepository.GetById(skillID);
+
+                    if (skill is not null)
                     {
-                        SkillId = skill.Id,
-                        JobId = job.Id
-                    };
+                        var jobSkill = new JobSkills
+                        {
+                            SkillId = skill.Id,
+                            JobId = job.Id
+                        };
 
-                    JobSkills.Add(jobSkill);
+                        JobSkills.Add(jobSkill);
+                    }
                 }
-            }
 
-            if (JobSkills.Any())
-            {
-                _unitOfWork.jobSkillsRepository.AddRange(JobSkills);
-                _unitOfWork.jobSkillsRepository.Save();
-            }
 
+                if (JobSkills.Any())
+                {
+                    _unitOfWork.jobSkillsRepository.AddRange(JobSkills);
+                    _unitOfWork.jobSkillsRepository.Save();
+                }
+
+            }
         }
-
         catch (Exception ex)
         {
             return new GeneralResponse

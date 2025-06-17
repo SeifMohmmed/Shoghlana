@@ -44,3 +44,15 @@ public enum UserRole
 
     Client = 1
 }
+
+public enum NotificationReason
+{
+    Welcome = 0,
+
+    AcceptedProposal = 1,
+
+    RejectedProposal = 2,
+
+    NewProposalAdded = 4,
+
+}
