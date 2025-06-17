@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Shoghlana.API.Response;
-using Shoghlana.API.Services.Implementations;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.EF.Hubs;

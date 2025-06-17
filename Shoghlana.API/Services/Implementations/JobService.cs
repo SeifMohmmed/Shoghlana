@@ -6,7 +6,6 @@ using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Enums;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Shoghlana.API.Services.Implementations;
 

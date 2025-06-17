@@ -1,6 +1,5 @@
 ﻿using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.Interfaces;
-using Shoghlana.EF.Repositories;
 using System.Linq.Expressions;
 
 namespace Shoghlana.API.Services.Implementations;

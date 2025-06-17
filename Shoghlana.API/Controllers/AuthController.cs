@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 
 namespace Shoghlana.API.Controllers;

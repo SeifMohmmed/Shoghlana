@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Shoghlana.Core.DTOs;
+﻿namespace Shoghlana.Core.DTOs;
 
 public class ClientWithJobsDTO
 {

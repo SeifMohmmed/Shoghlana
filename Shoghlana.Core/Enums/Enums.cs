@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shoghlana.Core.Enums;
+﻿namespace Shoghlana.Core.Enums;
 public enum ExperienceLevel
 {
     Beginner = 0,

@@ -1,5 +1,4 @@
 ﻿using Google.Apis.Auth;
-using Google.Apis.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +13,10 @@ using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
 using Shoghlana.EF.Configurations;
 using Shoghlana.EF.Hubs;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
 using IClientService = Shoghlana.API.Services.Interfaces.IClientService;
 

@@ -1,5 +1,4 @@
 ﻿using Shoghlana.Core.Enums;
-using Shoghlana.Core.Models;
 
 namespace Shoghlana.Core.DTOs;
 public class GetNotificationDTO

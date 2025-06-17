@@ -1,15 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
-using Shoghlana.API.Services.Implementations;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Interfaces;
-using Shoghlana.Core.Models;
-using Shoghlana.EF.Hubs;
-using Shoghlana.EF.Repositories;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]

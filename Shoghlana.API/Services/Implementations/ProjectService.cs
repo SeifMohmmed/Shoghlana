@@ -11,7 +11,7 @@ namespace Shoghlana.API.Services.Implementations;
 public class ProjectService : GenericService<Project>, IProjectService
 {
     private readonly IMapper _mapper;
-    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png", "jpeg" };
+    private List<string> allowedExtensions = new List<string>() { ".jpg", ".png", ".jpeg" };
     private long maxAllowedImageSize = 1_048_576;  // 1 MB
 
     public ProjectService(IUnitOfWork unitOfWork, IGenericRepository<Project> repository, IMapper mapper)
@@ -182,7 +182,7 @@ public class ProjectService : GenericService<Project>, IProjectService
             {
                 IsSuccess = false,
                 Status = 400,
-                Message = "The allowed image extensions for poster are: jpg, png",
+                Message = "The allowed image extensions for poster are: jpg, png, jpeg",
             };
         }
 
@@ -211,7 +211,7 @@ public class ProjectService : GenericService<Project>, IProjectService
                     {
                         IsSuccess = false,
                         Status = 400,
-                        Message = "The allowed image extensions are: jpg, png"
+                        Message = "The allowed image extensions are: jpg, png, jpeg"
                     };
                 }
 
@@ -309,7 +309,7 @@ public class ProjectService : GenericService<Project>, IProjectService
                 {
                     IsSuccess = false,
                     Status = 400,
-                    Message = "The allowed image extensions for poster are: jpg, png"
+                    Message = "The allowed image extensions for poster are: jpg, png, jpeg"
                 };
             }
 
@@ -340,7 +340,7 @@ public class ProjectService : GenericService<Project>, IProjectService
                     {
                         IsSuccess = false,
                         Status = 400,
-                        Message = "The allowed image extensions are: jpg, png"
+                        Message = "The allowed image extensions are: jpg, png, jpeg"
                     };
                 }
 

@@ -4,8 +4,6 @@ using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
-using Shoghlana.EF;
-using Shoghlana.EF.Repositories;
 
 namespace Shoghlana.API.Services.Implementations;
 

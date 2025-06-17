@@ -1,8 +1,4 @@
-﻿
-using Shoghlana.API.Services.Implementations;
-using Shoghlana.Core.Models;
-using System.Linq.Expressions;
-using Shoghlana.EF.Repositories;
+﻿using Shoghlana.Core.Models;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.Interfaces;
 using AutoMapper;
@@ -205,7 +201,7 @@ public class ProposalService : GenericService<Proposal>, IProposalService
                     {
                         IsSuccess = false,
                         Status = 400,
-                        Message = "The allowed Image Extensions => {jpg , png}",
+                        Message = "The allowed Image Extensions => {jpg , png, jpeg}",
                     };
                 }
                 if (addProposalImageDTO.Image.Length > maxAllowedImageSize)
@@ -382,7 +378,7 @@ public class ProposalService : GenericService<Proposal>, IProposalService
                     {
                         IsSuccess = false,
                         Status = 400,
-                        Message = "The allowed Image Extensions => {jpg , png}",
+                        Message = "The allowed Image Extensions => {jpg , png, jpeg}",
                     };
                 }
                 if (addProposalImageDTO.Image.Length > maxAllowedImageSize)

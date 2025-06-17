@@ -1,12 +1,4 @@
-﻿using Shoghlana.Core.Enums;
-using Shoghlana.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Shoghlana.Core.DTOs;
 public class AddProposalDTO

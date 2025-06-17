@@ -3,12 +3,6 @@ using Shoghlana.Core.DTOs;
 using Shoghlana.Core.Enums;
 using Shoghlana.Core.Interfaces;
 using Shoghlana.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoghlana.EF.Repositories;
 public class JobRepository : GenericRepository<Job>, IJobRepository

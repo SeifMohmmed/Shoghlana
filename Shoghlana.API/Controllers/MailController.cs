@@ -1,9 +1,6 @@
-﻿using MailKit;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
-using Shoghlana.API.Services.Implementations;
 using Shoghlana.API.Services.Interfaces;
 using Shoghlana.Core.Models;
 using IMailService = Shoghlana.API.Services.Interfaces.IMailService;
