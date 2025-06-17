@@ -15,89 +15,91 @@ internal class FreelancerConfiguration : IEntityTypeConfiguration<Freelancer>
 
         builder.Property(f => f.Overview).IsRequired(false).HasMaxLength(500);
 
-
+        #region Seeding Data
         builder.HasData(
-        new Freelancer
-        {
-            Id = 1,
-            Name = "Mohamed Ahmed",
-            Title = "Specialized Application Developer",
-            Address = "Cairo, Egypt",
-            Overview = "A professional developer with experience in web and mobile application development."
-        },
-        new Freelancer
-        {
-            Id = 2,
-            Name = "Fatima Ali",
-            Title = "Professional Graphic Designer",
-            Address = "Riyadh, Saudi Arabia",
-            Overview = "A highly experienced designer in logo and poster design."
-        },
-        new Freelancer
-        {
-            Id = 3,
-            Name = "Ahmed Khaled",
-            Title = "AI Specialist Programmer",
-            Address = "Cairo, Egypt",
-            Overview = "A programmer with experience in developing advanced applications using AI technologies."
-        },
-        new Freelancer
-        {
-            Id = 4,
-            Name = "Sarah Hussein",
-            Title = "Creative Abstract Designer",
-            Address = "Dubai, United Arab Emirates",
-            Overview = "A graphic designer with experience in abstract design and creative arts."
-        },
-        new Freelancer
-        {
-            Id = 5,
-            Name = "Abdulrahman Mahmoud",
-            Title = "Advanced Web Developer",
-            Address = "Alexandria, Egypt",
-            Overview = "A professional developer with experience in building and developing large and complex websites."
-        },
-        new Freelancer
-        {
-            Id = 6,
-            Name = "Rima Abdullah",
-            Title = "Professional Graphic Designer",
-            Address = "Jeddah, Saudi Arabia",
-            Overview = "A graphic designer with extensive experience in logo and brand identity design."
-        },
-        new Freelancer
-        {
-            Id = 7,
-            Name = "Mahmoud Ali",
-            Title = "Mobile App Developer",
-            Address = "Cairo, Egypt",
-            Overview = "A specialized developer with experience in mobile application development using the latest technologies."
-        },
-        new Freelancer
-        {
-            Id = 8,
-            Name = "Noor Abdullah",
-            Title = "Professional App Developer",
-            Address = "Riyadh, Saudi Arabia",
-            Overview = "A developer with experience in advanced web and mobile application development."
-        },
-        new Freelancer
-        {
-            Id = 9,
-            Name = "Layla Mohammed",
-            Title = "Creative Graphic Designer and Artist",
-            Address = "Alexandria, Egypt",
-            Overview = "A graphic designer and artist with experience in illustration and fine arts design."
-        },
-        new Freelancer
-        {
-            Id = 10,
-            Name = "Ali Al-Husseini",
-            Title = "Electronic Application Developer",
-            Address = "Manama, Bahrain",
-            Overview = "A developer with experience in web and mobile application development using multiple languages."
-        }
-        );
+                        new Freelancer
+                        {
+                            Id = 1,
+                            Name = "محمد أحمد",
+                            Title = "مطور تطبيقات متخصص",
+                            Address = "القاهرة، مصر",
+                            Overview = "مطور محترف بخبرة في تطوير تطبيقات الويب والهواتف الذكية",
 
+                        },
+                        new Freelancer
+                        {
+                            Id = 2,
+                            Name = "فاطمة علي",
+                            Title = "مصممة جرافيك محترفة",
+                            Address = "الرياض، السعودية",
+                            Overview = "مصممة ذات خبرة عالية في تصميم الشعارات والبوسترات",
+                        },
+                        new Freelancer
+                        {
+                            Id = 3,
+                            Name = "أحمد خالد",
+                            Title = "مبرمج متخصص في الذكاء الاصطناعي",
+                            Address = "القاهرة، مصر",
+                            Overview = "مبرمج ذو خبرة في تطوير التطبيقات المتقدمة باستخدام تقنيات الذكاء الاصطناعي",
+                        },
+                        new Freelancer
+                        {
+                            Id = 4,
+                            Name = "سارة حسين",
+                            Title = "مصممة تجريدية ومبدعة",
+                            Address = "دبي، الإمارات",
+                            Overview = "مصممة جرافيك بخبرة في التصميم التجريدي والفنون الإبداعية",
+                        },
+                        new Freelancer
+                        {
+                            Id = 5,
+                            Name = "عبد الرحمن محمود",
+                            Title = "مطور مواقع إلكترونية متقدم",
+                            Address = "الإسكندرية، مصر",
+                            Overview = "مطور محترف بخبرة في بناء وتطوير المواقع الإلكترونية الكبيرة والمعقدة",
+                        },
+                        new Freelancer
+                        {
+                            Id = 6,
+                            Name = "ريما عبدالله",
+                            Title = "مصممة جرافيك احترافية",
+                            Address = "جدة، السعودية",
+                            Overview = "مصممة جرافيك بخبرة واسعة في تصميم الشعارات والهويات التجارية",
+                        },
+                        new Freelancer
+                        {
+                            Id = 7,
+                            Name = "محمود علي",
+                            Title = "مطور تطبيقات متخصص في الهواتف الذكية",
+                            Address = "القاهرة، مصر",
+                            Overview = "مطور متخصص بخبرة في تطوير تطبيقات الهواتف الذكية باستخدام أحدث التقنيات",
+                        },
+                        new Freelancer
+                        {
+                            Id = 8,
+                            Name = "نور عبدالله",
+                            Title = "مطورة تطبيقات محترفة",
+                            Address = "الرياض، السعودية",
+                            Overview = "مطورة بخبرة في تطوير تطبيقات الويب والهواتف الذكية بتقنيات متقدمة",
+                        },
+                        new Freelancer
+                        {
+                            Id = 9,
+                            Name = "ليلى محمد",
+                            Title = "مصممة جرافيك وفنانة مبدعة",
+                            Address = "الإسكندرية، مصر",
+                            Overview = "مصممة جرافيك وفنانة بخبرة في تصميم الرسومات والفنون التشكيلية",
+                        },
+                        new Freelancer
+                        {
+                            Id = 10,
+                            Name = "علي الحسيني",
+                            Title = "مطور تطبيقات إلكترونية",
+                            Address = "المنامة، البحرين",
+                            Overview = "مطور بخبرة في تطوير تطبيقات الويب والهواتف الذكية باللغات المتعددة",
+                        }
+                        );
+        #endregion
+    
     }
 }

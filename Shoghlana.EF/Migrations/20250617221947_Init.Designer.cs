@@ -12,8 +12,8 @@ using Shoghlana.EF;
 namespace Shoghlana.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250617190410_init")]
-    partial class init
+    [Migration("20250617221947_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -324,38 +324,38 @@ namespace Shoghlana.EF.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Includes all services related to graphic design, industrial design, and web design.",
-                            Title = "Design Services"
+                            Description = "تشمل كافة الخدمات المتعلقة بالتصميم الجرافيكي، التصميم الصناعي، وتصميم الويب.",
+                            Title = "خدمات التصميم"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Includes development and programming of applications and software for various systems and devices.",
-                            Title = "Software Services"
+                            Description = "تشمل كتابة وتطوير التطبيقات والبرمجيات لمختلف الأنظمة والأجهزة.",
+                            Title = "خدمات برمجية"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Includes article writing, instant translation, and content creation for websites and blogs.",
-                            Title = "Writing and Translation Services"
+                            Description = "تشمل كتابة المقالات، الترجمة الفورية، وكتابة المحتوى للمواقع والمدونات.",
+                            Title = "خدمات الكتابة والترجمة"
                         },
                         new
                         {
                             Id = 4,
-                            Description = "Includes managing digital marketing campaigns, social media advertising, and market analytics.",
-                            Title = "Digital Marketing Services"
+                            Description = "تشمل إدارة حملات التسويق الرقمي، الإعلانات على وسائل التواصل الاجتماعي، وتحليلات السوق.",
+                            Title = "خدمات التسويق الرقمي"
                         },
                         new
                         {
                             Id = 5,
-                            Description = "Includes user support, troubleshooting technical issues, and enhancing system and network performance.",
-                            Title = "Technical Support Services"
+                            Description = "تشمل دعم المستخدمين، إصلاح الأعطال التقنية، وتحسين أداء النظم والشبكات.",
+                            Title = "خدمات الدعم الفني والتقني"
                         },
                         new
                         {
                             Id = 6,
-                            Description = "Includes providing training courses, designing educational curricula, and developing learning resources.",
-                            Title = "Education and Training Services"
+                            Description = "تشمل تقديم دورات تدريبية، تصميم مناهج تعليمية، وتطوير الموارد التعليمية.",
+                            Title = "خدمات التعليم والتدريب"
                         });
                 });
 
@@ -398,195 +398,165 @@ namespace Shoghlana.EF.Migrations
                         new
                         {
                             Id = 1,
-                            Country = "Saudi Arabia",
-                            Description = "A programmer and application developer specialized in web development.",
-                            Name = "Abdulrahman Ahmed",
+                            Country = "المملكة العربية السعودية",
+                            Description = "مبرمج ومطور تطبيقات متخصص في تطوير الويب",
+                            Name = "عبد الرحمن أحمد",
                             Phone = "+966123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            Country = "Egypt",
-                            Description = "A professional graphic designer specializing in logo and poster design.",
-                            Name = "Fatima Mohammed",
+                            Country = "مصر",
+                            Description = "مصممة جرافيك محترفة تعمل في تصميم اللوجوهات والبوسترات",
+                            Name = "فاطمة محمد",
                             Phone = "+201234567890",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            Country = "United Arab Emirates",
-                            Description = "A professional digital marketer with experience in managing social media ad campaigns.",
-                            Name = "Ali Alabdullah",
+                            Country = "الإمارات العربية المتحدة",
+                            Description = "مسوق رقمي محترف بخبرة في إدارة الحملات الإعلانية عبر وسائل التواصل الاجتماعي",
+                            Name = "علي العبدالله",
                             Phone = "+971123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
-                            Country = "Jordan",
-                            Description = "A content writer specialized in creative writing and artistic articles.",
-                            Name = "Maryam Hassan",
+                            Country = "الأردن",
+                            Description = "كاتبة محتوى متخصصة في الكتابة الإبداعية والمقالات الفنية",
+                            Name = "مريم حسن",
                             Phone = "+962123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
-                            Country = "Iraq",
-                            Description = "A photographer specializing in event and special occasion photography.",
-                            Name = "Yousef Khalid",
+                            Country = "العراق",
+                            Description = "مصور فوتوغرافي متخصص في تصوير الأحداث والمناسبات الخاصة",
+                            Name = "يوسف خالد",
                             Phone = "+964123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 6,
-                            Country = "Saudi Arabia",
-                            Description = "A professional project manager in tech and software development.",
-                            Name = "Lama Abdullah",
+                            Country = "السعودية",
+                            Description = "مديرة مشروع محترفة في إدارة المشاريع التقنية والتطوير البرمجي",
+                            Name = "لمى عبدالله",
                             Phone = "+966123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 7,
-                            Country = "Egypt",
-                            Description = "A creative content marketer working on promoting digital content for startups.",
-                            Name = "Omar Ahmed",
+                            Country = "مصر",
+                            Description = "مسوق محتوى إبداعي يعمل على ترويج المحتوى الرقمي للشركات الناشئة",
+                            Name = "عمر أحمد",
                             Phone = "+201234567890",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 8,
-                            Country = "Lebanon",
-                            Description = "A professional app developer working in mobile app development.",
-                            Name = "Rana Mahmoud",
+                            Country = "لبنان",
+                            Description = "مطورة تطبيقات محترفة تعمل في تطوير تطبيقات الهواتف الذكية",
+                            Name = "رنا محمود",
                             Phone = "+961123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 9,
-                            Country = "Jordan",
-                            Description = "A marketing manager specialized in digital marketing strategies.",
-                            Name = "Ahmed Ali",
+                            Country = "الأردن",
+                            Description = "مدير تسويق متخصص في إدارة استراتيجيات التسويق الرقمي",
+                            Name = "أحمد علي",
                             Phone = "+962123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 10,
-                            Country = "Saudi Arabia",
-                            Description = "An expert in designing and managing websites for small and medium businesses.",
-                            Name = "Huda Saleh",
+                            Country = "السعودية",
+                            Description = "خبيرة في تصميم وإدارة مواقع الويب للشركات الصغيرة والمتوسطة",
+                            Name = "هدى صالح",
                             Phone = "+966123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 11,
-                            Country = "United Arab Emirates",
-                            Description = "A professional financial accountant working in financial reporting.",
-                            Name = "Salma Abdullah",
+                            Country = "الإمارات العربية المتحدة",
+                            Description = "محاسبة مالية محترفة تعمل في مجال إعداد التقارير المالية",
+                            Name = "سلمى عبدالله",
                             Phone = "+971123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 12,
-                            Country = "Egypt",
-                            Description = "An architect specialized in residential building design.",
-                            Name = "Mohammed Hassan",
+                            Country = "مصر",
+                            Description = "مهندس معماري متخصص في تصميم المباني السكنية",
+                            Name = "محمد حسن",
                             Phone = "+201234567890",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 13,
-                            Country = "Iraq",
-                            Description = "A doctor specialized in pediatrics and mental health.",
-                            Name = "Zainab Abdullah",
+                            Country = "العراق",
+                            Description = "طبيبة مختصة في طب الأطفال والأمراض النفسية",
+                            Name = "زينب عبدالله",
                             Phone = "+964123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 14,
-                            Country = "Lebanon",
-                            Description = "A creative graphic designer working in commercial ad design.",
-                            Name = "Ahmed Hussein",
+                            Country = "لبنان",
+                            Description = "مصمم جرافيك مبدع يعمل في تصميم الإعلانات التجارية",
+                            Name = "أحمد حسين",
                             Phone = "+961123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 15,
-                            Country = "Jordan",
-                            Description = "A professional translator specializing in medical and scientific text translation.",
-                            Name = "Fatima Ali",
+                            Country = "الأردن",
+                            Description = "مترجمة محترفة تعمل في ترجمة النصوص الطبية والعلمية",
+                            Name = "فاطمة علي",
                             Phone = "+962123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 16,
-                            Country = "Saudi Arabia",
-                            Description = "A professional web developer in electronic application development.",
-                            Name = "Abdullah Mahmoud",
+                            Country = "السعودية",
+                            Description = "مطور ويب محترف في تطوير التطبيقات الإلكترونية",
+                            Name = "عبدالله محمود",
                             Phone = "+966123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 17,
-                            Country = "Egypt",
-                            Description = "An architectural engineer specialized in industrial facility design.",
-                            Name = "Reem Abdullah",
+                            Country = "مصر",
+                            Description = "مهندسة معمارية متخصصة في تصميم المنشآت الصناعية",
+                            Name = "ريم عبدالله",
                             Phone = "+201234567890",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 18,
-                            Country = "Lebanon",
-                            Description = "A financial accountant with extensive experience in financial accounting.",
-                            Name = "Omar Hassan",
+                            Country = "لبنان",
+                            Description = "محاسب مالي يتمتع بخبرة واسعة في المحاسبة المالية",
+                            Name = "عمر حسن",
                             Phone = "+961123456789",
-                            RegisterationTime = new DateTime(2024, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            RegisterationTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("Shoghlana.Core.Models.ClientNotification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("SentTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("ClientNotifications");
                 });
 
             modelBuilder.Entity("Shoghlana.Core.Models.Freelancer", b =>
@@ -625,113 +595,83 @@ namespace Shoghlana.EF.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "Cairo, Egypt",
-                            Name = "Mohamed Ahmed",
-                            Overview = "A professional developer with experience in web and mobile application development.",
-                            Title = "Specialized Application Developer"
+                            Address = "القاهرة، مصر",
+                            Name = "محمد أحمد",
+                            Overview = "مطور محترف بخبرة في تطوير تطبيقات الويب والهواتف الذكية",
+                            Title = "مطور تطبيقات متخصص"
                         },
                         new
                         {
                             Id = 2,
-                            Address = "Riyadh, Saudi Arabia",
-                            Name = "Fatima Ali",
-                            Overview = "A highly experienced designer in logo and poster design.",
-                            Title = "Professional Graphic Designer"
+                            Address = "الرياض، السعودية",
+                            Name = "فاطمة علي",
+                            Overview = "مصممة ذات خبرة عالية في تصميم الشعارات والبوسترات",
+                            Title = "مصممة جرافيك محترفة"
                         },
                         new
                         {
                             Id = 3,
-                            Address = "Cairo, Egypt",
-                            Name = "Ahmed Khaled",
-                            Overview = "A programmer with experience in developing advanced applications using AI technologies.",
-                            Title = "AI Specialist Programmer"
+                            Address = "القاهرة، مصر",
+                            Name = "أحمد خالد",
+                            Overview = "مبرمج ذو خبرة في تطوير التطبيقات المتقدمة باستخدام تقنيات الذكاء الاصطناعي",
+                            Title = "مبرمج متخصص في الذكاء الاصطناعي"
                         },
                         new
                         {
                             Id = 4,
-                            Address = "Dubai, United Arab Emirates",
-                            Name = "Sarah Hussein",
-                            Overview = "A graphic designer with experience in abstract design and creative arts.",
-                            Title = "Creative Abstract Designer"
+                            Address = "دبي، الإمارات",
+                            Name = "سارة حسين",
+                            Overview = "مصممة جرافيك بخبرة في التصميم التجريدي والفنون الإبداعية",
+                            Title = "مصممة تجريدية ومبدعة"
                         },
                         new
                         {
                             Id = 5,
-                            Address = "Alexandria, Egypt",
-                            Name = "Abdulrahman Mahmoud",
-                            Overview = "A professional developer with experience in building and developing large and complex websites.",
-                            Title = "Advanced Web Developer"
+                            Address = "الإسكندرية، مصر",
+                            Name = "عبد الرحمن محمود",
+                            Overview = "مطور محترف بخبرة في بناء وتطوير المواقع الإلكترونية الكبيرة والمعقدة",
+                            Title = "مطور مواقع إلكترونية متقدم"
                         },
                         new
                         {
                             Id = 6,
-                            Address = "Jeddah, Saudi Arabia",
-                            Name = "Rima Abdullah",
-                            Overview = "A graphic designer with extensive experience in logo and brand identity design.",
-                            Title = "Professional Graphic Designer"
+                            Address = "جدة، السعودية",
+                            Name = "ريما عبدالله",
+                            Overview = "مصممة جرافيك بخبرة واسعة في تصميم الشعارات والهويات التجارية",
+                            Title = "مصممة جرافيك احترافية"
                         },
                         new
                         {
                             Id = 7,
-                            Address = "Cairo, Egypt",
-                            Name = "Mahmoud Ali",
-                            Overview = "A specialized developer with experience in mobile application development using the latest technologies.",
-                            Title = "Mobile App Developer"
+                            Address = "القاهرة، مصر",
+                            Name = "محمود علي",
+                            Overview = "مطور متخصص بخبرة في تطوير تطبيقات الهواتف الذكية باستخدام أحدث التقنيات",
+                            Title = "مطور تطبيقات متخصص في الهواتف الذكية"
                         },
                         new
                         {
                             Id = 8,
-                            Address = "Riyadh, Saudi Arabia",
-                            Name = "Noor Abdullah",
-                            Overview = "A developer with experience in advanced web and mobile application development.",
-                            Title = "Professional App Developer"
+                            Address = "الرياض، السعودية",
+                            Name = "نور عبدالله",
+                            Overview = "مطورة بخبرة في تطوير تطبيقات الويب والهواتف الذكية بتقنيات متقدمة",
+                            Title = "مطورة تطبيقات محترفة"
                         },
                         new
                         {
                             Id = 9,
-                            Address = "Alexandria, Egypt",
-                            Name = "Layla Mohammed",
-                            Overview = "A graphic designer and artist with experience in illustration and fine arts design.",
-                            Title = "Creative Graphic Designer and Artist"
+                            Address = "الإسكندرية، مصر",
+                            Name = "ليلى محمد",
+                            Overview = "مصممة جرافيك وفنانة بخبرة في تصميم الرسومات والفنون التشكيلية",
+                            Title = "مصممة جرافيك وفنانة مبدعة"
                         },
                         new
                         {
                             Id = 10,
-                            Address = "Manama, Bahrain",
-                            Name = "Ali Al-Husseini",
-                            Overview = "A developer with experience in web and mobile application development using multiple languages.",
-                            Title = "Electronic Application Developer"
+                            Address = "المنامة، البحرين",
+                            Name = "علي الحسيني",
+                            Overview = "مطور بخبرة في تطوير تطبيقات الويب والهواتف الذكية باللغات المتعددة",
+                            Title = "مطور تطبيقات إلكترونية"
                         });
-                });
-
-            modelBuilder.Entity("Shoghlana.Core.Models.FreelancerNotification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("FreelancerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SentTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FreelancerId");
-
-                    b.ToTable("FreelancerNotifications");
                 });
 
             modelBuilder.Entity("Shoghlana.Core.Models.FreelancerSkills", b =>
@@ -816,14 +756,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 1,
                             CategoryId = 1,
                             ClientId = 1,
-                            Description = "Professional design and artistic work",
+                            Description = "تصميم وأعمال فنية احترافية",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 500m,
                             MinBudget = 100m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                             Status = 0,
-                            Title = "Professional and Unique Logo Design"
+                            Title = "تصميم شعار احترافي ومميز"
                         },
                         new
                         {
@@ -831,14 +771,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 2,
                             CategoryId = 1,
                             ClientId = 2,
-                            Description = "Design and administrative artwork",
+                            Description = "تصميم وأعمال فنية إدارية",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 700m,
                             MinBudget = 200m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                             Status = 0,
-                            Title = "Social Media Advertising Poster Design"
+                            Title = "تصميم بوستر إعلاني لمواقع التواصل"
                         },
                         new
                         {
@@ -846,14 +786,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 3,
                             CategoryId = 1,
                             ClientId = 3,
-                            Description = "Business card design",
+                            Description = "تصميم بطاقات أعمال",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 600m,
                             MinBudget = 150m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "Professional Business Card Design for Printing"
+                            Status = 2,
+                            Title = "تصميم كارت شخصي احترافي للطباعة"
                         },
                         new
                         {
@@ -861,14 +801,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 4,
                             CategoryId = 2,
                             ClientId = 4,
-                            Description = "Website and application development",
+                            Description = "برمجة وتطوير المواقع والتطبيقات",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 800m,
                             MinBudget = 300m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "Lifetime Free Control Panel Installation"
+                            Status = 2,
+                            Title = "تركيب لوحة تحكم مجانية مدى الحياة"
                         },
                         new
                         {
@@ -876,14 +816,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 5,
                             CategoryId = 3,
                             ClientId = 5,
-                            Description = "Website programming",
+                            Description = "برمجة مواقع الإنترنت",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 700m,
                             MinBudget = 200m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "Company Profile Website Design"
+                            Status = 1,
+                            Title = "تصميم موقع تعريفي للشركات"
                         },
                         new
                         {
@@ -891,14 +831,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 6,
                             CategoryId = 4,
                             ClientId = 6,
-                            Description = "Programming and design of mobile apps",
+                            Description = "برمجة وتصميم تطبيقات الهواتف الذكية",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 3000m,
                             MinBudget = 1000m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "Mobile App Development for iOS and Android"
+                            Status = 1,
+                            Title = "تطوير تطبيق موبايل لنظام iOS و Android"
                         },
                         new
                         {
@@ -906,14 +846,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 7,
                             CategoryId = 3,
                             ClientId = 7,
-                            Description = "Programming and design of online shopping websites",
+                            Description = "برمجة وتصميم مواقع التسوق عبر الإنترنت",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1500m,
                             MinBudget = 500m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                             Status = 2,
-                            Title = "E-Commerce Website Design and Development"
+                            Title = "تصميم وتطوير موقع تجارة إلكترونية"
                         },
                         new
                         {
@@ -921,14 +861,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 8,
                             CategoryId = 5,
                             ClientId = 8,
-                            Description = "Marketing and advertising for companies and individuals",
+                            Description = "تسويق وإعلان للشركات والأفراد",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 1000m,
                             MinBudget = 300m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                             Status = 2,
-                            Title = "Social Media Advertising Campaign Management"
+                            Title = "إدارة حملة إعلانية على وسائل التواصل الاجتماعي"
                         },
                         new
                         {
@@ -936,14 +876,14 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 9,
                             CategoryId = 6,
                             ClientId = 9,
-                            Description = "Illustration and drawing arts",
+                            Description = "فنون تصويرية ورسم",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 600m,
                             MinBudget = 200m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                             Status = 2,
-                            Title = "Illustration Design for Children's Books"
+                            Title = "تصميم مجموعة من الرسوم التوضيحية للكتب الأطفال"
                         },
                         new
                         {
@@ -951,364 +891,364 @@ namespace Shoghlana.EF.Migrations
                             AcceptedFreelancerId = 10,
                             CategoryId = 1,
                             ClientId = 10,
-                            Description = "Marketing and advertising content writing",
+                            Description = "كتابة محتوى تسويقي وإعلاني",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 300m,
                             MinBudget = 100m,
                             PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
                             Status = 2,
-                            Title = "Advertising Content Writing for Website"
+                            Title = "كتابة محتوى إعلاني لموقع الويب"
                         },
                         new
                         {
                             Id = 11,
                             CategoryId = 2,
                             ClientId = 11,
-                            Description = "Advanced administrative systems programming",
+                            Description = "برمجة نظم إدارية متقدمة",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 2000m,
                             MinBudget = 500m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Employee Management System Design and Programming"
+                            Title = "تصميم وبرمجة نظام إدارة للموظفين"
                         },
                         new
                         {
                             Id = 12,
                             CategoryId = 3,
                             ClientId = 12,
-                            Description = "Economic and financial analysis",
+                            Description = "تحليل اقتصادي ومالي",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 5000m,
                             MinBudget = 1000m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Feasibility Study for Future Business Project"
+                            Title = "إعداد دراسة جدوى لمشروع تجاري مستقبلي"
                         },
                         new
                         {
                             Id = 13,
                             CategoryId = 4,
                             ClientId = 13,
-                            Description = "Educational and training courses",
+                            Description = "دورات تعليمية وتدريب",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 200m,
                             MinBudget = 50m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "Online Programming Lessons for Beginners"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 1,
+                            Title = "تعليم البرمجة للمبتدئين عبر الإنترنت"
                         },
                         new
                         {
                             Id = 14,
                             CategoryId = 5,
                             ClientId = 14,
-                            Description = "Graphic design and advertising",
+                            Description = "تصميم جرافيك وإعلان",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 500m,
                             MinBudget = 150m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Promotional Print Design for Cultural Event"
+                            Title = "تصميم مطبوعات دعائية لفعالية ثقافية"
                         },
                         new
                         {
                             Id = 15,
                             CategoryId = 6,
                             ClientId = 15,
-                            Description = "Translation and writing",
+                            Description = "ترجمة وكتابة",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 800m,
                             MinBudget = 200m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Translation of Scientific Articles from English to Arabic"
+                            Title = "ترجمة مقالات علمية من الإنجليزية إلى العربية"
                         },
                         new
                         {
                             Id = 16,
                             CategoryId = 1,
                             ClientId = 16,
-                            Description = "Video game programming",
+                            Description = "برمجة ألعاب الفيديو",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 5000m,
                             MinBudget = 1000m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Mobile Video Game Design and Development"
+                            Title = "تصميم وتطوير لعبة فيديو متنقلة"
                         },
                         new
                         {
                             Id = 17,
                             CategoryId = 2,
                             ClientId = 17,
-                            Description = "Design and development of e-learning platforms",
+                            Description = "تصميم وبرمجة منصات تعليمية إلكترونية",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1500m,
                             MinBudget = 500m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Online Educational Platform Design"
+                            Title = "تصميم منصة تعليمية عبر الإنترنت"
                         },
                         new
                         {
                             Id = 18,
                             CategoryId = 3,
                             ClientId = 18,
-                            Description = "Content writing and editing",
+                            Description = "كتابة وتحرير محتوى",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 700m,
                             MinBudget = 200m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "Content Management for Tech Blog"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2,
+                            Title = "إدارة محتوى لمدونة تقنية"
                         },
                         new
                         {
                             Id = 19,
                             CategoryId = 4,
                             ClientId = 1,
-                            Description = "CRM system programming and customization",
+                            Description = "برمجة وتخصيص نظم CRM",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 2500m,
                             MinBudget = 800m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 0,
-                            Title = "CRM System Design and Development"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2,
+                            Title = "تصميم وتطوير نظام إدارة العلاقات مع العملاء (CRM)"
                         },
                         new
                         {
                             Id = 20,
                             CategoryId = 5,
                             ClientId = 2,
-                            Description = "Data analysis and report preparation",
+                            Description = "تحليل بيانات وإعداد تقارير",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1000m,
                             MinBudget = 300m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 1,
-                            Title = "Data Analysis and Strategic Report Preparation for Companies"
+                            Title = "تحليل بيانات وإعداد تقرير استراتيجي للشركات"
                         },
                         new
                         {
                             Id = 21,
                             CategoryId = 6,
                             ClientId = 3,
-                            Description = "Educational and research content writing",
+                            Description = "كتابة محتوى تعليمي وبحثي",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 1500m,
                             MinBudget = 500m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 1,
-                            Title = "Writing and Editing E-Books on AI"
+                            Title = "كتابة وتحرير كتب إلكترونية في مجال الذكاء الاصطناعي"
                         },
                         new
                         {
                             Id = 22,
                             CategoryId = 1,
                             ClientId = 4,
-                            Description = "Programming and design of educational websites",
+                            Description = "برمجة وتصميم مواقع تعليمية",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1200m,
                             MinBudget = 400m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 1,
-                            Title = "Educational Website Design and Development for Students"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            Title = "تصميم وتطوير موقع تعليمي للطلاب"
                         },
                         new
                         {
                             Id = 23,
                             CategoryId = 2,
                             ClientId = 5,
-                            Description = "Design and programming of booking apps",
+                            Description = "تصميم وبرمجة تطبيقات الحجز الإلكتروني",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1800m,
                             MinBudget = 600m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 1,
-                            Title = "Online Event Booking Platform Design and Programming"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            Title = "تصميم وبرمجة منصة للحجز الإلكتروني للفعاليات"
                         },
                         new
                         {
                             Id = 24,
                             CategoryId = 3,
                             ClientId = 6,
-                            Description = "Improving website search engine performance",
+                            Description = "تحسين أداء محركات البحث للمواقع",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 800m,
                             MinBudget = 200m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 1,
-                            Title = "Website Search Engine Optimization (SEO)"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            Title = "تحسين محركات البحث (SEO) لموقع الويب"
                         },
                         new
                         {
                             Id = 25,
                             CategoryId = 4,
                             ClientId = 7,
-                            Description = "Integrated management systems programming",
+                            Description = "برمجة نظم إدارة متكاملة",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 2500m,
                             MinBudget = 700m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 1,
-                            Title = "Inventory and Sales Management System for Small Businesses"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            Title = "تطوير نظام لإدارة المخزون والمبيعات للشركات الصغيرة"
                         },
                         new
                         {
                             Id = 26,
                             CategoryId = 5,
                             ClientId = 8,
-                            Description = "Economic and financial analysis for real estate projects",
+                            Description = "تحليل اقتصادي ومالي للمشاريع العقارية",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 5000m,
                             MinBudget = 1500m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 1,
-                            Title = "Feasibility Study for a New Residential Project"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            Title = "إعداد دراسة جدوى لمشروع سكني جديد"
                         },
                         new
                         {
                             Id = 27,
                             CategoryId = 6,
                             ClientId = 9,
-                            Description = "Personal assistant app programming",
+                            Description = "برمجة تطبيقات المساعدة الشخصية",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 3000m,
                             MinBudget = 800m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
-                            Status = 1,
-                            Title = "Online Personal Assistant App Design and Development"
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 0,
+                            Title = "تصميم وتطوير تطبيق للمساعدة الشخصية عبر الإنترنت"
                         },
                         new
                         {
                             Id = 28,
                             CategoryId = 1,
                             ClientId = 10,
-                            Description = "Marketing and fundraising",
+                            Description = "تسويق وجمع التبرعات",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1500m,
                             MinBudget = 400m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 1,
-                            Title = "Create and Manage Online Fundraising Campaign"
+                            Title = "إنشاء وإدارة حملة تبرعات عبر الإنترنت"
                         },
                         new
                         {
                             Id = 29,
                             CategoryId = 2,
                             ClientId = 11,
-                            Description = "Design and programming of interactive educational platforms",
+                            Description = "تصميم وبرمجة منصات تعليمية تفاعلية",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 2000m,
                             MinBudget = 600m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 1,
-                            Title = "Interactive Educational Platform for Teaching Mathematics"
+                            Title = "تطوير منصة تعليمية تفاعلية لتعليم الرياضيات"
                         },
                         new
                         {
                             Id = 30,
                             CategoryId = 3,
                             ClientId = 12,
-                            Description = "Educational game programming and design",
+                            Description = "برمجة وتصميم ألعاب تعليمية",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 1200m,
                             MinBudget = 300m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 1,
-                            Title = "Educational Video Game Design for Children"
+                            Title = "تصميم وتطوير لعبة فيديو تعليمية للأطفال"
                         },
                         new
                         {
                             Id = 31,
                             CategoryId = 4,
                             ClientId = 13,
-                            Description = "Policy analysis and report preparation",
+                            Description = "تحليل سياسات وإعداد تقارير",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 700m,
                             MinBudget = 200m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 1,
-                            Title = "Research Report on Public Policy"
+                            Title = "إعداد تقرير بحثي عن السياسات العامة"
                         },
                         new
                         {
                             Id = 32,
                             CategoryId = 5,
                             ClientId = 14,
-                            Description = "Content management systems programming and customization",
+                            Description = "برمجة وتخصيص نظم إدارة المحتوى",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1500m,
                             MinBudget = 400m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Blog Content Management System Design and Programming"
+                            Title = "تصميم وبرمجة نظام إدارة المحتوى للمدونات"
                         },
                         new
                         {
                             Id = 33,
                             CategoryId = 6,
                             ClientId = 15,
-                            Description = "Product marketing and advertising",
+                            Description = "تسويق وإعلان عن المنتجات",
                             DurationInDays = 0,
                             ExperienceLevel = 0,
                             MaxBudget = 1000m,
                             MinBudget = 300m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Marketing Campaign for a New Product"
+                            Title = "إعداد وتنفيذ حملة تسويقية لمنتج جديد"
                         },
                         new
                         {
                             Id = 34,
                             CategoryId = 1,
                             ClientId = 16,
-                            Description = "Project management system programming",
+                            Description = "برمجة نظم إدارة المشاريع",
                             DurationInDays = 0,
                             ExperienceLevel = 2,
                             MaxBudget = 2500m,
                             MinBudget = 600m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Engineering Project Management System Design and Programming"
+                            Title = "تصميم وبرمجة نظام لإدارة المشاريع الهندسية"
                         },
                         new
                         {
                             Id = 35,
                             CategoryId = 2,
                             ClientId = 17,
-                            Description = "Educational apps programming and design",
+                            Description = "برمجة وتصميم تطبيقات تعليمية",
                             DurationInDays = 0,
                             ExperienceLevel = 1,
                             MaxBudget = 1800m,
                             MinBudget = 500m,
-                            PostTime = new DateTime(2025, 6, 8, 22, 9, 59, 384, DateTimeKind.Local).AddTicks(615),
+                            PostTime = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = 0,
-                            Title = "Programming Language Learning App Design and Development"
+                            Title = "تصميم وتطوير تطبيق لتعليم لغات البرمجة"
                         });
                 });
 
@@ -1330,6 +1270,50 @@ namespace Shoghlana.EF.Migrations
                     b.HasIndex("SkillId1");
 
                     b.ToTable("JobSkills");
+                });
+
+            modelBuilder.Entity("Shoghlana.Core.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int?>("FreelancerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("NotificationTriggerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SentTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("FreelancerId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Shoghlana.Core.Models.Project", b =>
@@ -1597,252 +1581,252 @@ namespace Shoghlana.EF.Migrations
                         new
                         {
                             Id = 1,
-                            Title = "Graphic Design"
+                            Title = "تصميم الجرافيك"
                         },
                         new
                         {
                             Id = 2,
-                            Title = "Industrial Drawing"
+                            Title = "الرسم الصناعي"
                         },
                         new
                         {
                             Id = 3,
-                            Title = "Web Design"
+                            Title = "تصميم الويب"
                         },
                         new
                         {
                             Id = 4,
-                            Title = "Brand Identity Design"
+                            Title = "تصميم الهوية التجارية"
                         },
                         new
                         {
                             Id = 5,
-                            Title = "Product Design"
+                            Title = "تصميم المنتجات"
                         },
                         new
                         {
                             Id = 6,
-                            Title = "Logo Design"
+                            Title = "تصميم الشعارات"
                         },
                         new
                         {
                             Id = 7,
-                            Title = "Mobile App Development"
+                            Title = "تطوير تطبيقات الجوال"
                         },
                         new
                         {
                             Id = 8,
-                            Title = "Web Development"
+                            Title = "تطوير الويب"
                         },
                         new
                         {
                             Id = 9,
-                            Title = "Game Development"
+                            Title = "تطوير الألعاب"
                         },
                         new
                         {
                             Id = 10,
-                            Title = "Computer Programming"
+                            Title = "برمجة الحاسوب"
                         },
                         new
                         {
                             Id = 11,
-                            Title = "Content Writing"
+                            Title = "كتابة المحتوى"
                         },
                         new
                         {
                             Id = 12,
-                            Title = "Article Writing"
+                            Title = "كتابة المقالات"
                         },
                         new
                         {
                             Id = 13,
-                            Title = "Translation"
+                            Title = "الترجمة"
                         },
                         new
                         {
                             Id = 14,
-                            Title = "Proofreading"
+                            Title = "التدقيق اللغوي"
                         },
                         new
                         {
                             Id = 15,
-                            Title = "Technical Writing"
+                            Title = "الكتابة الفنية"
                         },
                         new
                         {
                             Id = 16,
-                            Title = "Digital Marketing"
+                            Title = "التسويق الرقمي"
                         },
                         new
                         {
                             Id = 17,
-                            Title = "Search Engine Optimization (SEO)"
+                            Title = "تحسين محركات البحث (SEO)"
                         },
                         new
                         {
                             Id = 18,
-                            Title = "Social Media Advertising"
+                            Title = "الإعلانات عبر وسائل التواصل الاجتماعي"
                         },
                         new
                         {
                             Id = 19,
-                            Title = "Email Marketing"
+                            Title = "التسويق بالبريد الإلكتروني"
                         },
                         new
                         {
                             Id = 20,
-                            Title = "Content Marketing"
+                            Title = "التسويق بالمحتوى"
                         },
                         new
                         {
                             Id = 21,
-                            Title = "Technical Support"
+                            Title = "الدعم الفني"
                         },
                         new
                         {
                             Id = 22,
-                            Title = "Network Administration"
+                            Title = "إدارة الشبكات"
                         },
                         new
                         {
                             Id = 23,
-                            Title = "System Maintenance"
+                            Title = "صيانة الأنظمة"
                         },
                         new
                         {
                             Id = 24,
-                            Title = "Desktop Support"
+                            Title = "دعم سطح المكتب"
                         },
                         new
                         {
                             Id = 25,
-                            Title = "Cloud Computing Services"
+                            Title = "خدمات الحوسبة السحابية"
                         },
                         new
                         {
                             Id = 26,
-                            Title = "Educational Software Development"
+                            Title = "تطوير البرامج التعليمية"
                         },
                         new
                         {
                             Id = 27,
-                            Title = "Curriculum Design"
+                            Title = "تصميم المناهج الدراسية"
                         },
                         new
                         {
                             Id = 28,
-                            Title = "E-Learning Development"
+                            Title = "تطوير التعليم الإلكتروني"
                         },
                         new
                         {
                             Id = 29,
-                            Title = "Lesson Design"
+                            Title = "تصميم الدروس التعليمية"
                         },
                         new
                         {
                             Id = 30,
-                            Title = "Online Teaching"
+                            Title = "تعليم عبر الإنترنت"
                         },
                         new
                         {
                             Id = 31,
-                            Title = "Advertisement Design"
+                            Title = "تصميم الإعلانات"
                         },
                         new
                         {
                             Id = 32,
-                            Title = "User Interface (UI) Design"
+                            Title = "تصميم واجهات المستخدم (UI)"
                         },
                         new
                         {
                             Id = 33,
-                            Title = "User Experience (UX)"
+                            Title = "تجربة المستخدم (UX)"
                         },
                         new
                         {
                             Id = 34,
-                            Title = "3D Modeling"
+                            Title = "نمذجة ثلاثية الأبعاد (3D)"
                         },
                         new
                         {
                             Id = 35,
-                            Title = "Character Design"
+                            Title = "تصميم الشخصيات"
                         },
                         new
                         {
                             Id = 36,
-                            Title = "App Development with React.js"
+                            Title = "تطوير التطبيقات بواسطة React.js"
                         },
                         new
                         {
                             Id = 37,
-                            Title = "App Development with Node.js"
+                            Title = "تطوير التطبيقات بواسطة Node.js"
                         },
                         new
                         {
                             Id = 38,
-                            Title = "App Development with Ruby on Rails"
+                            Title = "تطوير التطبيقات بواسطة Ruby on Rails"
                         },
                         new
                         {
                             Id = 39,
-                            Title = "App Development with SQL"
+                            Title = "تطوير التطبيقات بواسطة SQL"
                         },
                         new
                         {
                             Id = 40,
-                            Title = "App Development with Django"
+                            Title = "تطوير التطبيقات بواسطة Django"
                         },
                         new
                         {
                             Id = 41,
-                            Title = "Legal Article Writing"
+                            Title = "كتابة المقالات القانونية"
                         },
                         new
                         {
                             Id = 42,
-                            Title = "Creative Writing"
+                            Title = "الكتابة الإبداعية"
                         },
                         new
                         {
                             Id = 43,
-                            Title = "Legal Verification"
+                            Title = "التحقق القانوني"
                         },
                         new
                         {
                             Id = 44,
-                            Title = "Localization"
+                            Title = "التعريب"
                         },
                         new
                         {
                             Id = 45,
-                            Title = "Market Analysis"
+                            Title = "تحليل السوق"
                         },
                         new
                         {
                             Id = 46,
-                            Title = "Statistical Analysis"
+                            Title = "التحليلات الإحصائية"
                         },
                         new
                         {
                             Id = 47,
-                            Title = "Performance Marketing"
+                            Title = "التسويق بالأداء"
                         },
                         new
                         {
                             Id = 48,
-                            Title = "Affiliate Marketing"
+                            Title = "التسويق بالشراكة"
                         },
                         new
                         {
                             Id = 49,
-                            Title = "Online Marketing"
+                            Title = "التسويق الإلكتروني"
                         },
                         new
                         {
                             Id = 50,
-                            Title = "Ad Campaign Management"
+                            Title = "إدارة الحملات الإعلانية"
                         });
                 });
 
@@ -1952,28 +1936,6 @@ namespace Shoghlana.EF.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Shoghlana.Core.Models.ClientNotification", b =>
-                {
-                    b.HasOne("Shoghlana.Core.Models.Client", "Client")
-                        .WithMany("Notifications")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("Shoghlana.Core.Models.FreelancerNotification", b =>
-                {
-                    b.HasOne("Shoghlana.Core.Models.Freelancer", "Freelancer")
-                        .WithMany("Notifications")
-                        .HasForeignKey("FreelancerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Freelancer");
-                });
-
             modelBuilder.Entity("Shoghlana.Core.Models.FreelancerSkills", b =>
                 {
                     b.HasOne("Shoghlana.Core.Models.Freelancer", "Freelancer")
@@ -2039,6 +2001,21 @@ namespace Shoghlana.EF.Migrations
                     b.Navigation("Job");
 
                     b.Navigation("Skill");
+                });
+
+            modelBuilder.Entity("Shoghlana.Core.Models.Notification", b =>
+                {
+                    b.HasOne("Shoghlana.Core.Models.Client", "Client")
+                        .WithMany("Notifications")
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("Shoghlana.Core.Models.Freelancer", "Freelancer")
+                        .WithMany("Notifications")
+                        .HasForeignKey("FreelancerId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Freelancer");
                 });
 
             modelBuilder.Entity("Shoghlana.Core.Models.Project", b =>
