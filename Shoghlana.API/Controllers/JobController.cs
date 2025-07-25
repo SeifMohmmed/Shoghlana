@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Enums;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.DTOs;
+using Shoghlana.Domain.Enums;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]

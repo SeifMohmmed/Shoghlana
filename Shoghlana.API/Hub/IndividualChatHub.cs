@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Shoghlana.Core.DTOs;
+using Shoghlana.Application.DTOs;
 namespace Shoghlana.API.Services.Implementations;
 public class IndividualChatHub : Hub
 {

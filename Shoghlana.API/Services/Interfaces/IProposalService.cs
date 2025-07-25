@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
-using Shoghlana.API.Services.Implementations;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Models;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.Entities;
 
 namespace Shoghlana.API.Services.Interfaces;
 

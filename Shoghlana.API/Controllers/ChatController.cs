@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Services.Implementations;
-using Shoghlana.Core.DTOs;
+using Shoghlana.Application.DTOs;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
@@ -18,18 +17,18 @@ public class ChatController : ControllerBase
     [HttpPost("register-user")]
     public IActionResult RegisterUser([FromBody] ChatDTO model)
     {
-        if(model is null || string.IsNullOrEmpty(model.Name))
+        if (model is null || string.IsNullOrEmpty(model.Name))
         {
             return BadRequest("Invalid user data.");
         }
 
-        if(_chatServices.AddUsersToList(model.Name))
+        if (_chatServices.AddUsersToList(model.Name))
         {
             return NoContent();
         }
 
         return BadRequest("This name is taken, please choose another name.");
-    
+
     }
 
 

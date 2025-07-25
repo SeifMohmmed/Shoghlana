@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
-using Shoghlana.Core.Models;
+using Shoghlana.Domain.Entities;
 
 namespace Shoghlana.API.Services.Interfaces;
 

@@ -1,6 +1,4 @@
-﻿using Shoghlana.Core.Models;
-
-namespace Shoghlana.API.Services.Interfaces;
+﻿namespace Shoghlana.API.Services.Interfaces;
 
 public interface IGoogleAuthService
 {

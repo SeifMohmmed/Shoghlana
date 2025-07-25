@@ -1,12 +1,7 @@
 ﻿using Shoghlana.API.Response;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Models;
-using System;
-using System.Collections.Generic;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoghlana.API.Services.Interfaces;
 public interface IAuthService

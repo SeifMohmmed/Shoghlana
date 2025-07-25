@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.Interfaces;
-using Shoghlana.EF.Hubs;
+using Shoghlana.AspNetCore.SignalR.Hubs;
+using Shoghlana.Domain.Repositories;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
