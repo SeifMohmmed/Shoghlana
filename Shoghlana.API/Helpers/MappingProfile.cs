@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Models;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.Entities;
 
 namespace Shoghlana.API.Helpers;
 
@@ -48,7 +48,7 @@ public class MappingProfile : Profile
 
         //CreateMap<GetNotificationDTO, GetClientNotificationDTO>().ReverseMap();
 
-        CreateMap<Notification,GetNotificationDTO>().ReverseMap();
+        CreateMap<Notification, GetNotificationDTO>().ReverseMap();
 
     }
 }

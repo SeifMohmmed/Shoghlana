@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.Models;
+using Shoghlana.Domain.Entities;
 using IMailService = Shoghlana.API.Services.Interfaces.IMailService;
 
 namespace Shoghlana.API.Controllers;

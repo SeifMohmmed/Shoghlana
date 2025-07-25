@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Interfaces;
-using Shoghlana.Core.Models;
-using Shoghlana.EF.Hubs;
+using Shoghlana.Application.DTOs;
+using Shoghlana.AspNetCore.SignalR.Hubs;
+using Shoghlana.Domain.Entities;
+using Shoghlana.Domain.Repositories;
 
 namespace Shoghlana.API.Services.Implementations;
 

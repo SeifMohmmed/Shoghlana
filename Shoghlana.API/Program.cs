@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Shoghlana.API.Services.Implementations;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.Helpers;
-using Shoghlana.Core.Interfaces;
-using Shoghlana.Core.Models;
-using Shoghlana.EF;
-using Shoghlana.EF.Configurations;
-using Shoghlana.EF.Hubs;
+using Shoghlana.Application.Helpers;
+using Shoghlana.AspNetCore.SignalR.Hubs;
+using Shoghlana.Domain.Entities;
+using Shoghlana.Domain.Repositories;
 using Shoghlana.EF.Repositories;
+using Shoghlana.Infrastructure.Configurations;
+using Shoghlana.Infrastructure.Hubs;
+using Shoghlana.Infrastructure.Persistence;
+using Shoghlana.Infrastructure.Repositories;
 using System.Text;
 
 namespace Shoghlana.API
@@ -25,10 +26,6 @@ namespace Shoghlana.API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            //.AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-            //});
 
             builder.Services.AddSignalR();
 
@@ -49,7 +46,7 @@ namespace Shoghlana.API
                             .AddEntityFrameworkStores<ApplicationDbContext>()
                             .AddDefaultTokenProviders();
 
-            builder.Services.Configure<IdentityOptions>(options => 
+            builder.Services.Configure<IdentityOptions>(options =>
             {
                 options.User.AllowedUserNameCharacters =
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ " +

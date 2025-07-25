@@ -1,4 +1,4 @@
-﻿using Shoghlana.Core.Models;
+﻿using Shoghlana.Domain.Entities;
 
 namespace Shoghlana.API.Services.Interfaces;
 

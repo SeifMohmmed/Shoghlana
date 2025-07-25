@@ -3,7 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.Models;
+using Shoghlana.Domain.Entities;
 
 namespace Shoghlana.API.Services.Implementations;
 

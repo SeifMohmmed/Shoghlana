@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Models;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.Entities;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]
@@ -257,7 +257,7 @@ public class AuthController : ControllerBase
         {
             IsSuccess = true,
             Message = result.Message,
-            Token= result.Token,
+            Token = result.Token,
         };
     }
 

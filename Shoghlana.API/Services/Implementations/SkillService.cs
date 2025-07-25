@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Interfaces;
-using Shoghlana.Core.Models;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.Entities;
+using Shoghlana.Domain.Repositories;
 
 namespace Shoghlana.API.Services.Implementations;
 
@@ -12,7 +12,7 @@ public class SkillService : GenericService<Skill>, ISkillService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public SkillService(IUnitOfWork unitOfWork, IGenericRepository<Skill> repository, IMapper mapper) 
+    public SkillService(IUnitOfWork unitOfWork, IGenericRepository<Skill> repository, IMapper mapper)
         : base(unitOfWork, repository)
     {
         _unitOfWork = unitOfWork;
@@ -28,8 +28,8 @@ public class SkillService : GenericService<Skill>, ISkillService
             return new GeneralResponse()
             {
                 IsSuccess = false,
-                Data=null,
-                Message="No Skills Found"
+                Data = null,
+                Message = "No Skills Found"
             };
         }
         var skillDTOs = _mapper.Map<List<Skill>, List<SkillDTO>>(skills.ToList());
@@ -44,7 +44,7 @@ public class SkillService : GenericService<Skill>, ISkillService
 
     public async Task<GeneralResponse> GetByIdAsync(int id)
     {
-        var skills = await _unitOfWork.skillRepository.FindAsync(s=>s.Id==id);
+        var skills = await _unitOfWork.skillRepository.FindAsync(s => s.Id == id);
 
         if (skills is null)
         {
@@ -55,7 +55,7 @@ public class SkillService : GenericService<Skill>, ISkillService
                 Message = "No Skills Found"
             };
         }
-        var skillDTOs = _mapper.Map<Skill,SkillDTO>(skills);
+        var skillDTOs = _mapper.Map<Skill, SkillDTO>(skills);
 
         return new GeneralResponse()
         {

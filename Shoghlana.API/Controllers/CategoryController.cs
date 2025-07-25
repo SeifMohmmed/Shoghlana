@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
 using Shoghlana.API.Services.Interfaces;
-using Shoghlana.Core.DTOs;
+using Shoghlana.Application.DTOs;
 
 namespace Shoghlana.API.Controllers;
 [Route("api/[controller]")]

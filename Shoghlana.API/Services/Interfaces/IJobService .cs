@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoghlana.API.Response;
-using Shoghlana.API.Services.Implementations;
-using Shoghlana.Core.DTOs;
-using Shoghlana.Core.Enums;
-using Shoghlana.Core.Interfaces;
-using Shoghlana.Core.Models;
-using Shoghlana.EF.Repositories;
+using Shoghlana.Application.DTOs;
+using Shoghlana.Domain.DTOs;
+using Shoghlana.Domain.Entities;
+using Shoghlana.Domain.Enums;
 
 namespace Shoghlana.API.Services.Interfaces;
 
