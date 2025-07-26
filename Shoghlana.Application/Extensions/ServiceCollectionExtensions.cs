@@ -5,6 +5,9 @@ public static class ServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {
+        // AutoMapper
+        services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
+
 
     }
 }
