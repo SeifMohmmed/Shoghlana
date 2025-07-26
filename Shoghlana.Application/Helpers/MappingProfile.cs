@@ -2,7 +2,7 @@
 using Shoghlana.Application.DTOs;
 using Shoghlana.Domain.Entities;
 
-namespace Shoghlana.API.Helpers;
+namespace Shoghlana.Application.Helpers;
 
 public class MappingProfile : Profile
 {
