@@ -15,7 +15,7 @@ It enables seamless profile management, job postings, proposals, messaging, and 
 ### 👩‍💻 Freelancer Features
 - **Profile Management**: Update personal info, add/edit portfolio & skills 📝  
 - **Job Browsing**: Filter and paginate jobs (budget, category, status) 🔍  
-- **Proposal Management**: Submit proposals to open jobs, and view proposal status (accepted, rejected, waiting). 📄
+- **Proposal Management**: Submit proposals to open jobs, and view proposal status (accepted, rejected, waiting).
 - **Communication**: Participate in group chats with other freelancers using a unique group name as the ID. 🗣️
 - **Work History**: Successfully completed jobs are added to the freelancer's work history. 📜
 - **Image Validation**: Ensure profile and portfolio images meet the required extensions (jpg, jpeg, png) and size (max 1 MB). 🖼️
@@ -37,7 +37,7 @@ It enables seamless profile management, job postings, proposals, messaging, and 
 - **Real-time Features:** SignalR Hubs for Chat (Individual & Group) and Notifications  
 
 ## 📸 Screenshots
-### 🗂️ ERD
+### 🗂️ Class Diagram
 <p align="center">
   <img src="https://github.com/SeifMohmmed/Shoghlana.API/blob/11b6dff6b0c8b6c0ad23858fbcaa4f4129c4e9d8/Screenshots/Shoglana.png" alt="image alt"/>
 </p>
