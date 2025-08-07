@@ -29,13 +29,15 @@ It enables seamless profile management, job postings, proposals, messaging, and 
 - **Private Chat Groups**: Automatically generate unique private group names for two users 
  
 ## Technologies Used 🚀
-- **Backend:** ASP.NET Core 9 Web API, SignalR (real-time communication), C#, LINQ, EF Core  
-- **Database:** Microsoft SQL Server  
-- **Authentication & Security:** JWT, Refresh Tokens, External Login (OAuth), Role-based Access Control  
-- **Architecture & Patterns:** Clean Architecture, Repository Pattern, Unit of Work, Dependency Injection, Services  
-- **Data Handling:** DTOs, AutoMapper, Pagination, Fluent API  
-- **Real-time Features:** SignalR Hubs for Chat (Individual & Group) and Notifications  
-
+- **Backend:** ASP.NET Core 9 Web API, SignalR (real-time communication), C#, LINQ, EF Core.
+- **Database:** Microsoft SQL Server.
+- **Authentication & Security:** JWT, Refresh Tokens, External Login (OAuth), Role-based Access Control. 
+- **Architecture & Patterns:** Clean Architecture, Repository Pattern, Unit of Work Pattern, Dependency Injection, Services.
+- **Data Handling:** DTOs, AutoMapper, Pagination, Fluent API.
+- **Real-time Features:** SignalR Hubs for Chat (Individual & Group) and Notifications.
+- **Image Uploads** — Handled using `IFormFile`, with conversion to byte arrays for database storage.
+- **Validation** — File extension and size checks for safety (max 1MB, image-only uploads).
+  
 ## 📸 Screenshots
 ### 🗂️ Class Diagram
 <p align="center">
